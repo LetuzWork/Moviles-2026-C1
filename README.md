@@ -1,5 +1,18 @@
 # 📱 App Mobile — Guía de Contribución con GitFlow
 
+## 📄 Documentación del proyecto
+
+En la carpeta [`docs/`](./docs) se encuentran los documentos base del proyecto:
+
+| Archivo | Descripción |
+|---|---|
+| [`consigna.md`](./docs/consigna.md) | Requisitos funcionales, no funcionales y arquitectónicos planteados por la cátedra (IFTS 18 — Desarrollo de Aplicaciones Móviles, 2° Año "B") |
+| [`diagrama_arquitectura.md`](./docs/diagrama_arquitectura.md) | Diagrama de alto nivel de la arquitectura de la solución |
+| [`documentacion_tecnica.md`](./docs/documentacion_tecnica.md) | Documentación técnica del proyecto |
+| [`documentacion_usuario.md`](./docs/documentacion_usuario.md) | Documentación orientada al usuario final |
+
+---
+
 Este documento define las convenciones de **ramas** y **commits** que seguimos en el proyecto usando el flujo de trabajo **GitFlow**.
 
 ---

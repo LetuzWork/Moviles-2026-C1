@@ -1,0 +1,26 @@
+
+# Archivos compilados y caché de Gradle
+*.iml
+.gradle/
+/build/
+/app/build/
+/captures/
+.externalNativeBuild/
+.cxx/
+
+# Configuración local (rutas al SDK, etc.)
+local.properties
+
+# Caché de Kotlin
+.kotlin/
+
+# Claude Code
+.claude/
+
+# macOS
+.DS_Store
+
+# IntelliJ / Android Studio — ignorar todo excepto lo esencial
+.idea/
+!.idea/vcs.xml
+!.idea/misc.xml

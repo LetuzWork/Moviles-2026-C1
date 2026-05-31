@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">MenúSemana</string>
+    <string name="nav_plan">Mi semana</string>
+    <string name="nav_meals">Mis comidas</string>
+    <string name="nav_recipes">Recetas</string>
+    <string name="nav_shopping">Compras</string>
+    <string name="onboarding_skip">Saltar</string>
+    <string name="onboarding_next">Siguiente</string>
+    <string name="onboarding_start">Empezar</string>
+    <string name="add_meal">Sumar comida</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete">Eliminar</string>
+    <string name="edit">Editar</string>
+    <string name="take_photo">Sacar foto</string>
+    <string name="add_to_plan">Sumar al plan</string>
+    <string name="search_meals">Buscar comidas…</string>
+    <string name="search_recipes">Buscar recetas…</string>
+    <string name="error_network">Sin conexión. Mostrando datos guardados.</string>
+    <string name="retry">Reintentar</string>
+    <string name="delete_confirm_title">¿Borrar comida?</string>
+    <string name="delete_confirm_body">Esta acción no se puede deshacer.</string>
+    <string name="camera_permission_rationale">Necesitamos acceso a la cámara para sacar la foto de tu comida.</string>
+    <string name="field_required">Este campo es obligatorio</string>
+    <string name="add_ingredient">Agregar ingrediente</string>
+    <string name="empty_meals_title">Todavía no tenés comidas</string>
+    <string name="empty_meals_body">Sumá tu primera comida con el botón +</string>
+    <string name="empty_plan_title">La semana está vacía</string>
+    <string name="empty_plan_body">Asigná comidas a cada turno del día</string>
+    <string name="empty_shopping_title">La lista está vacía</string>
+    <string name="empty_shopping_body">Planificá tu semana para generar la lista automáticamente</string>
+    <string name="add_to_my_meals">Agregar a mis comidas</string>
+    <string name="meal_picker_title">Elegí una comida</string>
+</resources>
