@@ -8,6 +8,9 @@
 .externalNativeBuild/
 .cxx/
 
+# APKs intermedios de build — los entregables van en /release/
+/app/build/outputs/
+
 # Configuración local (rutas al SDK, etc.)
 local.properties
 

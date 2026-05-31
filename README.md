@@ -13,6 +13,18 @@ En la carpeta [`docs/`](./docs) se encuentran los documentos base del proyecto:
 
 ---
 
+## 📦 Entregables — APK
+
+Los APKs se encuentran en la carpeta [`release/`](./release):
+
+| Archivo | Versión | Tipo | Descripción |
+|---|---|---|---|
+| [`menusemana-v1.0-debug.apk`](./release/menusemana-v1.0-debug.apk) | 1.0 | Debug | APK demo para H1 — puede instalarse directamente en el dispositivo |
+
+> El APK de producción firmado (release) se agregará en H2 junto con el AAB.
+
+---
+
 Este documento define las convenciones de **ramas** y **commits** que seguimos en el proyecto usando el flujo de trabajo **GitFlow**.
 
 ---
