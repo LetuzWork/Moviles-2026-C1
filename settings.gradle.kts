@@ -24,4 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Final Mobile"
 include(":app")
- 
+include(":benchmark")
