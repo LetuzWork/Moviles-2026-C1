@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,6 +44,7 @@ fun MisComidasScreen(
     val density = LocalDensity.current
     val topPx = with(density) { contentPadding.calculateTopPadding().roundToPx() }
     val bottomPx = with(density) { contentPadding.calculateBottomPadding().roundToPx() }
+
 
     Scaffold(
         contentWindowInsets = WindowInsets(top = topPx, bottom = bottomPx),
@@ -92,7 +94,7 @@ fun MisComidasScreen(
                     )
                 }
             } else {
-                LazyColumn(modifier = Modifier.weight(1f)) {
+                LazyColumn(modifier = Modifier.weight(1f).testTag("lista_comidas")) {
                     items(state.meals, key = { it.id }) { meal ->
                         MealListRow(
                             name = meal.name,

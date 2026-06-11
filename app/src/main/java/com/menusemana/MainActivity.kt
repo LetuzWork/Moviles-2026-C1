@@ -78,21 +78,23 @@ private fun MenuSemanaApp(dataStore: DataStore<Preferences>) {
     val backStack by navController.currentBackStackEntryAsState()
     val currentRoute = backStack?.destination?.route
 
+// 1. Usamos los nombres exactos en texto, para que R8 no los rompa
     val topLevelRoutes = listOf(
-        Plan::class.qualifiedName,
-        Meals::class.qualifiedName,
-        Recipes::class.qualifiedName,
-        Shopping::class.qualifiedName,
+        "com.menusemana.navigation.Plan",
+        "com.menusemana.navigation.Meals",
+        "com.menusemana.navigation.Recipes",
+        "com.menusemana.navigation.Shopping"
     )
-    val showBottomBar = topLevelRoutes.any { currentRoute?.startsWith(it ?: "") == true }
+    val showBottomBar = topLevelRoutes.any { currentRoute?.startsWith(it) == true }
 
     val selectedIndex = when {
-        currentRoute?.startsWith(Plan::class.qualifiedName ?: "") == true -> 0
-        currentRoute?.startsWith(Meals::class.qualifiedName ?: "") == true -> 1
-        currentRoute?.startsWith(Recipes::class.qualifiedName ?: "") == true -> 2
-        currentRoute?.startsWith(Shopping::class.qualifiedName ?: "") == true -> 3
+        currentRoute?.startsWith("com.menusemana.navigation.Plan") == true -> 0
+        currentRoute?.startsWith("com.menusemana.navigation.Meals") == true -> 1
+        currentRoute?.startsWith("com.menusemana.navigation.Recipes") == true -> 2
+        currentRoute?.startsWith("com.menusemana.navigation.Shopping") == true -> 3
         else -> 0
     }
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),

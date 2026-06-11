@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.menusemana.core.designsystem.theme.Persimmon100
 import com.menusemana.core.designsystem.theme.Persimmon500
@@ -51,6 +52,9 @@ fun MsBottomBar(
         bottomNavItems.forEachIndexed { index, item ->
             val selected = index == selectedIndex
             NavigationBarItem(
+                modifier = Modifier.testTag(
+                    if (item.label == "Mis comidas") "tab_mis_comidas" else "tab_$index"
+                ),
                 selected = selected,
                 onClick = { onTabSelected(index) },
                 icon = {
