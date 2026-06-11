@@ -1,5 +1,3 @@
-//MEJORAR... TENGO QUE ARREGLARLO.
-
 package com.example.benchmark
 
 import androidx.benchmark.macro.FrameTimingMetric
@@ -29,14 +27,15 @@ class ScrollBenchmark {
         pressHome()
         startActivityAndWait()
 
+        // 1. Pasar el Onboarding
         repeat(2) {
             device.wait(Until.findObject(By.text("Siguiente")), 1000)?.click()
         }
         device.wait(Until.findObject(By.text("Empezar")), 1000)?.click()
 
-        device.waitForIdle(3000)
+        device.waitForIdle()
 
-
+        // 2. Encontrar y hacer clic en la pestaña
         val tabEncontrado =
             device.wait(Until.findObject(By.res("tab_mis_comidas")), 5000)?.also { it.click() }
                 ?: device.wait(Until.findObject(By.text("Mis comidas")), 5000)?.also { it.click() }
@@ -44,13 +43,14 @@ class ScrollBenchmark {
 
         check(tabEncontrado != null) { "No se encontró el tab 'Mis comidas'" }
 
-        device.waitForIdle(2000)
+        device.waitForIdle()
 
+        // 3. Validar contenido
         if (device.findObject(By.text("Todavía no tenés comidas")) != null) {
-            println("Sin comidas precargadas, saltando iteración.")
-            return@measureRepeated
+            throw AssertionError("La lista está vacía. Por favor, precargá comidas manualmente antes de correr el test para poder medir el scroll.")
         }
 
+        // 4. Buscar la lista y medir el scroll
         val todosScrollables = device.findObjects(By.scrollable(true))
         val lista = todosScrollables?.firstOrNull { obj ->
             runCatching { obj.visibleBounds.height() > obj.visibleBounds.width() }.getOrDefault(false)
@@ -59,9 +59,11 @@ class ScrollBenchmark {
         check(lista != null) { "No se encontró ningún elemento scrollable vertical en 'Mis comidas'." }
 
         lista.setGestureMargin(device.displayWidth / 5)
-        repeat(5) {
-            lista.scroll(Direction.DOWN, 0.8f)
-            device.waitForIdle(500)
+
+        // Usamos fling para simular un swipe rápido y natural del usuario
+        repeat(3) {
+            lista.fling(Direction.DOWN)
+            device.waitForIdle()
         }
     }
 }

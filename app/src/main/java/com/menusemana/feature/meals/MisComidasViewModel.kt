@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 data class MisComidasUiState(
@@ -41,4 +40,5 @@ class MisComidasViewModel @Inject constructor(
 
     fun onQueryChange(query: String) { _query.value = query }
     fun onCategorySelected(category: String?) { _category.value = category }
+
 }

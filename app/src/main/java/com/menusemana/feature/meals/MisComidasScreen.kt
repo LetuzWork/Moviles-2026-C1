@@ -45,6 +45,7 @@ fun MisComidasScreen(
     val topPx = with(density) { contentPadding.calculateTopPadding().roundToPx() }
     val bottomPx = with(density) { contentPadding.calculateBottomPadding().roundToPx() }
 
+
     Scaffold(
         contentWindowInsets = WindowInsets(top = topPx, bottom = bottomPx),
         floatingActionButton = {
