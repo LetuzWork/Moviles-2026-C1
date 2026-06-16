@@ -129,8 +129,11 @@ class RecipeDetailViewModel @Inject constructor(
         val state = _state.value
         val recipe = state.recipe ?: return
         viewModelScope.launch {
+            val spanishName = recipe.nameEs
+                ?: runCatching { translator.translateToSpanish(recipe.name) }.getOrNull()
+                ?: recipe.name
             val meal = Meal(
-                name = recipe.nameEs ?: recipe.name,
+                name = spanishName,
                 photoUri = recipe.thumbUrl,
                 category = MealTranslator.mealCategory(recipe.category).label,
                 notes = recipe.instructionsEs ?: recipe.instructions,

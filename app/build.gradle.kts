@@ -154,6 +154,9 @@ dependencies {
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     android.set(true)
     ignoreFailures.set(false)
+    filter {
+        exclude("**/*.kts")
+    }
 }
 
 detekt {
