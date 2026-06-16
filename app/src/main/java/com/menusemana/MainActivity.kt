@@ -22,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.menusemana.core.designsystem.component.MsBottomBar
 import com.menusemana.core.designsystem.theme.MenuSemanaTheme
 import com.menusemana.feature.meals.AddEditMealScreen
@@ -184,12 +185,17 @@ private fun MenuSemanaApp(dataStore: DataStore<Preferences>) {
                     onSaved = { navController.navigateUp() },
                 )
             }
-            composable<Recipes> {
+            composable<Recipes> { entry ->
+                val importedName by entry.savedStateHandle
+                    .getStateFlow("imported_recipe_name", "")
+                    .collectAsStateWithLifecycle()
                 RecetasScreen(
                     contentPadding = innerPadding,
                     onNavigateToDetail = { mealDbId ->
                         navController.navigate(RecipeDetail(mealDbId))
-                    }
+                    },
+                    importedRecipeName = importedName,
+                    onImportedConsumed = { entry.savedStateHandle["imported_recipe_name"] = "" },
                 )
             }
             composable<RecipeDetail> { backStackEntry ->
@@ -197,12 +203,10 @@ private fun MenuSemanaApp(dataStore: DataStore<Preferences>) {
                 RecipeDetailScreen(
                     mealDbId = route.mealDbId,
                     onNavigateUp = { navController.navigateUp() },
-                    onNavigateToMyMeals = {
-                        navController.navigate(Meals) {
-                            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                    onImported = { name ->
+                        navController.previousBackStackEntry
+                            ?.savedStateHandle?.set("imported_recipe_name", name)
+                        navController.navigateUp()
                     },
                 )
             }
