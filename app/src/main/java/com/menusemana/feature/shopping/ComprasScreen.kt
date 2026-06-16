@@ -11,11 +11,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,8 +28,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import android.content.Intent
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.menusemana.core.designsystem.component.MsEmptyState
@@ -39,10 +45,36 @@ fun ComprasScreen(
     viewModel: ShoppingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     Column(modifier = Modifier.fillMaxSize().padding(contentPadding)) {
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
-            MsLargeHeader(kicker = "Esta semana", title = "Compras")
+            MsLargeHeader(
+                kicker = "Esta semana",
+                title = "Compras",
+                actions = {
+                    if (state.sections.isNotEmpty()) {
+                        IconButton(onClick = {
+                            val text = viewModel.buildShareText()
+                            if (text.isNotBlank()) {
+                                val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_SUBJECT, "Lista de compras — MenúSemana")
+                                    putExtra(Intent.EXTRA_TEXT, text)
+                                }
+                                context.startActivity(
+                                    Intent.createChooser(sendIntent, "Compartir lista")
+                                )
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Share,
+                                contentDescription = "Compartir lista",
+                            )
+                        }
+                    }
+                },
+            )
         }
 
         if (state.sections.isEmpty()) {

@@ -54,4 +54,23 @@ class ShoppingViewModel @Inject constructor(
     }
 
     fun itemKey(aisle: String, name: String) = "$aisle|$name"
+
+    /** Arma el texto de la lista de compras para compartir (HU-05.3). */
+    fun buildShareText(): String {
+        val current = state.value
+        if (current.sections.isEmpty()) return ""
+        return buildString {
+            appendLine("🛒 Lista de compras — MenúSemana")
+            appendLine()
+            current.sections.forEach { section ->
+                appendLine(section.aisle.uppercase())
+                section.items.forEach { item ->
+                    val mark = if (itemKey(section.aisle, item.name) in current.checkedItems) "[x]" else "[ ]"
+                    val qty = if (item.quantity.isNotBlank()) " — ${item.quantity}" else ""
+                    appendLine("$mark ${item.name}$qty")
+                }
+                appendLine()
+            }
+        }.trimEnd()
+    }
 }
