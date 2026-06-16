@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.menusemana.core.database.dao.MealDao
 import com.menusemana.core.database.dao.PlanDao
+import com.menusemana.core.database.dao.PreferencesDao
 import com.menusemana.core.database.dao.RecipeCacheDao
 import com.menusemana.core.database.entity.IngredientEntity
 import com.menusemana.core.database.entity.MealEntity
@@ -74,4 +75,7 @@ object DatabaseModule {
 
     @Provides
     fun provideRecipeCacheDao(db: MenuSemanaDatabase): RecipeCacheDao = db.recipeCacheDao()
+
+    @Provides
+    fun providePreferencesDao(db: MenuSemanaDatabase): PreferencesDao = db.preferencesDao()
 }

@@ -4,7 +4,9 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.menusemana.core.database.dao.MealDao
 import com.menusemana.core.database.dao.PlanDao
+import com.menusemana.core.database.dao.PreferencesDao
 import com.menusemana.core.database.dao.RecipeCacheDao
+import com.menusemana.core.database.entity.DietaryPreferenceEntity
 import com.menusemana.core.database.entity.IngredientEntity
 import com.menusemana.core.database.entity.MealEntity
 import com.menusemana.core.database.entity.PlannedMealEntity
@@ -16,12 +18,14 @@ import com.menusemana.core.database.entity.RecipeCacheEntity
         IngredientEntity::class,
         PlannedMealEntity::class,
         RecipeCacheEntity::class,
+        DietaryPreferenceEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = false,
 )
 abstract class MenuSemanaDatabase : RoomDatabase() {
     abstract fun mealDao(): MealDao
     abstract fun planDao(): PlanDao
     abstract fun recipeCacheDao(): RecipeCacheDao
+    abstract fun preferencesDao(): PreferencesDao
 }
