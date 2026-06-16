@@ -36,6 +36,21 @@ class RecipeRepositoryImpl @Inject constructor(
                 },
             )
 
+    override suspend fun searchByCategory(category: String): Result<List<Recipe>> =
+        runCatching { api.filterByCategory(category) }
+            .fold(
+                onSuccess = { response ->
+                    val recipes = response.meals?.map { it.toRecipe().copy(category = category) } ?: emptyList()
+                    Result.Success(recipes)
+                },
+                onFailure = { throwable ->
+                    Result.Error(
+                        if (throwable is IOException) ErrorType.Network else ErrorType.Unknown,
+                        throwable,
+                    )
+                },
+            )
+
     override suspend fun getById(mealDbId: String): Result<Recipe> =
         runCatching { api.lookupById(mealDbId) }
             .fold(

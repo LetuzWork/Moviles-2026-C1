@@ -63,7 +63,7 @@ fun RecipeDetailScreen(
     }
 
     Scaffold(
-        topBar = { MsTopAppBar(title = recipe.name, onNavigateUp = onNavigateUp) }
+        topBar = { MsTopAppBar(title = recipe.nameEs ?: recipe.name, onNavigateUp = onNavigateUp) }
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
             item {
@@ -86,7 +86,7 @@ fun RecipeDetailScreen(
 
             item {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text(recipe.name, style = MaterialTheme.typography.headlineSmall)
+                    Text(recipe.nameEs ?: recipe.name, style = MaterialTheme.typography.headlineSmall)
                     state.translatedArea?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                     Spacer(Modifier.height(12.dp))
                     MsPrimaryButton("Agregar a mis comidas", onClick = { viewModel.importToMyMeals() }, modifier = Modifier.fillMaxWidth())

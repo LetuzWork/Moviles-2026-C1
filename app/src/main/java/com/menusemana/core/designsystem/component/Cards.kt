@@ -117,6 +117,7 @@ fun MealPhotoCard(
     thumbUrl: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    area: String? = null,
 ) {
     Card(
         onClick = onClick,
@@ -174,6 +175,15 @@ fun MealPhotoCard(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
+                if (!area.isNullOrBlank()) {
+                    Text(
+                        text = area,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Neutral50.copy(alpha = 0.75f),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
         }
     }

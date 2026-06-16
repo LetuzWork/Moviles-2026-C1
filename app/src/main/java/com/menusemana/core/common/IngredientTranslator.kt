@@ -819,7 +819,7 @@ class MealTranslator @Inject constructor(
 
     // ─── Clasificación de recetas ─────────────────────────────────────────────
 
-    private val COLACION_CATEGORIES = setOf("dessert", "starter")
+    private val COLACION_CATEGORIES = setOf("dessert", "starter", "breakfast", "side")
 
     private val MEAT_FISH = setOf(
         "chicken", "beef", "pork", "lamb", "turkey", "duck", "veal", "venison",

@@ -51,7 +51,7 @@ class RecipeDetailViewModel @Inject constructor(
                         translatedCategory = recipe.category?.let { translator.translateCategory(it) },
                         isLoading = false,
                     ) }
-                    val needsTranslation = recipe.instructionsEs == null || recipe.ingredientsEs == null
+                    val needsTranslation = recipe.nameEs == null || recipe.instructionsEs == null || recipe.ingredientsEs == null
                     if (needsTranslation) translateRecipe(recipe)
                 }
                 is Result.Error -> _state.update { it.copy(isLoading = false) }
@@ -77,6 +77,10 @@ class RecipeDetailViewModel @Inject constructor(
             // Fire independent API calls in parallel
             var updatedRecipe = recipe
             coroutineScope {
+                val nameDeferred = if (recipe.nameEs == null) {
+                    async { runCatching { translator.translateToSpanish(recipe.name) }.getOrNull() }
+                } else null
+
                 val instrDeferred = if (recipe.instructions != null && recipe.instructionsEs == null) {
                     async { translator.translateToSpanish(recipe.instructions) }
                 } else null
@@ -84,6 +88,10 @@ class RecipeDetailViewModel @Inject constructor(
                 val namesDeferred = if (localPairs != null && unknownNames.isNotEmpty()) {
                     async { runCatching { translator.translateBatch(unknownNames) }.getOrDefault(unknownNames) }
                 } else null
+
+                nameDeferred?.await()?.let { translated ->
+                    updatedRecipe = updatedRecipe.copy(nameEs = translated)
+                }
 
                 instrDeferred?.await()?.let { translated ->
                     recipeRepository.saveTranslation(recipe.mealDbId, translated)
@@ -122,7 +130,7 @@ class RecipeDetailViewModel @Inject constructor(
         val recipe = state.recipe ?: return
         viewModelScope.launch {
             val meal = Meal(
-                name = recipe.name,
+                name = recipe.nameEs ?: recipe.name,
                 photoUri = recipe.thumbUrl,
                 category = MealTranslator.mealCategory(recipe.category).label,
                 notes = recipe.instructionsEs ?: recipe.instructions,

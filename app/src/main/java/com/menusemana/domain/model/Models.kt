@@ -60,6 +60,7 @@ data class PlannedMeal(
 data class Recipe(
     val mealDbId: String,
     val name: String,
+    val nameEs: String? = null,
     val thumbUrl: String?,
     val area: String?,
     val category: String?,
