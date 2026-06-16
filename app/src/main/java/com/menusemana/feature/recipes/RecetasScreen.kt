@@ -72,7 +72,7 @@ fun RecetasScreen(
     }
     LaunchedEffect(reachedEnd) {
         if (reachedEnd && state.hasMore && !state.isLoadingMore && !state.isLoading && state.query.isBlank()) {
-            viewModel.loadNextCategory()
+            viewModel.loadNextPage()
         }
     }
 
