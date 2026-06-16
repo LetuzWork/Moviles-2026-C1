@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
@@ -30,8 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.menusemana.core.common.IngredientTranslator
-import com.menusemana.core.common.MetricConverter
 import com.menusemana.core.designsystem.component.MsPrimaryButton
 import com.menusemana.core.designsystem.component.MsTopAppBar
 import com.menusemana.core.designsystem.theme.JetBrainsMono
@@ -80,7 +79,7 @@ fun RecipeDetailScreen(
                         Box(
                             modifier = Modifier.align(Alignment.TopStart).padding(12.dp)
                                 .clip(PillShape).background(Persimmon500).padding(horizontal = 10.dp, vertical = 4.dp)
-                        ) { Text(IngredientTranslator.translateCategory(cat), style = MaterialTheme.typography.labelSmall, color = Neutral50) }
+                        ) { Text(state.translatedCategory ?: cat, style = MaterialTheme.typography.labelSmall, color = Neutral50) }
                     }
                 }
             }
@@ -88,35 +87,50 @@ fun RecipeDetailScreen(
             item {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(recipe.name, style = MaterialTheme.typography.headlineSmall)
-                    recipe.area?.let { Text(IngredientTranslator.translateArea(it), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+                    state.translatedArea?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                     Spacer(Modifier.height(12.dp))
                     MsPrimaryButton("Agregar a mis comidas", onClick = { viewModel.importToMyMeals() }, modifier = Modifier.fillMaxWidth())
                 }
                 HorizontalDivider()
             }
 
-            if (recipe.ingredients.isNotEmpty()) {
+            val resolvedIngredients = state.resolvedIngredients
+            if (resolvedIngredients.isNotEmpty()) {
                 item { Text("Ingredientes", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(16.dp)) }
-                itemsIndexed(recipe.ingredients) { _, (name, measure) ->
+                itemsIndexed(resolvedIngredients) { _, (name, measure) ->
                     Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
                         Text(
-                            MetricConverter.convert(measure).ifBlank { measure }.ifBlank { "c/n" },
+                            measure.ifBlank { "c/n" },
                             style = MaterialTheme.typography.bodyMedium.copy(fontFamily = JetBrainsMono),
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.weight(0.35f),
                         )
-                        Text(IngredientTranslator.translate(name), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(0.65f))
+                        Text(name, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(0.65f))
                     }
                 }
                 item { HorizontalDivider() }
             }
 
-            if (!recipe.instructions.isNullOrBlank()) {
+            val showInstructions = !recipe.instructions.isNullOrBlank() || state.isTranslating
+            if (showInstructions) {
                 item {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Text("Preparación", style = MaterialTheme.typography.titleMedium)
+                        Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                            Text("Preparación", style = MaterialTheme.typography.titleMedium)
+                            if (state.isTranslating) {
+                                Spacer(Modifier.width(8.dp))
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(14.dp),
+                                    strokeWidth = 2.dp,
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
+                            }
+                        }
                         Spacer(Modifier.height(8.dp))
-                        Text(recipe.instructions, style = MaterialTheme.typography.bodyMedium)
+                        val body = recipe.instructionsEs ?: recipe.instructions
+                        if (!body.isNullOrBlank()) {
+                            Text(body, style = MaterialTheme.typography.bodyMedium)
+                        }
                     }
                 }
             }

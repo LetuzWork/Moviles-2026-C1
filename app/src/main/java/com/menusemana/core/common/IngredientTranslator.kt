@@ -1,15 +1,143 @@
 package com.menusemana.core.common
 
-object IngredientTranslator {
+import com.menusemana.domain.model.DietaryPreference
+import com.menusemana.domain.model.MealCategory
+import com.menusemana.domain.model.Recipe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.HttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.json.JSONArray
+import javax.inject.Inject
+import javax.inject.Singleton
 
-    fun translate(name: String): String =
-        INGREDIENTS[name.trim().lowercase()] ?: name.trim()
+@Singleton
+class MealTranslator @Inject constructor(
+    private val client: OkHttpClient,
+) {
 
-    fun translateArea(area: String): String =
-        AREAS[area.trim().lowercase()] ?: area.trim()
+    // ─── API (Google Translate) ───────────────────────────────────────────────
 
-    fun translateCategory(category: String): String =
-        CATEGORIES[category.trim().lowercase()] ?: category.trim()
+    suspend fun translateToSpanish(text: String): String? = withContext(Dispatchers.IO) {
+        if (text.isBlank()) return@withContext null
+        runCatching {
+            val url = HttpUrl.Builder()
+                .scheme("https")
+                .host("translate.googleapis.com")
+                .addPathSegments("translate_a/single")
+                .addQueryParameter("client", "gtx")
+                .addQueryParameter("sl", "en")
+                .addQueryParameter("tl", "es")
+                .addQueryParameter("dt", "t")
+                .addQueryParameter("q", text)
+                .build()
+            val response = client.newCall(Request.Builder().url(url).build()).execute()
+            if (!response.isSuccessful) return@runCatching null
+            val body = response.body?.string() ?: return@runCatching null
+            parseSegments(body)
+        }.getOrNull()
+    }
+
+    suspend fun translateBatch(items: List<String>): List<String> {
+        if (items.isEmpty()) return emptyList()
+        val translated = translateToSpanish(items.joinToString("\n")) ?: return items
+        val lines = translated.split("\n")
+        return if (lines.size == items.size) lines.map { it.trim() } else items
+    }
+
+    private fun parseSegments(json: String): String {
+        val segments = JSONArray(json).getJSONArray(0)
+        return (0 until segments.length())
+            .mapNotNull { runCatching { segments.getJSONArray(it).getString(0) }.getOrNull() }
+            .joinToString("")
+            .trim()
+    }
+
+    // ─── Local: instance methods delegate to companion for static access ────────
+
+    fun translate(name: String) = Companion.translate(name)
+    fun translateMeasure(raw: String) = Companion.translateMeasure(raw)
+    fun translatePair(name: String, measure: String) = Companion.translatePair(name, measure)
+    fun translateArea(area: String) = Companion.translateArea(area)
+    fun translateCategory(category: String) = Companion.translateCategory(category)
+
+    companion object {
+
+        // Static access for Compose screens (e.g. MealTranslator.translateCategory(cat))
+        fun translate(name: String): String =
+            INGREDIENTS[name.trim().lowercase()] ?: name.trim()
+
+        fun translateMeasure(raw: String): String {
+            val s = raw.trim()
+            if (s.isBlank()) return s
+            val (amount, rest) = parseMeasureAmount(s) ?: return MEASURES[s.lowercase()] ?: s
+            val unit = rest.trim().lowercase()
+            return when {
+                unit.startsWith("cup")                                     -> toMetric(amount * 240,  "ml")
+                unit.startsWith("tbsp") || unit.startsWith("tablespoon")  -> toMetric(amount * 15,   "ml")
+                unit.startsWith("tsp")  || unit.startsWith("teaspoon")    -> toMetric(amount * 5,    "ml")
+                unit.startsWith("fl oz") || unit.startsWith("fluid ounce")-> toMetric(amount * 30,   "ml")
+                unit.startsWith("pint")                                    -> toMetric(amount * 475,  "ml")
+                unit.startsWith("quart")                                   -> toMetric(amount * 950,  "ml")
+                unit.startsWith("gallon")                                  -> toMetric(amount * 3800, "ml")
+                unit.startsWith("oz") || unit.startsWith("ounce")         -> toMetric(amount * 28,   "g")
+                unit.startsWith("lb") || unit.startsWith("pound")         -> toMetric(amount * 450,  "g")
+                unit.startsWith("stick")                                   -> toMetric(amount * 115,  "g")
+                else -> {
+                    val translatedUnit = MEASURES[unit] ?: unit
+                    if (translatedUnit != unit) {
+                        val n = if (amount == amount.toLong().toDouble()) amount.toLong().toString()
+                                else "%.1f".format(amount)
+                        "$n $translatedUnit"
+                    } else {
+                        MEASURES[s.lowercase()] ?: s
+                    }
+                }
+            }
+        }
+
+        fun translatePair(name: String, measure: String): Pair<String, String> =
+            translate(name) to translateMeasure(measure)
+
+        fun translateArea(area: String): String =
+            AREAS[area.trim().lowercase()] ?: area.trim()
+
+        fun translateCategory(category: String): String =
+            CATEGORIES[category.trim().lowercase()] ?: category.trim()
+
+        // ─── Conversión de unidades ───────────────────────────────────────────
+
+    private val MIXED    = Regex("""^(\d+)\s+(\d+)/(\d+)(.*)$""")
+    private val FRACTION = Regex("""^(\d+)/(\d+)(.*)$""")
+    private val DECIMAL  = Regex("""^(\d+(?:\.\d+)?)(.*)$""")
+
+    private fun parseMeasureAmount(s: String): Pair<Double, String>? {
+        MIXED.find(s)?.let { m ->
+            val whole = m.groupValues[1].toDouble()
+            val num   = m.groupValues[2].toDouble()
+            val den   = m.groupValues[3].toDouble()
+            return (whole + num / den) to m.groupValues[4]
+        }
+        FRACTION.find(s)?.let { m ->
+            return (m.groupValues[1].toDouble() / m.groupValues[2].toDouble()) to m.groupValues[3]
+        }
+        DECIMAL.find(s)?.let { m ->
+            return m.groupValues[1].toDouble() to m.groupValues[2]
+        }
+        return null
+    }
+
+    private fun toMetric(value: Double, baseUnit: String): String {
+        val (scaled, unit) = when (baseUnit) {
+            "ml" -> if (value >= 1000) value / 1000 to "l"  else value to "ml"
+            "g"  -> if (value >= 1000) value / 1000 to "kg" else value to "g"
+            else -> value to baseUnit
+        }
+        val formatted = if (scaled == scaled.toLong().toDouble()) scaled.toLong().toString()
+                        else "%.0f".format(scaled)
+        return "$formatted $unit"
+    }
 
     // ─── Ingredientes ────────────────────────────────────────────────────────
 
@@ -529,6 +657,113 @@ object IngredientTranslator {
         "toor dal"                   to "Dal de lentejas amarillas",
     )
 
+    // ─── Medidas informales / cualitativas ───────────────────────────────────
+
+    private val MEASURES = mapOf(
+        // Cantidades informales — singular
+        "handful"           to "puñado",
+        "a handful"         to "un puñado",
+        "handful of"        to "puñado de",
+        "a handful of"      to "un puñado de",
+        "pinch"             to "pizca",
+        "a pinch"           to "una pizca",
+        "dash"              to "toque",
+        "a dash"            to "un toque",
+        "drizzle"           to "chorrito",
+        "a drizzle"         to "un chorrito",
+        "sprinkle"          to "pizca",
+        "bunch"             to "atado",
+        "a bunch"           to "un atado",
+        "sprig"             to "ramita",
+        "knob"              to "nuez",
+        "squeeze"           to "chorro",
+        "a squeeze"         to "un chorro",
+        "can"               to "lata",
+        "tin"               to "lata",
+        "jar"               to "frasco",
+        "packet"            to "paquete",
+        "pack"              to "paquete",
+        "bag"               to "bolsa",
+        "bottle"            to "botella",
+        "head"              to "cabeza",
+        "clove"             to "diente",
+        "stalk"             to "tallo",
+        "leaf"              to "hoja",
+        "strip"             to "tira",
+        "piece"             to "trozo",
+        "slice"             to "rodaja",
+        "rasher"            to "loncha",
+        "cube"              to "cubo",
+        "fillet"            to "filete",
+        "portion"           to "porción",
+        // Cantidades informales — plural
+        "handfuls"          to "puñados",
+        "pinches"           to "pizcas",
+        "dashes"            to "toques",
+        "drizzles"          to "chorritos",
+        "sprinkles"         to "pizcas",
+        "bunches"           to "atados",
+        "sprigs"            to "ramitas",
+        "knobs"             to "nueces",
+        "squeezes"          to "chorros",
+        "cans"              to "latas",
+        "tins"              to "latas",
+        "jars"              to "frascos",
+        "packets"           to "paquetes",
+        "packs"             to "paquetes",
+        "bags"              to "bolsas",
+        "bottles"           to "botellas",
+        "heads"             to "cabezas",
+        "cloves"            to "dientes",
+        "stalks"            to "tallos",
+        "leaves"            to "hojas",
+        "strips"            to "tiras",
+        "pieces"            to "trozos",
+        "slices"            to "rodajas",
+        "rashers"           to "lonchas",
+        "cubes"             to "cubos",
+        "fillets"           to "filetes",
+        "portions"          to "porciones",
+        // Descriptores de preparación (en el campo medida de MealDB)
+        "chopped"           to "picado",
+        "finely chopped"    to "finamente picado",
+        "coarsely chopped"  to "picado grueso",
+        "roughly chopped"   to "picado grueso",
+        "diced"             to "en cubos",
+        "minced"            to "picado fino",
+        "beaten"            to "batido",
+        "finely sliced"     to "finamente rebanado",
+        "thinly sliced"     to "en rodajas finas",
+        "thickly sliced"    to "en rodajas gruesas",
+        "sliced"            to "en rodajas",
+        "grated"            to "rallado",
+        "crushed"           to "machacado",
+        "peeled"            to "pelado",
+        "deveined"          to "desvenado",
+        "trimmed"           to "limpio",
+        "halved"            to "partido a la mitad",
+        "quartered"         to "en cuartos",
+        "shredded"          to "desmenuzado",
+        "melted"            to "derretido",
+        "softened"          to "ablandado",
+        "room temperature"  to "temperatura ambiente",
+        // Expresiones de cantidad
+        "to taste"          to "a gusto",
+        "to serve"          to "para servir",
+        "for serving"       to "para servir",
+        "to sprinkle"       to "para espolvorear",
+        "as needed"         to "cantidad necesaria",
+        "optional"          to "opcional",
+        "some"              to "un poco",
+        "a few"             to "algunos",
+        "a little"          to "un poco",
+        "large"             to "grande",
+        "medium"            to "mediano",
+        "small"             to "pequeño",
+        "zest"              to "ralladura",
+        "juice"             to "jugo",
+    )
+
     // ─── Áreas / Origen ──────────────────────────────────────────────────────
 
     private val AREAS = mapOf(
@@ -581,4 +816,50 @@ object IngredientTranslator {
         "goat"       to "Cabra",
         "miscellaneous" to "Varios",
     )
+
+    // ─── Clasificación de recetas ─────────────────────────────────────────────
+
+    private val COLACION_CATEGORIES = setOf("dessert", "starter")
+
+    private val MEAT_FISH = setOf(
+        "chicken", "beef", "pork", "lamb", "turkey", "duck", "veal", "venison",
+        "bacon", "ham", "sausage", "chorizo", "salami", "prosciutto", "pancetta",
+        "lard", "gelatin", "fish", "salmon", "tuna", "cod", "tilapia", "sea bass",
+        "trout", "mackerel", "herring", "anchovy", "sardine", "shrimp", "prawn",
+        "crab", "lobster", "mussel", "clam", "squid", "octopus", "scallop",
+    )
+
+    private val DAIRY_INGREDIENTS = setOf(
+        "milk", "cream", "butter", "cheese", "yogurt", "yoghurt", "ghee",
+        "mozzarella", "parmesan", "cheddar", "ricotta", "brie", "camembert",
+        "feta", "gouda", "emmental", "gruyere", "sour cream", "condensed milk",
+        "evaporated milk", "creme fraiche", "cream cheese", "whipping cream",
+        "double cream", "heavy cream",
+    )
+
+    private val GLUTEN_INGREDIENTS = setOf(
+        "flour", "bread", "breadcrumbs", "croutons", "pasta", "noodle", "noodles",
+        "wheat", "barley", "rye", "semolina", "couscous", "oat", "oats",
+        "soy sauce", "beer", "malt",
+    )
+
+    fun mealCategory(mealDbCategory: String?): MealCategory =
+        if (mealDbCategory?.trim()?.lowercase() in COLACION_CATEGORIES) MealCategory.COLACION
+        else MealCategory.COMIDA
+
+    fun satisfies(recipe: Recipe, preference: DietaryPreference): Boolean {
+        val names = recipe.ingredients.map { it.first.lowercase() }
+        return when (preference) {
+            DietaryPreference.VEGETARIANO ->
+                names.none { name -> MEAT_FISH.any { name.contains(it) } }
+            DietaryPreference.VEGANO ->
+                names.none { name -> (MEAT_FISH + DAIRY_INGREDIENTS).any { name.contains(it) } }
+            DietaryPreference.SIN_LACTEOS ->
+                names.none { name -> DAIRY_INGREDIENTS.any { name.contains(it) } }
+            DietaryPreference.SIN_GLUTEN ->
+                names.none { name -> GLUTEN_INGREDIENTS.any { name.contains(it) } }
+        }
+    }
+
+    } // end companion object
 }

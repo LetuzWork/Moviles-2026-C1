@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.menusemana.core.common.IngredientTranslator
+import com.menusemana.core.common.MealTranslator
 import com.menusemana.core.designsystem.component.MsEmptyState
 import com.menusemana.core.designsystem.component.MsLargeHeader
 import com.menusemana.core.designsystem.component.MsPrimaryButton
@@ -111,7 +111,7 @@ fun RecetasScreen(
                 items(state.recipes, key = { it.mealDbId }) { recipe ->
                     MealPhotoCard(
                         name = recipe.name,
-                        category = IngredientTranslator.translateCategory(recipe.category ?: ""),
+                        category = MealTranslator.translateCategory(recipe.category ?: ""),
                         thumbUrl = recipe.thumbUrl,
                         onClick = { onNavigateToDetail(recipe.mealDbId) },
                     )

@@ -21,4 +21,10 @@ interface RecipeCacheDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(recipe: RecipeCacheEntity)
+
+    @Query("UPDATE recipe_cache SET instructionsEs = :translated WHERE mealDbId = :id")
+    suspend fun saveTranslation(id: String, translated: String)
+
+    @Query("UPDATE recipe_cache SET ingredientsEsJson = :json WHERE mealDbId = :id")
+    suspend fun saveIngredientTranslations(id: String, json: String)
 }

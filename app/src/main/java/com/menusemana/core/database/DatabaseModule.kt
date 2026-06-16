@@ -32,6 +32,7 @@ object DatabaseModule {
         mealDaoProvider: Provider<MealDao>,
     ): MenuSemanaDatabase =
         Room.databaseBuilder(context, MenuSemanaDatabase::class.java, "menusemana.db")
+            .addMigrations(MenuSemanaDatabase.MIGRATION_1_2, MenuSemanaDatabase.MIGRATION_2_3)
             .fallbackToDestructiveMigration()
             .addCallback(object : RoomDatabase.Callback() {
                 // Se ejecuta una sola vez, al crear la base (primera instalación). HU-06.4.

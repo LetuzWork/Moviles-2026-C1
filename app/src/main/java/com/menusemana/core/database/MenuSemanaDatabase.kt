@@ -2,6 +2,8 @@ package com.menusemana.core.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.menusemana.core.database.dao.MealDao
 import com.menusemana.core.database.dao.PlanDao
 import com.menusemana.core.database.dao.PreferencesDao
@@ -20,7 +22,7 @@ import com.menusemana.core.database.entity.RecipeCacheEntity
         RecipeCacheEntity::class,
         DietaryPreferenceEntity::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = false,
 )
 abstract class MenuSemanaDatabase : RoomDatabase() {
@@ -28,4 +30,17 @@ abstract class MenuSemanaDatabase : RoomDatabase() {
     abstract fun planDao(): PlanDao
     abstract fun recipeCacheDao(): RecipeCacheDao
     abstract fun preferencesDao(): PreferencesDao
+
+    companion object {
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE recipe_cache ADD COLUMN instructionsEs TEXT")
+            }
+        }
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE recipe_cache ADD COLUMN ingredientsEsJson TEXT")
+            }
+        }
+    }
 }

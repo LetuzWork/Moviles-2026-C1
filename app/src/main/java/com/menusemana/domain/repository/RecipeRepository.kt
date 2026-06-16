@@ -8,4 +8,6 @@ interface RecipeRepository {
     suspend fun search(query: String): Result<List<Recipe>>
     suspend fun getById(mealDbId: String): Result<Recipe>
     fun getCachedRecipes(): Flow<List<Recipe>>
+    suspend fun saveTranslation(mealDbId: String, translatedInstructions: String)
+    suspend fun saveIngredientTranslations(mealDbId: String, translatedPairs: List<Pair<String, String>>)
 }
