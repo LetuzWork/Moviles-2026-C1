@@ -99,4 +99,5 @@ Los APKs se encuentran en la carpeta [`release/`](./release):
 
 ## 🌿 Flujo de trabajo Git
 
-Las convenciones de ramas, commits y PRs están documentadas en [`GITFLOW.md`](./GITFLOW.md).
+- Cómo contribuir (setup, ramas, PRs, checklist): [`CONTRIBUTING.md`](./CONTRIBUTING.md).
+- Convenciones detalladas de ramas y commits: [`GITFLOW.md`](./GITFLOW.md).
