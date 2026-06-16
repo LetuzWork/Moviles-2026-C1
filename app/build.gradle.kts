@@ -1,9 +1,21 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+}
+
+// Carga keystore.properties si existe (no versionado). Permite firmar el release
+// localmente y, en CI, vía variables de entorno (Secrets de GitHub).
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties().apply {
+    if (keystorePropertiesFile.exists()) {
+        FileInputStream(keystorePropertiesFile).use { load(it) }
+    }
 }
 
 android {
@@ -23,9 +35,29 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            val storeFilePath = keystoreProperties.getProperty("storeFile")
+                ?: System.getenv("KEYSTORE_FILE")
+            if (storeFilePath != null) {
+                storeFile = rootProject.file(storeFilePath)
+                storePassword = keystoreProperties.getProperty("storePassword")
+                    ?: System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                    ?: System.getenv("KEY_ALIAS")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+                    ?: System.getenv("KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
+            val releaseSigning = signingConfigs.getByName("release")
+            if (releaseSigning.storeFile != null) {
+                signingConfig = releaseSigning
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
