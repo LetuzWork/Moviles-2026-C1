@@ -21,7 +21,6 @@ data class MealWithIngredients(
 
 @Dao
 interface MealDao {
-
     @Transaction
     @Query("SELECT * FROM meals ORDER BY createdAt DESC")
     fun getAllMealsWithIngredients(): Flow<List<MealWithIngredients>>

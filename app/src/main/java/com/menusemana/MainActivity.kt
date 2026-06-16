@@ -16,13 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.menusemana.core.designsystem.component.MsBottomBar
 import com.menusemana.core.designsystem.theme.MenuSemanaTheme
 import com.menusemana.feature.meals.AddEditMealScreen
@@ -50,7 +50,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     @Inject lateinit var dataStore: DataStore<Preferences>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,22 +81,23 @@ private fun MenuSemanaApp(dataStore: DataStore<Preferences>) {
     val currentRoute = backStack?.destination?.route
 
 // 1. Usamos los nombres exactos en texto, para que R8 no los rompa
-    val topLevelRoutes = listOf(
-        "com.menusemana.navigation.Plan",
-        "com.menusemana.navigation.Meals",
-        "com.menusemana.navigation.Recipes",
-        "com.menusemana.navigation.Shopping"
-    )
+    val topLevelRoutes =
+        listOf(
+            "com.menusemana.navigation.Plan",
+            "com.menusemana.navigation.Meals",
+            "com.menusemana.navigation.Recipes",
+            "com.menusemana.navigation.Shopping",
+        )
     val showBottomBar = topLevelRoutes.any { currentRoute?.startsWith(it) == true }
 
-    val selectedIndex = when {
-        currentRoute?.startsWith("com.menusemana.navigation.Plan") == true -> 0
-        currentRoute?.startsWith("com.menusemana.navigation.Meals") == true -> 1
-        currentRoute?.startsWith("com.menusemana.navigation.Recipes") == true -> 2
-        currentRoute?.startsWith("com.menusemana.navigation.Shopping") == true -> 3
-        else -> 0
-    }
-
+    val selectedIndex =
+        when {
+            currentRoute?.startsWith("com.menusemana.navigation.Plan") == true -> 0
+            currentRoute?.startsWith("com.menusemana.navigation.Meals") == true -> 1
+            currentRoute?.startsWith("com.menusemana.navigation.Recipes") == true -> 2
+            currentRoute?.startsWith("com.menusemana.navigation.Shopping") == true -> 3
+            else -> 0
+        }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -106,12 +106,13 @@ private fun MenuSemanaApp(dataStore: DataStore<Preferences>) {
                 MsBottomBar(
                     selectedIndex = selectedIndex,
                     onTabSelected = { index ->
-                        val route = when (index) {
-                            0 -> Plan
-                            1 -> Meals
-                            2 -> Recipes
-                            else -> Shopping
-                        }
+                        val route =
+                            when (index) {
+                                0 -> Plan
+                                1 -> Meals
+                                2 -> Recipes
+                                else -> Shopping
+                            }
                         navController.navigate(route) {
                             popUpTo(navController.graph.findStartDestination().id) {
                                 saveState = true
@@ -119,10 +120,10 @@ private fun MenuSemanaApp(dataStore: DataStore<Preferences>) {
                             launchSingleTop = true
                             restoreState = true
                         }
-                    }
+                    },
                 )
             }
-        }
+        },
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -134,7 +135,7 @@ private fun MenuSemanaApp(dataStore: DataStore<Preferences>) {
                         navController.navigate(Plan) {
                             popUpTo<Onboarding> { inclusive = true }
                         }
-                    }
+                    },
                 )
             }
             composable<Plan> {
@@ -157,7 +158,7 @@ private fun MenuSemanaApp(dataStore: DataStore<Preferences>) {
                     },
                     onNavigateToAdd = {
                         navController.navigate(AddMeal)
-                    }
+                    },
                 )
             }
             composable<MealDetail> { backStackEntry ->
@@ -211,7 +212,8 @@ private fun MenuSemanaApp(dataStore: DataStore<Preferences>) {
                     onNavigateUp = { navController.navigateUp() },
                     onImported = { name ->
                         navController.previousBackStackEntry
-                            ?.savedStateHandle?.set("imported_recipe_name", name)
+                            ?.savedStateHandle
+                            ?.set("imported_recipe_name", name)
                         navController.navigateUp()
                     },
                 )

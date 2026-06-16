@@ -2,9 +2,9 @@ package com.menusemana.feature.meals
 
 import android.content.Context
 import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.toRoute
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.menusemana.core.common.PhotoStorage
 import com.menusemana.domain.model.Meal
 import com.menusemana.domain.repository.MealRepository
@@ -28,49 +28,60 @@ data class DetalleComidaUiState(
 )
 
 @HiltViewModel
-class DetalleComidaViewModel @Inject constructor(
-    private val mealRepository: MealRepository,
-    private val assignMeal: AssignMealToSlotUseCase,
-    savedStateHandle: SavedStateHandle,
-) : ViewModel() {
+class DetalleComidaViewModel
+    @Inject
+    constructor(
+        private val mealRepository: MealRepository,
+        private val assignMeal: AssignMealToSlotUseCase,
+        savedStateHandle: SavedStateHandle,
+    ) : ViewModel() {
+        private val mealId: Long = checkNotNull(savedStateHandle.toRoute<com.menusemana.navigation.MealDetail>().mealId)
 
-    private val mealId: Long = checkNotNull(savedStateHandle.toRoute<com.menusemana.navigation.MealDetail>().mealId)
+        private val _state = MutableStateFlow(DetalleComidaUiState())
+        val state: StateFlow<DetalleComidaUiState> = _state
 
-    private val _state = MutableStateFlow(DetalleComidaUiState())
-    val state: StateFlow<DetalleComidaUiState> = _state
-
-    init {
-        viewModelScope.launch {
-            val meal = mealRepository.getMealById(mealId)
-            _state.update { it.copy(meal = meal, isLoading = false) }
-        }
-    }
-
-    fun showDeleteDialog() = _state.update { it.copy(showDeleteDialog = true) }
-    fun dismissDeleteDialog() = _state.update { it.copy(showDeleteDialog = false) }
-
-    fun deleteMeal(context: Context, onDeleted: () -> Unit) {
-        val meal = _state.value.meal ?: return
-        viewModelScope.launch {
-            meal.photoUri?.let { uri ->
-                if (!uri.startsWith("http")) PhotoStorage.deletePhoto(context, uri)
+        init {
+            viewModelScope.launch {
+                val meal = mealRepository.getMealById(mealId)
+                _state.update { it.copy(meal = meal, isLoading = false) }
             }
-            mealRepository.deleteMeal(meal)
-            onDeleted()
+        }
+
+        fun showDeleteDialog() = _state.update { it.copy(showDeleteDialog = true) }
+
+        fun dismissDeleteDialog() = _state.update { it.copy(showDeleteDialog = false) }
+
+        fun deleteMeal(
+            context: Context,
+            onDeleted: () -> Unit,
+        ) {
+            val meal = _state.value.meal ?: return
+            viewModelScope.launch {
+                meal.photoUri?.let { uri ->
+                    if (!uri.startsWith("http")) PhotoStorage.deletePhoto(context, uri)
+                }
+                mealRepository.deleteMeal(meal)
+                onDeleted()
+            }
+        }
+
+        fun openPlanPicker() = _state.update { it.copy(showPlanPicker = true) }
+
+        fun closePlanPicker() = _state.update { it.copy(showPlanPicker = false) }
+
+        fun assignToPlan(
+            dayOfWeek: Int,
+            slot: Int,
+        ) {
+            val meal = _state.value.meal ?: return
+            val weekStart =
+                LocalDate
+                    .now()
+                    .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                    .toEpochDay()
+            viewModelScope.launch {
+                assignMeal(weekStart, dayOfWeek, slot, meal.id)
+                _state.update { it.copy(showPlanPicker = false, addedToPlan = true) }
+            }
         }
     }
-
-    fun openPlanPicker() = _state.update { it.copy(showPlanPicker = true) }
-    fun closePlanPicker() = _state.update { it.copy(showPlanPicker = false) }
-
-    fun assignToPlan(dayOfWeek: Int, slot: Int) {
-        val meal = _state.value.meal ?: return
-        val weekStart = LocalDate.now()
-            .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-            .toEpochDay()
-        viewModelScope.launch {
-            assignMeal(weekStart, dayOfWeek, slot, meal.id)
-            _state.update { it.copy(showPlanPicker = false, addedToPlan = true) }
-        }
-    }
-}

@@ -3,7 +3,6 @@ package com.menusemana.core.designsystem.component
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,11 +31,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.menusemana.core.designsystem.theme.JetBrainsMono
-import com.menusemana.core.designsystem.theme.Neutral900
-import com.menusemana.core.designsystem.theme.PillShape
-import com.menusemana.core.designsystem.theme.Persimmon500
 import com.menusemana.core.designsystem.theme.Neutral50
+import com.menusemana.core.designsystem.theme.Neutral900
+import com.menusemana.core.designsystem.theme.Persimmon500
+import com.menusemana.core.designsystem.theme.PillShape
 
 @Composable
 fun MealListRow(
@@ -49,16 +47,18 @@ fun MealListRow(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick)
+                .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
-            modifier = Modifier
-                .size(64.dp)
-                .clip(MaterialTheme.shapes.medium),
+            modifier =
+                Modifier
+                    .size(64.dp)
+                    .clip(MaterialTheme.shapes.medium),
             contentAlignment = Alignment.Center,
         ) {
             if (photoUri != null) {
@@ -70,9 +70,10 @@ fun MealListRow(
                 )
             } else {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.surfaceVariant),
                     contentAlignment = Alignment.Center,
                 ) {
                     Icon(
@@ -138,23 +139,25 @@ fun MealPhotoCard(
             }
 
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, Neutral900.copy(alpha = 0.65f)),
-                            startY = 0.4f * 1000f,
-                        )
-                    )
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(Color.Transparent, Neutral900.copy(alpha = 0.65f)),
+                                startY = 0.4f * 1000f,
+                            ),
+                        ),
             )
 
             Box(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(8.dp)
-                    .clip(PillShape)
-                    .background(Persimmon500)
-                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                modifier =
+                    Modifier
+                        .align(Alignment.TopStart)
+                        .padding(8.dp)
+                        .clip(PillShape)
+                        .background(Persimmon500)
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
             ) {
                 Text(
                     text = category,
@@ -164,9 +167,10 @@ fun MealPhotoCard(
             }
 
             Column(
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(12.dp),
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(12.dp),
             ) {
                 Text(
                     text = name,

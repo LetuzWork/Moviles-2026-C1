@@ -47,23 +47,24 @@ private data class OnboardingPage(
     val body: String,
 )
 
-private val pages = listOf(
-    OnboardingPage(
-        icon = Icons.Rounded.CalendarMonth,
-        title = "Planificá tu semana",
-        body = "Asigná comidas a cada turno del día y tené todo organizado de un vistazo.",
-    ),
-    OnboardingPage(
-        icon = Icons.Rounded.PhotoCamera,
-        title = "Guardá tus comidas",
-        body = "Creá tus propias recetas con foto, ingredientes y pasos de preparación.",
-    ),
-    OnboardingPage(
-        icon = Icons.Rounded.ShoppingBasket,
-        title = "Lista de compras automática",
-        body = "Generamos la lista de compras de la semana agrupada por rubro. Sin esfuerzo.",
-    ),
-)
+private val pages =
+    listOf(
+        OnboardingPage(
+            icon = Icons.Rounded.CalendarMonth,
+            title = "Planificá tu semana",
+            body = "Asigná comidas a cada turno del día y tené todo organizado de un vistazo.",
+        ),
+        OnboardingPage(
+            icon = Icons.Rounded.PhotoCamera,
+            title = "Guardá tus comidas",
+            body = "Creá tus propias recetas con foto, ingredientes y pasos de preparación.",
+        ),
+        OnboardingPage(
+            icon = Icons.Rounded.ShoppingBasket,
+            title = "Lista de compras automática",
+            body = "Generamos la lista de compras de la semana agrupada por rubro. Sin esfuerzo.",
+        ),
+    )
 
 @Composable
 fun OnboardingScreen(
@@ -74,27 +75,30 @@ fun OnboardingScreen(
     val scope = rememberCoroutineScope()
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(Persimmon500, Saffron500)))
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Brush.verticalGradient(listOf(Persimmon500, Saffron500))),
     ) {
         TextButton(
             onClick = {
                 viewModel.markOnboardingSeen()
                 onFinished()
             },
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp),
         ) {
             Text("Saltar", color = Neutral50)
         }
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 32.dp)
-                .padding(top = 64.dp, bottom = 32.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 32.dp)
+                    .padding(top = 64.dp, bottom = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             HorizontalPager(
@@ -140,10 +144,11 @@ fun OnboardingScreen(
                         label = "indicator",
                     )
                     Box(
-                        modifier = Modifier
-                            .size(if (index == pagerState.currentPage) 10.dp else 8.dp)
-                            .clip(CircleShape)
-                            .background(color),
+                        modifier =
+                            Modifier
+                                .size(if (index == pagerState.currentPage) 10.dp else 8.dp)
+                                .clip(CircleShape)
+                                .background(color),
                     )
                 }
             }

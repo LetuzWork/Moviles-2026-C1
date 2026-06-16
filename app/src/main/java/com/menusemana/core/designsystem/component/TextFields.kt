@@ -2,7 +2,6 @@ package com.menusemana.core.designsystem.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
@@ -37,14 +36,18 @@ fun MsTextField(
         modifier = modifier.fillMaxWidth(),
         singleLine = singleLine,
         isError = isError,
-        supportingText = if (isError && errorMessage != null) {
-            { Text(errorMessage, color = MaterialTheme.colorScheme.error) }
-        } else null,
+        supportingText =
+            if (isError && errorMessage != null) {
+                { Text(errorMessage, color = MaterialTheme.colorScheme.error) }
+            } else {
+                null
+            },
         trailingIcon = trailingIcon,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Persimmon500,
-            focusedLabelColor = Persimmon500,
-        ),
+        colors =
+            OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Persimmon500,
+                focusedLabelColor = Persimmon500,
+            ),
         shape = MaterialTheme.shapes.medium,
     )
 }
@@ -66,11 +69,12 @@ fun MsSearchBar(
             Icon(Icons.Rounded.Search, contentDescription = null)
         },
         shape = PillShape,
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Neutral100,
-            unfocusedContainerColor = Neutral100,
-            focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-            unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-        ),
+        colors =
+            TextFieldDefaults.colors(
+                focusedContainerColor = Neutral100,
+                unfocusedContainerColor = Neutral100,
+                focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+            ),
     )
 }

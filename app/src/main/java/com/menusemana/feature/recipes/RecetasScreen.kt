@@ -15,10 +15,10 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material3.FilterChip
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -34,11 +34,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.menusemana.core.common.MealTranslator
+import com.menusemana.core.designsystem.component.MealPhotoCard
 import com.menusemana.core.designsystem.component.MsEmptyState
 import com.menusemana.core.designsystem.component.MsLargeHeader
 import com.menusemana.core.designsystem.component.MsPrimaryButton
 import com.menusemana.core.designsystem.component.MsSearchBar
-import com.menusemana.core.designsystem.component.MealPhotoCard
 import com.menusemana.core.designsystem.theme.Persimmon500
 import com.menusemana.core.designsystem.theme.Warning500
 import com.menusemana.domain.model.MealCategory
@@ -65,7 +65,10 @@ fun RecetasScreen(
     // Load next category when near the end of the browse grid
     val reachedEnd by remember {
         derivedStateOf {
-            val lastVisible = gridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            val lastVisible =
+                gridState.layoutInfo.visibleItemsInfo
+                    .lastOrNull()
+                    ?.index ?: 0
             val total = gridState.layoutInfo.totalItemsCount
             total > 0 && lastVisible >= total - 4
         }
@@ -126,50 +129,54 @@ fun RecetasScreen(
             }
 
             when {
-                state.isLoading -> Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = Persimmon500)
-                }
-                state.error != null && state.recipes.isEmpty() -> MsEmptyState(
-                    title = "Sin resultados",
-                    body = "Revisá tu conexión e intentá de nuevo",
-                    icon = Icons.Rounded.Search,
-                    action = { MsPrimaryButton("Reintentar", onClick = viewModel::retry) },
-                    modifier = Modifier.fillMaxSize(),
-                )
-                state.recipes.isEmpty() && state.query.isNotBlank() -> MsEmptyState(
-                    title = "Sin resultados",
-                    body = "Probá con otro término de búsqueda",
-                    icon = Icons.Rounded.Search,
-                    modifier = Modifier.fillMaxSize(),
-                )
-                else -> LazyVerticalGrid(
-                    state = gridState,
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    items(state.recipes, key = { it.mealDbId }) { recipe ->
-                        MealPhotoCard(
-                            name = recipe.nameEs ?: recipe.name,
-                            category = MealTranslator.translateCategory(recipe.category ?: ""),
-                            area = recipe.area?.let { MealTranslator.translateArea(it) },
-                            thumbUrl = recipe.thumbUrl,
-                            onClick = { onNavigateToDetail(recipe.mealDbId) },
-                        )
+                state.isLoading ->
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(color = Persimmon500)
                     }
-                    if (state.isLoadingMore) {
-                        item(span = { GridItemSpan(maxLineSpan) }) {
-                            Box(
-                                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                CircularProgressIndicator(color = Persimmon500)
+                state.error != null && state.recipes.isEmpty() ->
+                    MsEmptyState(
+                        title = "Sin resultados",
+                        body = "Revisá tu conexión e intentá de nuevo",
+                        icon = Icons.Rounded.Search,
+                        action = { MsPrimaryButton("Reintentar", onClick = viewModel::retry) },
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                state.recipes.isEmpty() && state.query.isNotBlank() ->
+                    MsEmptyState(
+                        title = "Sin resultados",
+                        body = "Probá con otro término de búsqueda",
+                        icon = Icons.Rounded.Search,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                else ->
+                    LazyVerticalGrid(
+                        state = gridState,
+                        columns = GridCells.Fixed(2),
+                        contentPadding = PaddingValues(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        items(state.recipes, key = { it.mealDbId }) { recipe ->
+                            MealPhotoCard(
+                                name = recipe.nameEs ?: recipe.name,
+                                category = MealTranslator.translateCategory(recipe.category ?: ""),
+                                area = recipe.area?.let { MealTranslator.translateArea(it) },
+                                thumbUrl = recipe.thumbUrl,
+                                onClick = { onNavigateToDetail(recipe.mealDbId) },
+                            )
+                        }
+                        if (state.isLoadingMore) {
+                            item(span = { GridItemSpan(maxLineSpan) }) {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    CircularProgressIndicator(color = Persimmon500)
+                                }
                             }
                         }
                     }
-                }
             }
         }
 

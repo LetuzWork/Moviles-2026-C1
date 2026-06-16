@@ -16,7 +16,6 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddEditMealViewModelTest {
-
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
@@ -86,17 +85,18 @@ class AddEditMealViewModelTest {
     }
 
     @Test
-    fun `valid save calls repository and triggers onSaved`() = runTest {
-        viewModel.onNameChange("Milanesa")
-        viewModel.onServingsChange("2")
+    fun `valid save calls repository and triggers onSaved`() =
+        runTest {
+            viewModel.onNameChange("Milanesa")
+            viewModel.onServingsChange("2")
 
-        var savedCalled = false
-        viewModel.save { savedCalled = true }
+            var savedCalled = false
+            viewModel.save { savedCalled = true }
 
-        assertTrue(savedCalled)
-        assertEquals(1, repository.savedMeals.size)
-        assertEquals("Milanesa", repository.savedMeals.first().name)
-    }
+            assertTrue(savedCalled)
+            assertEquals(1, repository.savedMeals.size)
+            assertEquals("Milanesa", repository.savedMeals.first().name)
+        }
 
     // ── field updates ─────────────────────────────────────────────────────────
 
@@ -131,26 +131,37 @@ class AddEditMealViewModelTest {
         viewModel.removeIngredient(0)
 
         assertEquals(1, viewModel.state.value.ingredients.size)
-        assertEquals("Sal", viewModel.state.value.ingredients[0].name)
+        assertEquals(
+            "Sal",
+            viewModel.state.value.ingredients[0]
+                .name,
+        )
     }
 
     @Test
-    fun `saved meal includes notes when filled`() = runTest {
-        viewModel.onNameChange("Sopa")
-        viewModel.onServingsChange("4")
-        viewModel.onNotesChange("Hervir 30 minutos")
-        viewModel.save {}
+    fun `saved meal includes notes when filled`() =
+        runTest {
+            viewModel.onNameChange("Sopa")
+            viewModel.onServingsChange("4")
+            viewModel.onNotesChange("Hervir 30 minutos")
+            viewModel.save {}
 
-        assertEquals("Hervir 30 minutos", repository.savedMeals.first().notes)
-    }
+            assertEquals("Hervir 30 minutos", repository.savedMeals.first().notes)
+        }
 
     @Test
-    fun `saved meal excludes blank ingredient rows`() = runTest {
-        viewModel.onNameChange("Arroz")
-        viewModel.onServingsChange("2")
-        viewModel.onIngredientNameChange(0, "")
-        viewModel.save {}
+    fun `saved meal excludes blank ingredient rows`() =
+        runTest {
+            viewModel.onNameChange("Arroz")
+            viewModel.onServingsChange("2")
+            viewModel.onIngredientNameChange(0, "")
+            viewModel.save {}
 
-        assertTrue(repository.savedMeals.first().ingredients.isEmpty())
-    }
+            assertTrue(
+                repository.savedMeals
+                    .first()
+                    .ingredients
+                    .isEmpty(),
+            )
+        }
 }

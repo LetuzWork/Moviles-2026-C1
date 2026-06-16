@@ -11,17 +11,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class OnboardingViewModel @Inject constructor(
-    private val dataStore: DataStore<Preferences>,
-) : ViewModel() {
+class OnboardingViewModel
+    @Inject
+    constructor(
+        private val dataStore: DataStore<Preferences>,
+    ) : ViewModel() {
+        companion object {
+            val ONBOARDING_SEEN = booleanPreferencesKey("onboarding_seen")
+        }
 
-    companion object {
-        val ONBOARDING_SEEN = booleanPreferencesKey("onboarding_seen")
-    }
-
-    fun markOnboardingSeen() {
-        viewModelScope.launch {
-            dataStore.edit { it[ONBOARDING_SEEN] = true }
+        fun markOnboardingSeen() {
+            viewModelScope.launch {
+                dataStore.edit { it[ONBOARDING_SEEN] = true }
+            }
         }
     }
-}

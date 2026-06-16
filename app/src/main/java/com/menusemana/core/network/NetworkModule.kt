@@ -15,29 +15,35 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
     private const val BASE_URL = "https://www.themealdb.com/api/json/v1/1/"
 
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient =
-        OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BASIC
-            })
-            .build()
+        OkHttpClient
+            .Builder()
+            .addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BASIC
+                },
+            ).build()
 
     @Provides
     @Singleton
     fun provideMoshi(): Moshi =
-        Moshi.Builder()
+        Moshi
+            .Builder()
             .addLast(KotlinJsonAdapterFactory())
             .build()
 
     @Provides
     @Singleton
-    fun provideRetrofit(client: OkHttpClient, moshi: Moshi): Retrofit =
-        Retrofit.Builder()
+    fun provideRetrofit(
+        client: OkHttpClient,
+        moshi: Moshi,
+    ): Retrofit =
+        Retrofit
+            .Builder()
             .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
@@ -45,6 +51,5 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideTheMealDbApi(retrofit: Retrofit): TheMealDbApi =
-        retrofit.create(TheMealDbApi::class.java)
+    fun provideTheMealDbApi(retrofit: Retrofit): TheMealDbApi = retrofit.create(TheMealDbApi::class.java)
 }

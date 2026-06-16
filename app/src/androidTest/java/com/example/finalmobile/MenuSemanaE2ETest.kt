@@ -19,7 +19,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MenuSemanaE2ETest {
-
     // Inicia la MainActivity antes de cada prueba
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
@@ -40,27 +39,31 @@ class MenuSemanaE2ETest {
     // ── Escenario 1: Onboarding → pantalla principal ───────────────────────────
     @Test
     fun escenario1_flujoOnboardingAPantallaPrincipal() {
-        val nodosOnboarding = composeTestRule.onAllNodes(
-            hasText("Planificá tu semana", ignoreCase = true, substring = true)
-        )
+        val nodosOnboarding =
+            composeTestRule.onAllNodes(
+                hasText("Planificá tu semana", ignoreCase = true, substring = true),
+            )
         if (nodosOnboarding.fetchSemanticsNodes().isNotEmpty()) {
-            composeTestRule.onNode(
-                hasText("Saltar", ignoreCase = true, substring = true)
-            ).performClick()
+            composeTestRule
+                .onNode(
+                    hasText("Saltar", ignoreCase = true, substring = true),
+                ).performClick()
         }
         // Llegamos a la app: la pestaña "Mis comidas" existe y es clickeable
-        composeTestRule.onNode(
-            hasText("Mis comidas", ignoreCase = true, substring = true) and hasClickAction()
-        ).assertExists()
+        composeTestRule
+            .onNode(
+                hasText("Mis comidas", ignoreCase = true, substring = true) and hasClickAction(),
+            ).assertExists()
     }
 
     // ── Escenario 2: Navegar a Mis comidas ─────────────────────────────────────
     @Test
     fun escenario2_navegarMisComidasYVerificarPantalla() {
         saltarOnboardingSiEstaVisible()
-        composeTestRule.onNode(
-            hasText("Mis comidas", ignoreCase = true, substring = true) and hasClickAction()
-        ).performClick()
+        composeTestRule
+            .onNode(
+                hasText("Mis comidas", ignoreCase = true, substring = true) and hasClickAction(),
+            ).performClick()
 
         composeTestRule.onNode(hasText("Todas", ignoreCase = true, substring = true)).assertExists()
         composeTestRule.onNodeWithContentDescription("Sumar comida").assertExists()
@@ -71,9 +74,10 @@ class MenuSemanaE2ETest {
     fun escenario3_crearComidaConFoto() {
         saltarOnboardingSiEstaVisible()
 
-        composeTestRule.onNode(
-            hasText("Mis comidas", ignoreCase = true, substring = true) and hasClickAction()
-        ).performClick()
+        composeTestRule
+            .onNode(
+                hasText("Mis comidas", ignoreCase = true, substring = true) and hasClickAction(),
+            ).performClick()
         composeTestRule.onNodeWithContentDescription("Sumar comida").performClick()
         composeTestRule.onNodeWithText("Nueva comida").assertIsDisplayed()
 
@@ -88,8 +92,10 @@ class MenuSemanaE2ETest {
 
             // Al "tomar" la foto, el placeholder "Sacar foto" desaparece (se muestra la imagen)
             composeTestRule.waitUntil(timeoutMillis = 5_000) {
-                composeTestRule.onAllNodesWithText("Sacar foto", substring = true)
-                    .fetchSemanticsNodes().isEmpty()
+                composeTestRule
+                    .onAllNodesWithText("Sacar foto", substring = true)
+                    .fetchSemanticsNodes()
+                    .isEmpty()
             }
         } finally {
             Intents.release()
@@ -122,8 +128,10 @@ class MenuSemanaE2ETest {
         // La pantalla inicial es "Mi semana". Hay comidas de ejemplo (seed), así
         // que se ven los turnos con la opción "Sumar comida".
         composeTestRule.waitUntil(timeoutMillis = 5_000) {
-            composeTestRule.onAllNodesWithText("Sumar comida", substring = true)
-                .fetchSemanticsNodes().isNotEmpty()
+            composeTestRule
+                .onAllNodesWithText("Sumar comida", substring = true)
+                .fetchSemanticsNodes()
+                .isNotEmpty()
         }
         composeTestRule.onAllNodesWithText("Sumar comida", substring = true).onFirst().performClick()
 
@@ -135,10 +143,14 @@ class MenuSemanaE2ETest {
 
         // El selector se cierra y la comida queda asignada en el turno
         composeTestRule.waitUntil(timeoutMillis = 5_000) {
-            composeTestRule.onAllNodes(hasText("Elegí una comida", substring = true))
-                .fetchSemanticsNodes().isEmpty()
+            composeTestRule
+                .onAllNodes(hasText("Elegí una comida", substring = true))
+                .fetchSemanticsNodes()
+                .isEmpty()
         }
-        composeTestRule.onAllNodesWithText("Milanesa con puré", substring = true)
-            .fetchSemanticsNodes().isNotEmpty()
+        composeTestRule
+            .onAllNodesWithText("Milanesa con puré", substring = true)
+            .fetchSemanticsNodes()
+            .isNotEmpty()
     }
 }

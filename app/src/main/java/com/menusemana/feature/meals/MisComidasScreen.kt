@@ -20,12 +20,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.menusemana.core.designsystem.component.MealListRow
 import com.menusemana.core.designsystem.component.MsEmptyState
 import com.menusemana.core.designsystem.component.MsFab
 import com.menusemana.core.designsystem.component.MsFilterChip
 import com.menusemana.core.designsystem.component.MsLargeHeader
 import com.menusemana.core.designsystem.component.MsSearchBar
-import com.menusemana.core.designsystem.component.MealListRow
 import com.menusemana.domain.model.MealCategory
 
 private val CATEGORIES = listOf(null) + MealCategory.entries.map { it.label }
@@ -40,9 +40,10 @@ fun MisComidasScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(contentPadding),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(contentPadding),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
@@ -79,9 +80,10 @@ fun MisComidasScreen(
                 }
             } else {
                 LazyColumn(
-                    modifier = Modifier
-                        .weight(1f)
-                        .testTag("lista_comidas"),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .testTag("lista_comidas"),
                     contentPadding = PaddingValues(bottom = 88.dp),
                 ) {
                     items(state.meals, key = { it.id }) { meal ->
@@ -103,9 +105,10 @@ fun MisComidasScreen(
             icon = Icons.Rounded.Add,
             contentDescription = "Sumar comida",
             onClick = onNavigateToAdd,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 16.dp, bottom = 16.dp),
+            modifier =
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 16.dp, bottom = 16.dp),
         )
     }
 }

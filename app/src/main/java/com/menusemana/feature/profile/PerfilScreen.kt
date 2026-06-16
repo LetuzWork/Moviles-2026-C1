@@ -33,10 +33,11 @@ fun PerfilScreen(
         topBar = { MsTopAppBar(title = "Perfil", onNavigateUp = onNavigateUp) },
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(16.dp),
         ) {
             Text("Preferencias dietarias", style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(4.dp))

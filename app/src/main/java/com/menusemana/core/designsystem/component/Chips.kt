@@ -1,6 +1,5 @@
 package com.menusemana.core.designsystem.component
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -29,18 +28,20 @@ fun MsFilterChip(
         label = { Text(label, style = MaterialTheme.typography.labelMedium) },
         modifier = modifier.height(34.dp),
         shape = PillShape,
-        colors = FilterChipDefaults.filterChipColors(
-            selectedContainerColor = Persimmon500,
-            selectedLabelColor = Neutral0,
-            containerColor = Neutral0,
-            labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        ),
-        border = FilterChipDefaults.filterChipBorder(
-            selected = selected,
-            enabled = true,
-            selectedBorderColor = Persimmon500,
-            borderColor = Neutral300,
-        ),
+        colors =
+            FilterChipDefaults.filterChipColors(
+                selectedContainerColor = Persimmon500,
+                selectedLabelColor = Neutral0,
+                containerColor = Neutral0,
+                labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            ),
+        border =
+            FilterChipDefaults.filterChipBorder(
+                selected = selected,
+                enabled = true,
+                selectedBorderColor = Persimmon500,
+                borderColor = Neutral300,
+            ),
     )
 }
 
@@ -57,17 +58,19 @@ fun MsChoiceChip(
         label = { Text(label, style = MaterialTheme.typography.labelMedium) },
         modifier = modifier.height(34.dp),
         shape = PillShape,
-        colors = FilterChipDefaults.filterChipColors(
-            selectedContainerColor = Herb100,
-            selectedLabelColor = Herb800,
-            containerColor = Neutral0,
-            labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        ),
-        border = FilterChipDefaults.filterChipBorder(
-            selected = selected,
-            enabled = true,
-            selectedBorderColor = Herb100,
-            borderColor = Neutral300,
-        ),
+        colors =
+            FilterChipDefaults.filterChipColors(
+                selectedContainerColor = Herb100,
+                selectedLabelColor = Herb800,
+                containerColor = Neutral0,
+                labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            ),
+        border =
+            FilterChipDefaults.filterChipBorder(
+                selected = selected,
+                enabled = true,
+                selectedBorderColor = Herb100,
+                borderColor = Neutral300,
+            ),
     )
 }

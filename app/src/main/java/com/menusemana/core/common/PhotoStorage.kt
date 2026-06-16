@@ -7,7 +7,6 @@ import java.io.File
 import java.util.UUID
 
 object PhotoStorage {
-
     fun createPhotoUri(context: Context): Uri {
         val dir = File(context.filesDir, "meals")
         dir.mkdirs()
@@ -15,7 +14,10 @@ object PhotoStorage {
         return FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
     }
 
-    fun deletePhoto(context: Context, uriString: String) {
+    fun deletePhoto(
+        context: Context,
+        uriString: String,
+    ) {
         runCatching {
             val uri = Uri.parse(uriString)
             context.contentResolver.delete(uri, null, null)

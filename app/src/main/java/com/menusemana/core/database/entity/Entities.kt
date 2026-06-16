@@ -20,12 +20,14 @@ data class MealEntity(
 
 @Entity(
     tableName = "ingredients",
-    foreignKeys = [ForeignKey(
-        entity = MealEntity::class,
-        parentColumns = ["id"],
-        childColumns = ["mealId"],
-        onDelete = ForeignKey.CASCADE,
-    )],
+    foreignKeys = [
+        ForeignKey(
+            entity = MealEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["mealId"],
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
     indices = [Index("mealId")],
 )
 data class IngredientEntity(

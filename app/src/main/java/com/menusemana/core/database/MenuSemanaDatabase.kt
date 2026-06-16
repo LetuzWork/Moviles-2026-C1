@@ -27,20 +27,25 @@ import com.menusemana.core.database.entity.RecipeCacheEntity
 )
 abstract class MenuSemanaDatabase : RoomDatabase() {
     abstract fun mealDao(): MealDao
+
     abstract fun planDao(): PlanDao
+
     abstract fun recipeCacheDao(): RecipeCacheDao
+
     abstract fun preferencesDao(): PreferencesDao
 
     companion object {
-        val MIGRATION_1_2 = object : Migration(1, 2) {
-            override fun migrate(db: SupportSQLiteDatabase) {
-                db.execSQL("ALTER TABLE recipe_cache ADD COLUMN instructionsEs TEXT")
+        val MIGRATION_1_2 =
+            object : Migration(1, 2) {
+                override fun migrate(db: SupportSQLiteDatabase) {
+                    db.execSQL("ALTER TABLE recipe_cache ADD COLUMN instructionsEs TEXT")
+                }
             }
-        }
-        val MIGRATION_2_3 = object : Migration(2, 3) {
-            override fun migrate(db: SupportSQLiteDatabase) {
-                db.execSQL("ALTER TABLE recipe_cache ADD COLUMN ingredientsEsJson TEXT")
+        val MIGRATION_2_3 =
+            object : Migration(2, 3) {
+                override fun migrate(db: SupportSQLiteDatabase) {
+                    db.execSQL("ALTER TABLE recipe_cache ADD COLUMN ingredientsEsJson TEXT")
+                }
             }
-        }
     }
 }

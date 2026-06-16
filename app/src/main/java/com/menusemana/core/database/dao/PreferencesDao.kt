@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PreferencesDao {
-
     @Query("SELECT * FROM dietary_preferences")
     fun getAll(): Flow<List<DietaryPreferenceEntity>>
 

@@ -2,7 +2,7 @@ package com.menusemana.core.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Persimmon50  = Color(0xFFFCEFE9)
+val Persimmon50 = Color(0xFFFCEFE9)
 val Persimmon100 = Color(0xFFF8D8CB)
 val Persimmon200 = Color(0xFFF2B49E)
 val Persimmon300 = Color(0xFFED8F70)
@@ -13,7 +13,7 @@ val Persimmon700 = Color(0xFF9F3920)
 val Persimmon800 = Color(0xFF7A2A17)
 val Persimmon900 = Color(0xFF4F1A0D)
 
-val Herb50  = Color(0xFFEEF2E5)
+val Herb50 = Color(0xFFEEF2E5)
 val Herb100 = Color(0xFFDBE3C4)
 val Herb200 = Color(0xFFB8C893)
 val Herb300 = Color(0xFF95AC65)
@@ -30,8 +30,8 @@ val Saffron400 = Color(0xFFF4A93D)
 val Saffron500 = Color(0xFFE89220)
 val Saffron900 = Color(0xFF432708)
 
-val Neutral0   = Color(0xFFFFFFFF)
-val Neutral50  = Color(0xFFFBF7F0)
+val Neutral0 = Color(0xFFFFFFFF)
+val Neutral50 = Color(0xFFFBF7F0)
 val Neutral100 = Color(0xFFF4EDE2)
 val Neutral200 = Color(0xFFE8DECD)
 val Neutral300 = Color(0xFFD2C5B0)
@@ -45,5 +45,5 @@ val Neutral950 = Color(0xFF14110E)
 
 val Success500 = Color(0xFF4F8A3F)
 val Warning500 = Color(0xFFE89220)
-val Danger500  = Color(0xFFC73E2A)
-val Info500    = Color(0xFF3D7A8A)
+val Danger500 = Color(0xFFC73E2A)
+val Info500 = Color(0xFF3D7A8A)

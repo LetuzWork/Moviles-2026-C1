@@ -4,7 +4,6 @@ import android.Manifest
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -63,17 +62,19 @@ fun AddEditMealScreen(
     val context = LocalContext.current
     val pendingPhotoUri = remember { mutableStateOf<Uri?>(null) }
 
-    val takePictureLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-        if (success) pendingPhotoUri.value?.let { viewModel.onPhotoTaken(it) }
-    }
-
-    val cameraPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        if (granted) {
-            val uri = PhotoStorage.createPhotoUri(context)
-            pendingPhotoUri.value = uri
-            takePictureLauncher.launch(uri)
+    val takePictureLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) pendingPhotoUri.value?.let { viewModel.onPhotoTaken(it) }
         }
-    }
+
+    val cameraPermissionLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                val uri = PhotoStorage.createPhotoUri(context)
+                pendingPhotoUri.value = uri
+                takePictureLauncher.launch(uri)
+            }
+        }
 
     Scaffold(
         topBar = {
@@ -81,22 +82,25 @@ fun AddEditMealScreen(
                 title = if (mealId == null) "Nueva comida" else "Editar comida",
                 onNavigateUp = onNavigateUp,
             )
-        }
+        },
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier.padding(innerPadding).fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
+            contentPadding =
+                androidx.compose.foundation.layout
+                    .PaddingValues(16.dp),
         ) {
             item {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .testTag("meal_photo_picker")
-                        .clip(MaterialTheme.shapes.extraLarge)
-                        .border(1.dp, Neutral300, MaterialTheme.shapes.extraLarge)
-                        .clickable { cameraPermissionLauncher.launch(Manifest.permission.CAMERA) },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .testTag("meal_photo_picker")
+                            .clip(MaterialTheme.shapes.extraLarge)
+                            .border(1.dp, Neutral300, MaterialTheme.shapes.extraLarge)
+                            .clickable { cameraPermissionLauncher.launch(Manifest.permission.CAMERA) },
                     contentAlignment = Alignment.Center,
                 ) {
                     if (state.photoUri != null) {
@@ -110,7 +114,11 @@ fun AddEditMealScreen(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(Icons.Rounded.PhotoCamera, contentDescription = null, tint = Persimmon500, modifier = Modifier.size(40.dp))
                             Text("Sacar foto", style = MaterialTheme.typography.labelLarge, color = Persimmon500)
-                            Text("(opcional)", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(
+                                "(opcional)",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
                         }
                     }
                 }
@@ -170,8 +178,16 @@ fun AddEditMealScreen(
             itemsIndexed(state.ingredients) { index, ing ->
                 Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        MsTextField(value = ing.name, onValueChange = { viewModel.onIngredientNameChange(index, it) }, label = "Ingrediente")
-                        MsTextField(value = ing.quantity, onValueChange = { viewModel.onIngredientQuantityChange(index, it) }, label = "Cantidad")
+                        MsTextField(
+                            value = ing.name,
+                            onValueChange = { viewModel.onIngredientNameChange(index, it) },
+                            label = "Ingrediente",
+                        )
+                        MsTextField(
+                            value = ing.quantity,
+                            onValueChange = { viewModel.onIngredientQuantityChange(index, it) },
+                            label = "Cantidad",
+                        )
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             Aisle.entries.forEach { aisle ->
                                 MsChoiceChip(
