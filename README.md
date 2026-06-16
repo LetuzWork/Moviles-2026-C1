@@ -71,6 +71,10 @@ En la carpeta [`docs/`](./docs) se encuentran los documentos base del proyecto:
 | [`diagrama_arquitectura.md`](./docs/diagrama_arquitectura.md) | Diagrama de alto nivel de la arquitectura de la solución |
 | [`documentacion_tecnica.md`](./docs/documentacion_tecnica.md) | Documentación técnica del proyecto |
 | [`documentacion_usuario.md`](./docs/documentacion_usuario.md) | Documentación orientada al usuario final |
+| [`checklist_nielsen.md`](./docs/checklist_nielsen.md) | Evaluación de usabilidad contra las 10 heurísticas de Nielsen |
+| [`metricas_performance.md`](./docs/metricas_performance.md) | Resultados de Macrobenchmark (cold start y scroll) |
+| [`pitch_h2.md`](./docs/pitch_h2.md) | Guion del pitch / defensa de H2 |
+| [`declaracion_ia.md`](./docs/declaracion_ia.md) | Declaración de uso responsable de IA (consigna 0.1) |
 
 ### Diseño UI
 
