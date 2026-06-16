@@ -25,6 +25,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.ChevronLeft
 import androidx.compose.material.icons.rounded.ChevronRight
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Restaurant
 import androidx.compose.material.icons.rounded.WarningAmber
 import androidx.compose.material3.Card
@@ -88,6 +89,7 @@ private fun weekLabel(weekStart: LocalDate): String {
 fun MiSemanaScreen(
     contentPadding: PaddingValues = PaddingValues(),
     onNavigateToMealDetail: (Long) -> Unit,
+    onNavigateToProfile: () -> Unit = {},
     viewModel: PlanViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -101,6 +103,13 @@ fun MiSemanaScreen(
                 kicker = weekLabel(state.weekStart),
                 title = "Mi semana",
                 actions = {
+                    IconButton(onClick = onNavigateToProfile) {
+                        Icon(
+                            Icons.Rounded.Person,
+                            contentDescription = "Perfil",
+                            tint = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
                     if (!state.isCurrentWeek) {
                         TextButton(
                             onClick = {

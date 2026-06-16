@@ -3,37 +3,11 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>CyclomaticComplexMethod:MetricConverter.kt$MetricConverter$fun convert(raw: String): String</ID>
-    <ID>FunctionNaming:AddEditMealScreen.kt$@Composable fun AddEditMealScreen( mealId: Long?, onNavigateUp: () -&gt; Unit, onSaved: () -&gt; Unit, viewModel: AddEditMealViewModel = hiltViewModel(), )</ID>
-    <ID>FunctionNaming:AppBars.kt$@Composable fun MsLargeHeader( kicker: String, title: String, actions: @Composable RowScope.() -&gt; Unit = {}, modifier: Modifier = Modifier, )</ID>
-    <ID>FunctionNaming:AppBars.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MsTopAppBar( title: String, onNavigateUp: (() -&gt; Unit)? = null, actions: @Composable RowScope.() -&gt; Unit = {}, modifier: Modifier = Modifier, )</ID>
-    <ID>FunctionNaming:BottomNav.kt$@Composable fun MsBottomBar( selectedIndex: Int, onTabSelected: (Int) -&gt; Unit, modifier: Modifier = Modifier, )</ID>
-    <ID>FunctionNaming:Buttons.kt$@Composable fun MsDangerButton( text: String, onClick: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
-    <ID>FunctionNaming:Buttons.kt$@Composable fun MsFab( icon: ImageVector, contentDescription: String, onClick: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
-    <ID>FunctionNaming:Buttons.kt$@Composable fun MsOutlinedButton( text: String, onClick: () -&gt; Unit, modifier: Modifier = Modifier, enabled: Boolean = true, )</ID>
-    <ID>FunctionNaming:Buttons.kt$@Composable fun MsPrimaryButton( text: String, onClick: () -&gt; Unit, modifier: Modifier = Modifier, enabled: Boolean = true, )</ID>
-    <ID>FunctionNaming:Buttons.kt$@Composable fun MsTonalButton( text: String, onClick: () -&gt; Unit, modifier: Modifier = Modifier, enabled: Boolean = true, )</ID>
-    <ID>FunctionNaming:Cards.kt$@Composable fun MealListRow( name: String, timeMinutes: Int, ingredientCount: Int, category: String, photoUri: String?, onClick: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
-    <ID>FunctionNaming:Cards.kt$@Composable fun MealPhotoCard( name: String, category: String, thumbUrl: String?, onClick: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
-    <ID>FunctionNaming:Chips.kt$@Composable fun MsChoiceChip( label: String, selected: Boolean, onClick: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
-    <ID>FunctionNaming:Chips.kt$@Composable fun MsFilterChip( label: String, selected: Boolean, onClick: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
-    <ID>FunctionNaming:ComprasScreen.kt$@Composable fun ComprasScreen( contentPadding: PaddingValues = PaddingValues(), viewModel: ShoppingViewModel = hiltViewModel(), )</ID>
-    <ID>FunctionNaming:DetalleComidaScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun DetalleComidaScreen( mealId: Long, onNavigateUp: () -&gt; Unit, onNavigateToEdit: () -&gt; Unit, onDeleted: () -&gt; Unit, onNavigateToPlan: () -&gt; Unit, viewModel: DetalleComidaViewModel = hiltViewModel(), )</ID>
-    <ID>FunctionNaming:EmptyState.kt$@Composable fun MsEmptyState( title: String, body: String, modifier: Modifier = Modifier, icon: ImageVector = Icons.Rounded.RestaurantMenu, action: (@Composable () -&gt; Unit)? = null, )</ID>
-    <ID>FunctionNaming:MainActivity.kt$@Composable private fun MenuSemanaApp(dataStore: DataStore&lt;Preferences&gt;)</ID>
-    <ID>FunctionNaming:MiSemanaScreen.kt$@Composable private fun SlotRow( slotLabel: String, plannedMeal: PlannedMeal?, onTapEmpty: () -&gt; Unit, onTapFilled: () -&gt; Unit, )</ID>
-    <ID>FunctionNaming:MiSemanaScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MiSemanaScreen( contentPadding: PaddingValues = PaddingValues(), onNavigateToMealDetail: (Long) -&gt; Unit, viewModel: PlanViewModel = hiltViewModel(), )</ID>
-    <ID>FunctionNaming:MisComidasScreen.kt$@Composable fun MisComidasScreen( contentPadding: PaddingValues = PaddingValues(), onNavigateToDetail: (Long) -&gt; Unit, onNavigateToAdd: () -&gt; Unit, viewModel: MisComidasViewModel = hiltViewModel(), )</ID>
-    <ID>FunctionNaming:OnboardingScreen.kt$@Composable fun OnboardingScreen( onFinished: () -&gt; Unit, viewModel: OnboardingViewModel = hiltViewModel(), )</ID>
-    <ID>FunctionNaming:RecetasScreen.kt$@Composable fun RecetasScreen( contentPadding: PaddingValues = PaddingValues(), onNavigateToDetail: (String) -&gt; Unit, importedRecipeName: String = "", onImportedConsumed: () -&gt; Unit = {}, viewModel: RecetasViewModel = hiltViewModel(), )</ID>
-    <ID>FunctionNaming:RecipeDetailScreen.kt$@Composable fun RecipeDetailScreen( mealDbId: String, onNavigateUp: () -&gt; Unit, onImported: (recipeName: String) -&gt; Unit, viewModel: RecipeDetailViewModel = hiltViewModel(), )</ID>
-    <ID>FunctionNaming:TextFields.kt$@Composable fun MsSearchBar( query: String, onQueryChange: (String) -&gt; Unit, placeholder: String, modifier: Modifier = Modifier, )</ID>
-    <ID>FunctionNaming:TextFields.kt$@Composable fun MsTextField( value: String, onValueChange: (String) -&gt; Unit, label: String, modifier: Modifier = Modifier, isError: Boolean = false, errorMessage: String? = null, singleLine: Boolean = true, trailingIcon: @Composable (() -&gt; Unit)? = null, )</ID>
-    <ID>FunctionNaming:Theme.kt$@Composable fun MenuSemanaTheme( darkTheme: Boolean = isSystemInDarkTheme(), dynamicColor: Boolean = true, content: @Composable () -&gt; Unit, )</ID>
     <ID>LongMethod:AddEditMealScreen.kt$@Composable fun AddEditMealScreen( mealId: Long?, onNavigateUp: () -&gt; Unit, onSaved: () -&gt; Unit, viewModel: AddEditMealViewModel = hiltViewModel(), )</ID>
     <ID>LongMethod:ComprasScreen.kt$@Composable fun ComprasScreen( contentPadding: PaddingValues = PaddingValues(), viewModel: ShoppingViewModel = hiltViewModel(), )</ID>
     <ID>LongMethod:DetalleComidaScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun DetalleComidaScreen( mealId: Long, onNavigateUp: () -&gt; Unit, onNavigateToEdit: () -&gt; Unit, onDeleted: () -&gt; Unit, onNavigateToPlan: () -&gt; Unit, viewModel: DetalleComidaViewModel = hiltViewModel(), )</ID>
     <ID>LongMethod:MainActivity.kt$@Composable private fun MenuSemanaApp(dataStore: DataStore&lt;Preferences&gt;)</ID>
-    <ID>LongMethod:MiSemanaScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MiSemanaScreen( contentPadding: PaddingValues = PaddingValues(), onNavigateToMealDetail: (Long) -&gt; Unit, viewModel: PlanViewModel = hiltViewModel(), )</ID>
+    <ID>LongMethod:MiSemanaScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MiSemanaScreen( contentPadding: PaddingValues = PaddingValues(), onNavigateToMealDetail: (Long) -&gt; Unit, onNavigateToProfile: () -&gt; Unit = {}, viewModel: PlanViewModel = hiltViewModel(), )</ID>
     <ID>LongMethod:MisComidasScreen.kt$@Composable fun MisComidasScreen( contentPadding: PaddingValues = PaddingValues(), onNavigateToDetail: (Long) -&gt; Unit, onNavigateToAdd: () -&gt; Unit, viewModel: MisComidasViewModel = hiltViewModel(), )</ID>
     <ID>LongMethod:OnboardingScreen.kt$@Composable fun OnboardingScreen( onFinished: () -&gt; Unit, viewModel: OnboardingViewModel = hiltViewModel(), )</ID>
     <ID>LongMethod:RecetasScreen.kt$@Composable fun RecetasScreen( contentPadding: PaddingValues = PaddingValues(), onNavigateToDetail: (String) -&gt; Unit, importedRecipeName: String = "", onImportedConsumed: () -&gt; Unit = {}, viewModel: RecetasViewModel = hiltViewModel(), )</ID>
@@ -105,6 +79,7 @@
     <ID>MagicNumber:MisComidasViewModel.kt$MisComidasViewModel$5_000</ID>
     <ID>MagicNumber:Models.kt$MealSlot.NOCHE$3</ID>
     <ID>MagicNumber:OnboardingScreen.kt$240</ID>
+    <ID>MagicNumber:PerfilViewModel.kt$PerfilViewModel$5_000</ID>
     <ID>MagicNumber:PlanViewModel.kt$PlanViewModel$5_000</ID>
     <ID>MagicNumber:RecetasViewModel.kt$RecetasViewModel$5_000</ID>
     <ID>MagicNumber:RecipeDetailScreen.kt$0.35f</ID>

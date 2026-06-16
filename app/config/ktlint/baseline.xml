@@ -35,19 +35,18 @@
     </file>
     <file name="src/main/java/com/menusemana/MainActivity.kt">
         <error line="3" column="1" source="standard:import-ordering" />
-        <error line="51" column="1" source="standard:no-empty-first-line-in-class-body" />
-        <error line="66" column="13" source="standard:function-naming" />
-        <error line="83" column="26" source="standard:multiline-expression-wrapping" />
-        <error line="87" column="45" source="standard:trailing-comma-on-call-site" />
-        <error line="91" column="25" source="standard:multiline-expression-wrapping" />
-        <error line="99" column="1" source="standard:no-consecutive-blank-lines" />
-        <error line="107" column="37" source="standard:multiline-expression-wrapping" />
-        <error line="120" column="22" source="standard:trailing-comma-on-call-site" />
-        <error line="123" column="10" source="standard:trailing-comma-on-call-site" />
-        <error line="135" column="22" source="standard:trailing-comma-on-call-site" />
-        <error line="143" column="22" source="standard:trailing-comma-on-call-site" />
-        <error line="154" column="22" source="standard:trailing-comma-on-call-site" />
-        <error line="208" column="47" source="standard:chain-method-continuation" />
+        <error line="53" column="1" source="standard:no-empty-first-line-in-class-body" />
+        <error line="68" column="13" source="standard:function-naming" />
+        <error line="85" column="26" source="standard:multiline-expression-wrapping" />
+        <error line="89" column="45" source="standard:trailing-comma-on-call-site" />
+        <error line="93" column="25" source="standard:multiline-expression-wrapping" />
+        <error line="101" column="1" source="standard:no-consecutive-blank-lines" />
+        <error line="109" column="37" source="standard:multiline-expression-wrapping" />
+        <error line="122" column="22" source="standard:trailing-comma-on-call-site" />
+        <error line="125" column="10" source="standard:trailing-comma-on-call-site" />
+        <error line="137" column="22" source="standard:trailing-comma-on-call-site" />
+        <error line="160" column="22" source="standard:trailing-comma-on-call-site" />
+        <error line="214" column="47" source="standard:chain-method-continuation" />
     </file>
     <file name="src/main/java/com/menusemana/core/common/AisleClassifier.kt">
         <error line="6" column="1" source="standard:no-empty-first-line-in-class-body" />
@@ -751,16 +750,17 @@
         <error line="6" column="71" source="standard:class-signature" />
     </file>
     <file name="src/main/java/com/menusemana/core/database/DatabaseModule.kt">
-        <error line="26" column="1" source="standard:no-empty-first-line-in-class-body" />
-        <error line="33" column="13" source="standard:chain-method-continuation" />
-        <error line="35" column="26" source="standard:multiline-expression-wrapping" />
-        <error line="42" column="42" source="standard:multiline-expression-wrapping" />
-        <error line="51" column="34" source="standard:trailing-comma-on-call-site" />
-        <error line="61" column="34" source="standard:trailing-comma-on-call-site" />
+        <error line="27" column="1" source="standard:no-empty-first-line-in-class-body" />
+        <error line="34" column="13" source="standard:chain-method-continuation" />
+        <error line="36" column="26" source="standard:multiline-expression-wrapping" />
+        <error line="43" column="42" source="standard:multiline-expression-wrapping" />
+        <error line="52" column="34" source="standard:trailing-comma-on-call-site" />
+        <error line="62" column="34" source="standard:trailing-comma-on-call-site" />
     </file>
     <file name="src/main/java/com/menusemana/core/database/MenuSemanaDatabase.kt">
-        <error line="25" column="5" source="standard:blank-line-before-declaration" />
-        <error line="26" column="5" source="standard:blank-line-before-declaration" />
+        <error line="28" column="5" source="standard:blank-line-before-declaration" />
+        <error line="29" column="5" source="standard:blank-line-before-declaration" />
+        <error line="30" column="5" source="standard:blank-line-before-declaration" />
     </file>
     <file name="src/main/java/com/menusemana/core/database/SeedData.kt">
         <error line="14" column="1" source="standard:no-empty-first-line-in-class-body" />
@@ -781,6 +781,9 @@
         <error line="24" column="44" source="standard:function-signature" />
         <error line="24" column="54" source="standard:function-signature" />
         <error line="24" column="63" source="standard:function-signature" />
+    </file>
+    <file name="src/main/java/com/menusemana/core/database/dao/PreferencesDao.kt">
+        <error line="12" column="1" source="standard:no-empty-first-line-in-class-body" />
     </file>
     <file name="src/main/java/com/menusemana/core/database/dao/RecipeCacheDao.kt">
         <error line="12" column="1" source="standard:no-empty-first-line-in-class-body" />
@@ -1154,6 +1157,15 @@
         <error line="62" column="77" source="standard:function-signature" />
         <error line="62" column="86" source="standard:function-signature" />
     </file>
+    <file name="src/main/java/com/menusemana/data/repository/PreferencesRepositoryImpl.kt">
+        <error line="11" column="32" source="standard:annotation" />
+        <error line="11" column="40" source="standard:annotation" />
+        <error line="14" column="1" source="standard:no-empty-first-line-in-class-body" />
+        <error line="17" column="17" source="standard:chain-method-continuation" />
+        <error line="22" column="40" source="standard:function-signature" />
+        <error line="22" column="71" source="standard:function-signature" />
+        <error line="22" column="87" source="standard:function-signature" />
+    </file>
     <file name="src/main/java/com/menusemana/data/repository/RecipeRepositoryImpl.kt">
         <error line="16" column="27" source="standard:annotation" />
         <error line="16" column="35" source="standard:annotation" />
@@ -1178,7 +1190,7 @@
         <error line="92" column="38" source="standard:chain-method-continuation" />
     </file>
     <file name="src/main/java/com/menusemana/data/repository/RepositoryModule.kt">
-        <error line="15" column="1" source="standard:no-empty-first-line-in-class-body" />
+        <error line="16" column="1" source="standard:no-empty-first-line-in-class-body" />
     </file>
     <file name="src/main/java/com/menusemana/domain/model/Models.kt">
         <error line="22" column="25" source="standard:class-signature" />
@@ -1188,6 +1200,9 @@
         <error line="27" column="54" source="standard:class-signature" />
         <error line="34" column="18" source="standard:class-signature" />
         <error line="34" column="35" source="standard:class-signature" />
+        <error line="45" column="30" source="standard:class-signature" />
+        <error line="45" column="49" source="standard:class-signature" />
+        <error line="45" column="76" source="standard:class-signature" />
     </file>
     <file name="src/main/java/com/menusemana/domain/repository/MealRepository.kt">
         <error line="3" column="1" source="standard:no-unused-imports" />
@@ -1208,6 +1223,12 @@
         <error line="9" column="52" source="standard:function-signature" />
         <error line="9" column="68" source="standard:function-signature" />
         <error line="9" column="77" source="standard:function-signature" />
+    </file>
+    <file name="src/main/java/com/menusemana/domain/repository/PreferencesRepository.kt">
+        <error line="8" column="5" source="standard:blank-line-before-declaration" />
+        <error line="8" column="31" source="standard:function-signature" />
+        <error line="8" column="62" source="standard:function-signature" />
+        <error line="8" column="78" source="standard:function-signature" />
     </file>
     <file name="src/main/java/com/menusemana/domain/repository/RecipeRepository.kt">
         <error line="9" column="5" source="standard:blank-line-before-declaration" />
@@ -1392,26 +1413,26 @@
         <error line="17" column="1" source="standard:no-empty-first-line-in-class-body" />
     </file>
     <file name="src/main/java/com/menusemana/feature/plan/MiSemanaScreen.kt">
-        <error line="64" column="1" source="standard:no-unused-imports" />
-        <error line="88" column="5" source="standard:function-naming" />
-        <error line="146" column="36" source="standard:multiline-expression-wrapping" />
-        <error line="153" column="34" source="standard:trailing-comma-on-call-site" />
-        <error line="155" column="29" source="standard:chain-method-continuation" />
-        <error line="219" column="36" source="standard:multiline-expression-wrapping" />
-        <error line="229" column="34" source="standard:argument-list-wrapping" />
-        <error line="229" column="49" source="standard:argument-list-wrapping" />
-        <error line="229" column="93" source="standard:argument-list-wrapping" />
-        <error line="229" column="141" source="standard:max-line-length" />
-        <error line="229" column="143" source="standard:argument-list-wrapping" />
-        <error line="239" column="13" source="standard:function-naming" />
-        <error line="291" column="13" source="standard:function-naming" />
-        <error line="306" column="28" source="standard:multiline-expression-wrapping" />
-        <error line="318" column="26" source="standard:argument-list-wrapping" />
-        <error line="318" column="65" source="standard:argument-list-wrapping" />
-        <error line="318" column="109" source="standard:argument-list-wrapping" />
-        <error line="318" column="141" source="standard:max-line-length" />
-        <error line="318" column="159" source="standard:argument-list-wrapping" />
-        <error line="324" column="28" source="standard:multiline-expression-wrapping" />
+        <error line="65" column="1" source="standard:no-unused-imports" />
+        <error line="89" column="5" source="standard:function-naming" />
+        <error line="155" column="36" source="standard:multiline-expression-wrapping" />
+        <error line="162" column="34" source="standard:trailing-comma-on-call-site" />
+        <error line="164" column="29" source="standard:chain-method-continuation" />
+        <error line="228" column="36" source="standard:multiline-expression-wrapping" />
+        <error line="238" column="34" source="standard:argument-list-wrapping" />
+        <error line="238" column="49" source="standard:argument-list-wrapping" />
+        <error line="238" column="93" source="standard:argument-list-wrapping" />
+        <error line="238" column="141" source="standard:max-line-length" />
+        <error line="238" column="143" source="standard:argument-list-wrapping" />
+        <error line="248" column="13" source="standard:function-naming" />
+        <error line="300" column="13" source="standard:function-naming" />
+        <error line="315" column="28" source="standard:multiline-expression-wrapping" />
+        <error line="327" column="26" source="standard:argument-list-wrapping" />
+        <error line="327" column="65" source="standard:argument-list-wrapping" />
+        <error line="327" column="109" source="standard:argument-list-wrapping" />
+        <error line="327" column="141" source="standard:max-line-length" />
+        <error line="327" column="159" source="standard:argument-list-wrapping" />
+        <error line="333" column="28" source="standard:multiline-expression-wrapping" />
     </file>
     <file name="src/main/java/com/menusemana/feature/plan/PlanViewModel.kt">
         <error line="3" column="1" source="standard:import-ordering" />
@@ -1432,6 +1453,19 @@
         <error line="98" column="19" source="standard:function-signature" />
         <error line="98" column="29" source="standard:function-signature" />
         <error line="98" column="38" source="standard:function-signature" />
+    </file>
+    <file name="src/main/java/com/menusemana/feature/profile/PerfilScreen.kt">
+        <error line="26" column="5" source="standard:function-naming" />
+        <error line="36" column="24" source="standard:multiline-expression-wrapping" />
+    </file>
+    <file name="src/main/java/com/menusemana/feature/profile/PerfilViewModel.kt">
+        <error line="15" column="22" source="standard:annotation" />
+        <error line="15" column="30" source="standard:annotation" />
+        <error line="18" column="1" source="standard:no-empty-first-line-in-class-body" />
+        <error line="20" column="30" source="standard:chain-method-continuation" />
+        <error line="23" column="16" source="standard:function-signature" />
+        <error line="23" column="47" source="standard:function-signature" />
+        <error line="23" column="63" source="standard:function-signature" />
     </file>
     <file name="src/main/java/com/menusemana/feature/recipes/RecetasScreen.kt">
         <error line="3" column="1" source="standard:import-ordering" />
@@ -1455,35 +1489,34 @@
         <error line="76" column="1" source="standard:indent" />
         <error line="78" column="1" source="standard:indent" />
         <error line="79" column="1" source="standard:indent" />
-        <error line="79" column="32" source="standard:multiline-expression-wrapping" />
         <error line="80" column="1" source="standard:indent" />
         <error line="81" column="1" source="standard:indent" />
         <error line="82" column="1" source="standard:indent" />
-        <error line="82" column="63" source="standard:multiline-expression-wrapping" />
         <error line="83" column="1" source="standard:indent" />
         <error line="84" column="1" source="standard:indent" />
         <error line="85" column="1" source="standard:indent" />
-        <error line="86" column="1" source="standard:indent" />
         <error line="87" column="1" source="standard:indent" />
         <error line="88" column="1" source="standard:indent" />
+        <error line="88" column="32" source="standard:multiline-expression-wrapping" />
         <error line="89" column="1" source="standard:indent" />
-        <error line="89" column="40" source="standard:multiline-expression-wrapping" />
         <error line="90" column="1" source="standard:indent" />
         <error line="91" column="1" source="standard:indent" />
+        <error line="91" column="63" source="standard:multiline-expression-wrapping" />
         <error line="92" column="1" source="standard:indent" />
         <error line="93" column="1" source="standard:indent" />
         <error line="94" column="1" source="standard:indent" />
         <error line="95" column="1" source="standard:indent" />
-        <error line="95" column="21" source="standard:multiline-expression-wrapping" />
         <error line="96" column="1" source="standard:indent" />
         <error line="97" column="1" source="standard:indent" />
         <error line="98" column="1" source="standard:indent" />
+        <error line="98" column="40" source="standard:multiline-expression-wrapping" />
         <error line="99" column="1" source="standard:indent" />
         <error line="100" column="1" source="standard:indent" />
         <error line="101" column="1" source="standard:indent" />
         <error line="102" column="1" source="standard:indent" />
         <error line="103" column="1" source="standard:indent" />
         <error line="104" column="1" source="standard:indent" />
+        <error line="104" column="21" source="standard:multiline-expression-wrapping" />
         <error line="105" column="1" source="standard:indent" />
         <error line="106" column="1" source="standard:indent" />
         <error line="107" column="1" source="standard:indent" />
@@ -1491,14 +1524,23 @@
         <error line="109" column="1" source="standard:indent" />
         <error line="110" column="1" source="standard:indent" />
         <error line="111" column="1" source="standard:indent" />
+        <error line="112" column="1" source="standard:indent" />
+        <error line="113" column="1" source="standard:indent" />
+        <error line="114" column="1" source="standard:indent" />
+        <error line="115" column="1" source="standard:indent" />
+        <error line="116" column="1" source="standard:indent" />
+        <error line="117" column="1" source="standard:indent" />
+        <error line="118" column="1" source="standard:indent" />
+        <error line="119" column="1" source="standard:indent" />
+        <error line="120" column="1" source="standard:indent" />
     </file>
     <file name="src/main/java/com/menusemana/feature/recipes/RecetasViewModel.kt">
-        <error line="27" column="23" source="standard:annotation" />
-        <error line="27" column="31" source="standard:annotation" />
-        <error line="30" column="1" source="standard:no-empty-first-line-in-class-body" />
-        <error line="32" column="44" source="standard:multiline-expression-wrapping" />
-        <error line="51" column="38" source="standard:multiline-expression-wrapping" />
-        <error line="54" column="36" source="standard:multiline-expression-wrapping" />
+        <error line="29" column="23" source="standard:annotation" />
+        <error line="29" column="31" source="standard:annotation" />
+        <error line="33" column="1" source="standard:no-empty-first-line-in-class-body" />
+        <error line="35" column="44" source="standard:multiline-expression-wrapping" />
+        <error line="50" column="48" source="standard:multiline-expression-wrapping" />
+        <error line="80" column="36" source="standard:multiline-expression-wrapping" />
     </file>
     <file name="src/main/java/com/menusemana/feature/recipes/RecipeDetailScreen.kt">
         <error line="12" column="1" source="standard:no-unused-imports" />
@@ -1594,18 +1636,20 @@
         <error line="9" column="1" source="standard:spacing-between-declarations-with-annotations" />
         <error line="10" column="1" source="standard:blank-line-before-declaration" />
         <error line="10" column="1" source="standard:spacing-between-declarations-with-annotations" />
-        <error line="10" column="37" source="standard:class-signature" />
-        <error line="10" column="53" source="standard:class-signature" />
         <error line="11" column="1" source="standard:blank-line-before-declaration" />
         <error line="11" column="1" source="standard:spacing-between-declarations-with-annotations" />
+        <error line="11" column="37" source="standard:class-signature" />
+        <error line="11" column="53" source="standard:class-signature" />
         <error line="12" column="1" source="standard:blank-line-before-declaration" />
         <error line="12" column="1" source="standard:spacing-between-declarations-with-annotations" />
-        <error line="12" column="35" source="standard:class-signature" />
-        <error line="12" column="51" source="standard:class-signature" />
         <error line="13" column="1" source="standard:blank-line-before-declaration" />
         <error line="13" column="1" source="standard:spacing-between-declarations-with-annotations" />
-        <error line="13" column="39" source="standard:class-signature" />
-        <error line="13" column="59" source="standard:class-signature" />
+        <error line="13" column="35" source="standard:class-signature" />
+        <error line="13" column="51" source="standard:class-signature" />
+        <error line="14" column="1" source="standard:blank-line-before-declaration" />
+        <error line="14" column="1" source="standard:spacing-between-declarations-with-annotations" />
+        <error line="14" column="39" source="standard:class-signature" />
+        <error line="14" column="59" source="standard:class-signature" />
     </file>
     <file name="src/test/java/com/example/finalmobile/ExampleUnitTest.kt">
         <error line="3" column="1" source="standard:import-ordering" />

@@ -48,6 +48,11 @@ data class PlannedMealEntity(
     val mealId: Long,
 )
 
+@Entity(tableName = "dietary_preferences")
+data class DietaryPreferenceEntity(
+    @PrimaryKey val tag: String,
+)
+
 @Entity(tableName = "recipe_cache")
 data class RecipeCacheEntity(
     @PrimaryKey val mealDbId: String,

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.menusemana.core.common.ErrorType
 import com.menusemana.core.common.Result
 import com.menusemana.domain.model.Recipe
+import com.menusemana.domain.repository.PreferencesRepository
 import com.menusemana.domain.repository.RecipeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,11 +22,13 @@ data class RecetasUiState(
     val isLoading: Boolean = false,
     val isOffline: Boolean = false,
     val error: ErrorType? = null,
+    val activeDietaryFilters: List<String> = emptyList(),
 )
 
 @HiltViewModel
 class RecetasViewModel @Inject constructor(
     private val recipeRepository: RecipeRepository,
+    preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RecetasUiState())
@@ -35,7 +38,23 @@ class RecetasViewModel @Inject constructor(
         RecetasUiState(),
     )
 
+    private var rawRecipes: List<Recipe> = emptyList()
+    private var preferredCategories: Set<String> = emptySet()
+
     init {
+        viewModelScope.launch {
+            preferencesRepository.observePreferences().collect { prefs ->
+                preferredCategories = prefs.mapNotNull { it.mealDbCategory }.toSet()
+                _state.update {
+                    it.copy(
+                        activeDietaryFilters = prefs
+                            .filter { pref -> pref.mealDbCategory != null }
+                            .map { pref -> pref.label },
+                        recipes = applyDietaryFilter(rawRecipes),
+                    )
+                }
+            }
+        }
         search("")
     }
 
@@ -48,16 +67,34 @@ class RecetasViewModel @Inject constructor(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             when (val result = recipeRepository.search(query)) {
-                is Result.Success -> _state.update {
-                    it.copy(recipes = result.data, isLoading = false, isOffline = false)
+                is Result.Success -> {
+                    rawRecipes = result.data
+                    _state.update {
+                        it.copy(
+                            recipes = applyDietaryFilter(rawRecipes),
+                            isLoading = false,
+                            isOffline = false,
+                        )
+                    }
                 }
                 is Result.Error -> _state.update {
-                    it.copy(isLoading = false, error = result.type, isOffline = result.type == ErrorType.Network)
+                    it.copy(
+                        isLoading = false,
+                        error = result.type,
+                        isOffline = result.type == ErrorType.Network,
+                    )
                 }
                 is Result.Loading -> Unit
             }
         }
     }
+
+    private fun applyDietaryFilter(recipes: List<Recipe>): List<Recipe> =
+        if (preferredCategories.isEmpty()) {
+            recipes
+        } else {
+            recipes.filter { it.category in preferredCategories }
+        }
 
     fun retry() = search(_state.value.query)
 }

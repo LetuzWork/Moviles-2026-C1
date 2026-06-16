@@ -38,6 +38,17 @@ enum class Aisle(val label: String) {
     ALMACEN("Almacén"),
 }
 
+/**
+ * Preferencias dietarias del usuario (HU-01.3). [mealDbCategory] es la categoría
+ * de TheMealDB con la que se filtran las recetas (null = no filtra la API).
+ */
+enum class DietaryPreference(val label: String, val mealDbCategory: String?) {
+    VEGETARIANO("Vegetariano", "Vegetarian"),
+    VEGANO("Vegano", "Vegan"),
+    SIN_GLUTEN("Sin gluten", null),
+    SIN_LACTEOS("Sin lácteos", null),
+}
+
 data class PlannedMeal(
     val id: Long = 0,
     val weekStartEpochDay: Long,

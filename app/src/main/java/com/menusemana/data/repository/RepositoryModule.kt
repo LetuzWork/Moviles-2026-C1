@@ -2,6 +2,7 @@ package com.menusemana.data.repository
 
 import com.menusemana.domain.repository.MealRepository
 import com.menusemana.domain.repository.PlanRepository
+import com.menusemana.domain.repository.PreferencesRepository
 import com.menusemana.domain.repository.RecipeRepository
 import dagger.Binds
 import dagger.Module
@@ -24,4 +25,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindRecipeRepository(impl: RecipeRepositoryImpl): RecipeRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindPreferencesRepository(impl: PreferencesRepositoryImpl): PreferencesRepository
 }

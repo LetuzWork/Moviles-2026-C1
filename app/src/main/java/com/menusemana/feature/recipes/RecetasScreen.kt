@@ -75,6 +75,15 @@ fun RecetasScreen(
             )
         }
 
+        if (state.activeDietaryFilters.isNotEmpty()) {
+            Text(
+                "Filtrando por tus preferencias: ${state.activeDietaryFilters.joinToString(", ")}",
+                style = MaterialTheme.typography.bodySmall,
+                color = Persimmon500,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+            )
+        }
+
         when {
             state.isLoading -> Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(color = Persimmon500)

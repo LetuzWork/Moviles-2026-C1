@@ -3,6 +3,7 @@ package com.menusemana.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable data object Onboarding
+@Serializable data object Profile
 @Serializable data object Plan
 @Serializable data object Meals
 @Serializable data object Recipes

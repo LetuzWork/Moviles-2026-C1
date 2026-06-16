@@ -30,6 +30,7 @@ import com.menusemana.feature.meals.DetalleComidaScreen
 import com.menusemana.feature.meals.MisComidasScreen
 import com.menusemana.feature.onboarding.OnboardingScreen
 import com.menusemana.feature.plan.MiSemanaScreen
+import com.menusemana.feature.profile.PerfilScreen
 import com.menusemana.feature.recipes.RecetasScreen
 import com.menusemana.feature.recipes.RecipeDetailScreen
 import com.menusemana.feature.shopping.ComprasScreen
@@ -39,6 +40,7 @@ import com.menusemana.navigation.MealDetail
 import com.menusemana.navigation.Meals
 import com.menusemana.navigation.Onboarding
 import com.menusemana.navigation.Plan
+import com.menusemana.navigation.Profile
 import com.menusemana.navigation.RecipeDetail
 import com.menusemana.navigation.Recipes
 import com.menusemana.navigation.Shopping
@@ -140,8 +142,12 @@ private fun MenuSemanaApp(dataStore: DataStore<Preferences>) {
                     contentPadding = innerPadding,
                     onNavigateToMealDetail = { mealId ->
                         navController.navigate(MealDetail(mealId))
-                    }
+                    },
+                    onNavigateToProfile = { navController.navigate(Profile) },
                 )
+            }
+            composable<Profile> {
+                PerfilScreen(onNavigateUp = { navController.navigateUp() })
             }
             composable<Meals> {
                 MisComidasScreen(
