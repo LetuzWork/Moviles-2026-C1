@@ -64,7 +64,9 @@ data class Recipe(
     val area: String?,
     val category: String?,
     val instructions: String?,
+    val instructionsEs: String? = null,
     val ingredients: List<Pair<String, String>>,
+    val ingredientsEs: List<Pair<String, String>>? = null,
 )
 
 data class ShoppingItem(

@@ -63,4 +63,6 @@ data class RecipeCacheEntity(
     val instructions: String?,
     val ingredientsJson: String,
     val cachedAt: Long = System.currentTimeMillis(),
+    val instructionsEs: String? = null,
+    val ingredientsEsJson: String? = null,
 )

@@ -3,7 +3,9 @@ package com.menusemana.feature.recipes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.menusemana.core.common.ErrorType
+import com.menusemana.core.common.MealTranslator
 import com.menusemana.core.common.Result
+import com.menusemana.domain.model.DietaryPreference
 import com.menusemana.domain.model.Recipe
 import com.menusemana.domain.repository.PreferencesRepository
 import com.menusemana.domain.repository.RecipeRepository
@@ -39,17 +41,15 @@ class RecetasViewModel @Inject constructor(
     )
 
     private var rawRecipes: List<Recipe> = emptyList()
-    private var preferredCategories: Set<String> = emptySet()
+    private var activePreferences: Set<DietaryPreference> = emptySet()
 
     init {
         viewModelScope.launch {
             preferencesRepository.observePreferences().collect { prefs ->
-                preferredCategories = prefs.mapNotNull { it.mealDbCategory }.toSet()
+                activePreferences = prefs
                 _state.update {
                     it.copy(
-                        activeDietaryFilters = prefs
-                            .filter { pref -> pref.mealDbCategory != null }
-                            .map { pref -> pref.label },
+                        activeDietaryFilters = prefs.map { it.label },
                         recipes = applyDietaryFilter(rawRecipes),
                     )
                 }
@@ -90,11 +90,8 @@ class RecetasViewModel @Inject constructor(
     }
 
     private fun applyDietaryFilter(recipes: List<Recipe>): List<Recipe> =
-        if (preferredCategories.isEmpty()) {
-            recipes
-        } else {
-            recipes.filter { it.category in preferredCategories }
-        }
+        if (activePreferences.isEmpty()) recipes
+        else recipes.filter { recipe -> activePreferences.all { MealTranslator.satisfies(recipe, it) } }
 
     fun retry() = search(_state.value.query)
 }

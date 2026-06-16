@@ -23,7 +23,7 @@ class RecipeRepositoryImpl @Inject constructor(
             .fold(
                 onSuccess = { response ->
                     val recipes = response.meals?.map { it.toRecipe() } ?: emptyList()
-                    recipes.forEach { cacheRecipe(it) }
+                    recipes.forEach { mergeAndCache(it) }
                     Result.Success(recipes)
                 },
                 onFailure = { throwable ->
@@ -42,8 +42,7 @@ class RecipeRepositoryImpl @Inject constructor(
                 onSuccess = { response ->
                     val recipe = response.meals?.firstOrNull()?.toRecipe()
                         ?: return Result.Error(ErrorType.NotFound)
-                    cacheRecipe(recipe)
-                    Result.Success(recipe)
+                    Result.Success(mergeAndCache(recipe))
                 },
                 onFailure = { throwable ->
                     val cached = cacheDao.getById(mealDbId)?.toDomain()
@@ -58,8 +57,26 @@ class RecipeRepositoryImpl @Inject constructor(
     override fun getCachedRecipes(): Flow<List<Recipe>> =
         cacheDao.getAllCached().map { list -> list.map { it.toDomain() } }
 
-    private suspend fun cacheRecipe(recipe: Recipe) {
-        cacheDao.insert(recipe.toEntity())
+    override suspend fun saveTranslation(mealDbId: String, translatedInstructions: String) {
+        cacheDao.saveTranslation(mealDbId, translatedInstructions)
+    }
+
+    override suspend fun saveIngredientTranslations(
+        mealDbId: String,
+        translatedPairs: List<Pair<String, String>>,
+    ) {
+        val json = translatedPairs.joinToString("\n") { (n, m) -> "$n\t$m" }
+        cacheDao.saveIngredientTranslations(mealDbId, json)
+    }
+
+    private suspend fun mergeAndCache(recipe: Recipe): Recipe {
+        val existing = cacheDao.getById(recipe.mealDbId)
+        val merged = if (existing != null) recipe.copy(
+            instructionsEs = existing.instructionsEs,
+            ingredientsEs = existing.ingredientsEsJson?.let { parseIngredientJson(it) },
+        ) else recipe
+        cacheDao.insert(merged.toEntity())
+        return merged
     }
 
     private fun MealDbItemDto.toRecipe() = Recipe(
@@ -80,6 +97,9 @@ class RecipeRepositoryImpl @Inject constructor(
         category = category,
         instructions = instructions,
         ingredientsJson = ingredients.joinToString("\n") { (n, m) -> "$n\t$m" },
+        instructionsEs = instructionsEs,
+        ingredientsEsJson = ingredientsEs
+            ?.joinToString("\n") { (n, m) -> "$n\t$m" },
     )
 
     private fun RecipeCacheEntity.toDomain() = Recipe(
@@ -89,11 +109,16 @@ class RecipeRepositoryImpl @Inject constructor(
         area = area,
         category = category,
         instructions = instructions,
-        ingredients = ingredientsJson.lines()
+        instructionsEs = instructionsEs,
+        ingredients = parseIngredientJson(ingredientsJson),
+        ingredientsEs = ingredientsEsJson?.let { parseIngredientJson(it) },
+    )
+
+    private fun parseIngredientJson(json: String): List<Pair<String, String>> =
+        json.lines()
             .filter { it.isNotBlank() }
             .map { line ->
                 val parts = line.split("\t", limit = 2)
                 (parts.getOrNull(0) ?: "") to (parts.getOrNull(1) ?: "")
-            },
-    )
+            }
 }
