@@ -74,6 +74,7 @@ En la carpeta [`docs/`](./docs) se encuentran los documentos base del proyecto:
 | [`checklist_nielsen.md`](./docs/checklist_nielsen.md) | Evaluación de usabilidad contra las 10 heurísticas de Nielsen |
 | [`metricas_performance.md`](./docs/metricas_performance.md) | Resultados de Macrobenchmark (cold start y scroll) |
 | [`pitch_h2.md`](./docs/pitch_h2.md) | Guion del pitch / defensa de H2 |
+| [`pitch_h2_slides.md`](./docs/pitch_h2_slides.md) | Slides del pitch en formato Marp (exportable a PDF/PPTX) |
 | [`declaracion_ia.md`](./docs/declaracion_ia.md) | Declaración de uso responsable de IA (consigna 0.1) |
 
 ### Diseño UI
