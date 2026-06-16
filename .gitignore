@@ -14,6 +14,12 @@
 # Configuración local (rutas al SDK, etc.)
 local.properties
 
+# Firma del release — NO subir credenciales ni la clave privada
+keystore.properties
+keystore/
+*.jks
+*.keystore
+
 # Caché de Kotlin
 .kotlin/
 
