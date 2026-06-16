@@ -22,33 +22,40 @@ Mide los dos requisitos no funcionales de la consigna: **cold start < 2.5 s** y 
 
 ## 2. Cold start (HU-08.4) — ✅ cumple el objetivo
 
-**Objetivo:** < 2.5 s.
+**Objetivo:** < 2.5 s. **Medición:** `StartupTimingMetric`, 5 iteraciones `COLD`.
 
-| Estadística | timeToInitialDisplay |
-|-------------|----------------------|
-| Mínimo | **1.173 s** |
-| **Mediana** | **1.386 s** |
-| Máximo | 2.309 s |
-| Coef. de variación | 0.29 |
+Se corrió 3 veces en emulador (`sdk_gphone64_x86_64`, API 36) para evaluar la dispersión:
 
-✅ La **mediana (1.39 s)** está holgadamente bajo el objetivo de 2.5 s; incluso el máximo (2.31 s) cumple.
+| Corrida | Mín | **Mediana** | Máx | CoV |
+|---------|-----|-------------|-----|-----|
+| 1 | 1.173 s | **1.386 s** | 2.309 s | 0.29 |
+| 2 (host cargado) | 1.568 s | 2.300 s | 2.459 s | — |
+| 3 | 1.453 s | **1.587 s** | 2.332 s | 0.21 |
 
-> ⚠️ **Entorno de esta corrida:** emulador `sdk_gphone64_x86_64` (API 36), **no** un Pixel 9 Pro físico. En hardware real el cold start suele ser **igual o mejor**. Para la evidencia final de H2 se recomienda repetir en el dispositivo objetivo (Pixel 9 Pro, 4 GB RAM / 2 cores) y reemplazar esta tabla.
+✅ La **mediana en condiciones normales es ~1.4–1.6 s**, holgadamente bajo el objetivo de 2.5 s. La corrida 2 (mediana 2.30 s) ocurrió con el host saturado por una compilación en paralelo: ilustra que **el emulador es ruidoso** y depende de la carga de la máquina.
+
+> ⚠️ **Es emulador, no un Pixel 9 Pro físico.** El criterio pide medir en Pixel 9 Pro (4 GB / 2 cores). En hardware real el cold start suele ser **igual o mejor** y más estable. Para la evidencia formal de H2, correr el comando de abajo en el dispositivo objetivo y pegar la tabla resultante.
+
+**Reproducir en el dispositivo objetivo (1 comando):**
+```bash
+./gradlew :benchmark:connectedBenchmarkAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.class=com.example.benchmark.ExampleStartupBenchmark
+```
+Resultado esperado: `timeToInitialDisplayMs` mediana **< 2500 ms**.
 
 ---
 
-## 3. Scroll / fps (HU-08.5) — ⛔ pendiente de dispositivo + seed
+## 3. Scroll / fps (HU-08.5) — ⛔ pendiente de dispositivo físico
 
 **Objetivo:** > 54 fps p90 (frame timing).
 
-La corrida en emulador **no produjo resultados** por dos motivos:
+El **seed de datos (#25) ya está implementado**, así que "Mis comidas" arranca con comidas para scrollear. Sin embargo, las corridas en emulador **no produjeron resultados**: la captura de traza Perfetto/`TraceProcessor` es inestable en emulador (`BR_DEAD_REPLY`). `FrameTimingMetric` requiere un **dispositivo físico**.
 
-1. **Falta seed de datos (#25):** `ScrollBenchmark.scrollComidas` hace scroll sobre **"Mis comidas"** y aborta si la lista está vacía (`"La lista está vacía…"`). En una instalación limpia no hay comidas que scrollear.
-2. **Limitación del emulador:** la captura de traza Perfetto/`TraceProcessor` es inestable en emulador (`BR_DEAD_REPLY`); `FrameTimingMetric` requiere preferentemente un **dispositivo físico**.
-
-**Para completar la evidencia:**
-- Implementar el **seed inicial (#25)** o precargar comidas manualmente antes de correr.
-- Ejecutar `ScrollBenchmark` en un **dispositivo físico** y registrar `frameDurationCpuMs`/`frameOverrunMs` (p90) acá.
+**Para completar la evidencia**, correr en un teléfono conectado y pegar acá `frameDurationCpuMs`/`frameOverrunMs` (p90):
+```bash
+./gradlew :benchmark:connectedBenchmarkAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.class=com.example.benchmark.ScrollBenchmark
+```
 
 ---
 
@@ -65,5 +72,5 @@ La corrida en emulador **no produjo resultados** por dos motivos:
 
 | Requisito | Objetivo | Resultado | Estado |
 |-----------|----------|-----------|--------|
-| Cold start | < 2.5 s | 1.39 s (mediana, emulador) | ✅ (repetir en Pixel 9 Pro) |
-| Scroll | > 54 fps p90 | — | ⛔ pendiente (dispositivo + seed #25) |
+| Cold start | < 2.5 s | ~1.4–1.6 s (mediana, emulador) | ✅ (confirmar en Pixel 9 Pro) |
+| Scroll | > 54 fps p90 | — | ⛔ pendiente (dispositivo físico; seed #25 ya hecho) |
