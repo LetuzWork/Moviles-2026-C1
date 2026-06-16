@@ -21,9 +21,11 @@ subprojects {
         ignoreFailures.set(false)
     }
 
-    // detekt: baseline en config/detekt/baseline.xml (mismo criterio).
+    // detekt: config propia sobre la default + baseline por módulo (modo baseline:
+    // solo falla ante violaciones NUEVAS).
     extensions.configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
         buildUponDefaultConfig = true
+        config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
         baseline = file("$projectDir/config/detekt/baseline.xml")
     }
 }

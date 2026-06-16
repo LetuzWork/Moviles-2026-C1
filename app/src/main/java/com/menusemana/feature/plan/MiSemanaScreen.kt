@@ -22,13 +22,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.ChevronLeft
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Restaurant
+import androidx.compose.material.icons.rounded.WarningAmber
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -48,11 +53,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.menusemana.core.designsystem.component.MsEmptyState
 import com.menusemana.core.designsystem.component.MsLargeHeader
+import com.menusemana.core.designsystem.theme.Herb500
+import com.menusemana.core.designsystem.theme.JetBrainsMono
 import com.menusemana.core.designsystem.theme.Neutral300
 import com.menusemana.core.designsystem.theme.Neutral50
 import com.menusemana.core.designsystem.theme.Persimmon100
 import com.menusemana.core.designsystem.theme.Persimmon500
 import com.menusemana.core.designsystem.theme.SheetShape
+import com.menusemana.core.designsystem.theme.Warning500
 import com.menusemana.domain.model.Meal
 import com.menusemana.domain.model.MealSlot
 import com.menusemana.domain.model.PlannedMeal
@@ -122,6 +130,11 @@ fun MiSemanaScreen(
                         )
                     }
                 },
+            )
+            Spacer(Modifier.height(12.dp))
+            WeekSummaryCard(
+                planned = state.plannedMeals.size,
+                total = 7 * SLOTS.size,
             )
             Spacer(Modifier.height(12.dp))
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -217,6 +230,58 @@ fun MiSemanaScreen(
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun WeekSummaryCard(
+    planned: Int,
+    total: Int,
+    modifier: Modifier = Modifier,
+) {
+    val huecos = (total - planned).coerceAtLeast(0)
+    val completa = huecos == 0
+    val accent = if (completa) Herb500 else Warning500
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = accent.copy(alpha = 0.1f)),
+        elevation = CardDefaults.cardElevation(0.dp),
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text("Comidas planificadas", style = MaterialTheme.typography.labelLarge)
+                Text(
+                    "$planned/$total",
+                    style = MaterialTheme.typography.labelLarge.copy(fontFamily = JetBrainsMono),
+                    color = accent,
+                )
+            }
+            Spacer(Modifier.height(8.dp))
+            LinearProgressIndicator(
+                progress = { if (total > 0) planned.toFloat() / total else 0f },
+                modifier = Modifier.fillMaxWidth(),
+                color = accent,
+            )
+            Spacer(Modifier.height(6.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = if (completa) Icons.Rounded.CheckCircle else Icons.Rounded.WarningAmber,
+                    contentDescription = null,
+                    tint = accent,
+                    modifier = Modifier.size(16.dp),
+                )
+                Spacer(Modifier.width(4.dp))
+                Text(
+                    text = if (completa) "¡Semana completa!" else "Quedan $huecos turnos sin asignar",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = accent,
+                )
             }
         }
     }

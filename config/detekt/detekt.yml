@@ -1,0 +1,6 @@
+# Config de detekt sobre la config por defecto (buildUponDefaultConfig = true).
+# Las funciones @Composable usan PascalCase por convención de Jetpack Compose,
+# así que se excluyen de la regla FunctionNaming.
+naming:
+  FunctionNaming:
+    ignoreAnnotated: ['Composable']

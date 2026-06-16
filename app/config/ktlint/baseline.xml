@@ -1392,25 +1392,26 @@
         <error line="17" column="1" source="standard:no-empty-first-line-in-class-body" />
     </file>
     <file name="src/main/java/com/menusemana/feature/plan/MiSemanaScreen.kt">
-        <error line="56" column="1" source="standard:no-unused-imports" />
-        <error line="80" column="5" source="standard:function-naming" />
-        <error line="133" column="36" source="standard:multiline-expression-wrapping" />
-        <error line="140" column="34" source="standard:trailing-comma-on-call-site" />
-        <error line="142" column="29" source="standard:chain-method-continuation" />
-        <error line="206" column="36" source="standard:multiline-expression-wrapping" />
-        <error line="216" column="34" source="standard:argument-list-wrapping" />
-        <error line="216" column="49" source="standard:argument-list-wrapping" />
-        <error line="216" column="93" source="standard:argument-list-wrapping" />
-        <error line="216" column="141" source="standard:max-line-length" />
-        <error line="216" column="143" source="standard:argument-list-wrapping" />
-        <error line="226" column="13" source="standard:function-naming" />
-        <error line="241" column="28" source="standard:multiline-expression-wrapping" />
-        <error line="253" column="26" source="standard:argument-list-wrapping" />
-        <error line="253" column="65" source="standard:argument-list-wrapping" />
-        <error line="253" column="109" source="standard:argument-list-wrapping" />
-        <error line="253" column="141" source="standard:max-line-length" />
-        <error line="253" column="159" source="standard:argument-list-wrapping" />
-        <error line="259" column="28" source="standard:multiline-expression-wrapping" />
+        <error line="64" column="1" source="standard:no-unused-imports" />
+        <error line="88" column="5" source="standard:function-naming" />
+        <error line="146" column="36" source="standard:multiline-expression-wrapping" />
+        <error line="153" column="34" source="standard:trailing-comma-on-call-site" />
+        <error line="155" column="29" source="standard:chain-method-continuation" />
+        <error line="219" column="36" source="standard:multiline-expression-wrapping" />
+        <error line="229" column="34" source="standard:argument-list-wrapping" />
+        <error line="229" column="49" source="standard:argument-list-wrapping" />
+        <error line="229" column="93" source="standard:argument-list-wrapping" />
+        <error line="229" column="141" source="standard:max-line-length" />
+        <error line="229" column="143" source="standard:argument-list-wrapping" />
+        <error line="239" column="13" source="standard:function-naming" />
+        <error line="291" column="13" source="standard:function-naming" />
+        <error line="306" column="28" source="standard:multiline-expression-wrapping" />
+        <error line="318" column="26" source="standard:argument-list-wrapping" />
+        <error line="318" column="65" source="standard:argument-list-wrapping" />
+        <error line="318" column="109" source="standard:argument-list-wrapping" />
+        <error line="318" column="141" source="standard:max-line-length" />
+        <error line="318" column="159" source="standard:argument-list-wrapping" />
+        <error line="324" column="28" source="standard:multiline-expression-wrapping" />
     </file>
     <file name="src/main/java/com/menusemana/feature/plan/PlanViewModel.kt">
         <error line="3" column="1" source="standard:import-ordering" />
