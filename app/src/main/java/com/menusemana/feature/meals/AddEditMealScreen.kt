@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -92,6 +93,7 @@ fun AddEditMealScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
+                        .testTag("meal_photo_picker")
                         .clip(MaterialTheme.shapes.extraLarge)
                         .border(1.dp, Neutral300, MaterialTheme.shapes.extraLarge)
                         .clickable { cameraPermissionLauncher.launch(Manifest.permission.CAMERA) },
