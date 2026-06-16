@@ -15,9 +15,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -36,11 +40,22 @@ import com.menusemana.core.designsystem.theme.Warning500
 fun RecetasScreen(
     contentPadding: PaddingValues = PaddingValues(),
     onNavigateToDetail: (String) -> Unit,
+    importedRecipeName: String = "",
+    onImportedConsumed: () -> Unit = {},
     viewModel: RecetasViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    Column(modifier = Modifier.fillMaxSize().padding(contentPadding)) {
+    LaunchedEffect(importedRecipeName) {
+        if (importedRecipeName.isNotBlank()) {
+            snackbarHostState.showSnackbar("\"$importedRecipeName\" se agregó a Mis comidas")
+            onImportedConsumed()
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize().padding(contentPadding)) {
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
             MsLargeHeader(kicker = "TheMealDB", title = "Recetas")
             Spacer(Modifier.height(12.dp))
@@ -94,5 +109,11 @@ fun RecetasScreen(
                 }
             }
         }
+        }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter).padding(contentPadding),
+        )
     }
 }

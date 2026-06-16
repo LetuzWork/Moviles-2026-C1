@@ -44,13 +44,13 @@ import com.menusemana.core.designsystem.theme.PillShape
 fun RecipeDetailScreen(
     mealDbId: String,
     onNavigateUp: () -> Unit,
-    onNavigateToMyMeals: () -> Unit,
+    onImported: (recipeName: String) -> Unit,
     viewModel: RecipeDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(mealDbId) { viewModel.load(mealDbId) }
-    LaunchedEffect(state.imported) { if (state.imported) onNavigateToMyMeals() }
+    LaunchedEffect(state.imported) { if (state.imported) onImported(state.recipe?.name.orEmpty()) }
 
     val recipe = state.recipe
 
