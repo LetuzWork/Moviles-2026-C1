@@ -6,9 +6,9 @@
 
 | Integrante | Rol |
 |---|---|
-| Jeampierre Gonzalez | UX/UI |
+| Jeampierre Gonzalez | Tech Lead |
+| Rosana Sosa | UX/UI |
 | Facundo Palmaricciotti | QA / DevOps |
-| Rosana Sosa | Tech Lead |
 | Martin Laguna | PO / Tech Lead |
 
 ---
