@@ -2,8 +2,15 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:MetricConverter.kt$MetricConverter$fun convert(raw: String): String</ID>
+    <ID>ComplexCondition:RecetasScreen.kt$reachedEnd &amp;&amp; state.hasMore &amp;&amp; !state.isLoadingMore &amp;&amp; !state.isLoading &amp;&amp; state.query.isBlank()</ID>
+    <ID>CyclomaticComplexMethod:MealTranslator.kt$MealTranslator.Companion$fun translateMeasure(raw: String): String</ID>
+    <ID>CyclomaticComplexMethod:RecetasScreen.kt$@Composable fun RecetasScreen( contentPadding: PaddingValues = PaddingValues(), onNavigateToDetail: (String) -&gt; Unit, importedRecipeName: String = "", onImportedConsumed: () -&gt; Unit = {}, viewModel: RecetasViewModel = hiltViewModel(), )</ID>
+    <ID>CyclomaticComplexMethod:RecipeDetailScreen.kt$@Composable fun RecipeDetailScreen( mealDbId: String, onNavigateUp: () -&gt; Unit, onImported: (recipeName: String) -&gt; Unit, viewModel: RecipeDetailViewModel = hiltViewModel(), )</ID>
+    <ID>CyclomaticComplexMethod:RecipeDetailViewModel.kt$RecipeDetailViewModel$private fun translateRecipe(recipe: Recipe)</ID>
+    <ID>LargeClass:MealTranslator.kt$MealTranslator$Companion</ID>
     <ID>LongMethod:AddEditMealScreen.kt$@Composable fun AddEditMealScreen( mealId: Long?, onNavigateUp: () -&gt; Unit, onSaved: () -&gt; Unit, viewModel: AddEditMealViewModel = hiltViewModel(), )</ID>
+    <ID>LongMethod:Cards.kt$@Composable fun MealListRow( name: String, timeMinutes: Int, ingredientCount: Int, category: String, photoUri: String?, onClick: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:Cards.kt$@Composable fun MealPhotoCard( name: String, category: String, thumbUrl: String?, onClick: () -&gt; Unit, modifier: Modifier = Modifier, area: String? = null, )</ID>
     <ID>LongMethod:ComprasScreen.kt$@Composable fun ComprasScreen( contentPadding: PaddingValues = PaddingValues(), viewModel: ShoppingViewModel = hiltViewModel(), )</ID>
     <ID>LongMethod:DetalleComidaScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun DetalleComidaScreen( mealId: Long, onNavigateUp: () -&gt; Unit, onNavigateToEdit: () -&gt; Unit, onDeleted: () -&gt; Unit, onNavigateToPlan: () -&gt; Unit, viewModel: DetalleComidaViewModel = hiltViewModel(), )</ID>
     <ID>LongMethod:MainActivity.kt$@Composable private fun MenuSemanaApp(dataStore: DataStore&lt;Preferences&gt;)</ID>
@@ -12,6 +19,8 @@
     <ID>LongMethod:OnboardingScreen.kt$@Composable fun OnboardingScreen( onFinished: () -&gt; Unit, viewModel: OnboardingViewModel = hiltViewModel(), )</ID>
     <ID>LongMethod:RecetasScreen.kt$@Composable fun RecetasScreen( contentPadding: PaddingValues = PaddingValues(), onNavigateToDetail: (String) -&gt; Unit, importedRecipeName: String = "", onImportedConsumed: () -&gt; Unit = {}, viewModel: RecetasViewModel = hiltViewModel(), )</ID>
     <ID>LongMethod:RecipeDetailScreen.kt$@Composable fun RecipeDetailScreen( mealDbId: String, onNavigateUp: () -&gt; Unit, onImported: (recipeName: String) -&gt; Unit, viewModel: RecipeDetailViewModel = hiltViewModel(), )</ID>
+    <ID>LongMethod:RecipeDetailViewModel.kt$RecipeDetailViewModel$private fun translateRecipe(recipe: Recipe)</ID>
+    <ID>LongParameterList:Cards.kt$( name: String, category: String, thumbUrl: String?, onClick: () -&gt; Unit, modifier: Modifier = Modifier, area: String? = null, )</ID>
     <ID>LongParameterList:Cards.kt$( name: String, timeMinutes: Int, ingredientCount: Int, category: String, photoUri: String?, onClick: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
     <ID>LongParameterList:DetalleComidaScreen.kt$( mealId: Long, onNavigateUp: () -&gt; Unit, onNavigateToEdit: () -&gt; Unit, onDeleted: () -&gt; Unit, onNavigateToPlan: () -&gt; Unit, viewModel: DetalleComidaViewModel = hiltViewModel(), )</ID>
     <ID>LongParameterList:TextFields.kt$( value: String, onValueChange: (String) -&gt; Unit, label: String, modifier: Modifier = Modifier, isError: Boolean = false, errorMessage: String? = null, singleLine: Boolean = true, trailingIcon: @Composable (() -&gt; Unit)? = null, )</ID>
@@ -61,26 +70,29 @@
     <ID>MagicNumber:DetalleComidaScreen.kt$0.35f</ID>
     <ID>MagicNumber:DetalleComidaScreen.kt$0.65f</ID>
     <ID>MagicNumber:MainActivity.kt$3</ID>
-    <ID>MagicNumber:MetricConverter.kt$MetricConverter$1000</ID>
-    <ID>MagicNumber:MetricConverter.kt$MetricConverter$115</ID>
-    <ID>MagicNumber:MetricConverter.kt$MetricConverter$15</ID>
-    <ID>MagicNumber:MetricConverter.kt$MetricConverter$240</ID>
-    <ID>MagicNumber:MetricConverter.kt$MetricConverter$28</ID>
-    <ID>MagicNumber:MetricConverter.kt$MetricConverter$3</ID>
-    <ID>MagicNumber:MetricConverter.kt$MetricConverter$30</ID>
-    <ID>MagicNumber:MetricConverter.kt$MetricConverter$3800</ID>
-    <ID>MagicNumber:MetricConverter.kt$MetricConverter$4</ID>
-    <ID>MagicNumber:MetricConverter.kt$MetricConverter$450</ID>
-    <ID>MagicNumber:MetricConverter.kt$MetricConverter$475</ID>
-    <ID>MagicNumber:MetricConverter.kt$MetricConverter$5</ID>
-    <ID>MagicNumber:MetricConverter.kt$MetricConverter$950</ID>
+    <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$1000</ID>
+    <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$115</ID>
+    <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$15</ID>
+    <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$240</ID>
+    <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$28</ID>
+    <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$3</ID>
+    <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$30</ID>
+    <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$3800</ID>
+    <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$4</ID>
+    <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$450</ID>
+    <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$475</ID>
+    <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$5</ID>
+    <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$950</ID>
+    <ID>MagicNumber:MenuSemanaDatabase.kt$MenuSemanaDatabase.Companion.&lt;no name provided&gt;$3</ID>
     <ID>MagicNumber:MiSemanaScreen.kt$6</ID>
     <ID>MagicNumber:MiSemanaScreen.kt$7</ID>
+    <ID>MagicNumber:MisComidasViewModel.kt$MisComidasViewModel$128</ID>
     <ID>MagicNumber:MisComidasViewModel.kt$MisComidasViewModel$5_000</ID>
     <ID>MagicNumber:Models.kt$MealSlot.NOCHE$3</ID>
     <ID>MagicNumber:OnboardingScreen.kt$240</ID>
     <ID>MagicNumber:PerfilViewModel.kt$PerfilViewModel$5_000</ID>
     <ID>MagicNumber:PlanViewModel.kt$PlanViewModel$5_000</ID>
+    <ID>MagicNumber:RecetasScreen.kt$4</ID>
     <ID>MagicNumber:RecetasViewModel.kt$RecetasViewModel$5_000</ID>
     <ID>MagicNumber:RecipeDetailScreen.kt$0.35f</ID>
     <ID>MagicNumber:RecipeDetailScreen.kt$0.65f</ID>
@@ -92,51 +104,64 @@
     <ID>MagicNumber:Theme.kt$0xFFF4EDE2</ID>
     <ID>MatchingDeclarationName:BottomNav.kt$BottomNavItem</ID>
     <ID>MaxLineLength:AddEditMealScreen.kt$Icon(Icons.Rounded.PhotoCamera, contentDescription = null, tint = Persimmon500, modifier = Modifier.size(40.dp))</ID>
-    <ID>MaxLineLength:AddEditMealScreen.kt$MsTextField(value = ing.name, onValueChange = { viewModel.onIngredientNameChange(index, it) }, label = "Ingrediente")</ID>
-    <ID>MaxLineLength:AddEditMealScreen.kt$MsTextField(value = ing.quantity, onValueChange = { viewModel.onIngredientQuantityChange(index, it) }, label = "Cantidad")</ID>
-    <ID>MaxLineLength:AddEditMealScreen.kt$Text("(opcional)", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:AddEditMealScreen.kt$val</ID>
+    <ID>MaxLineLength:AddEditMealViewModel.kt$AddEditMealViewModel$it.copy(ingredients = it.ingredients.toMutableList().also { list -&gt; list[index] = transform(list[index]) })</ID>
+    <ID>MaxLineLength:AisleClassifierTest.kt$AisleClassifierTest$@Test fun `classification is case insensitive`()</ID>
+    <ID>MaxLineLength:AisleClassifierTest.kt$AisleClassifierTest$@Test fun `parmesan cheese is lacteos`()</ID>
+    <ID>MaxLineLength:AisleClassifierTest.kt$AisleClassifierTest$@Test fun `unknown ingredient defaults to almacen`()</ID>
     <ID>MaxLineLength:ComprasScreen.kt$progress = { if (state.totalCount &gt; 0) state.checkedCount.toFloat() / state.totalCount else 0f }</ID>
-    <ID>MaxLineLength:DetalleComidaScreen.kt$Brush.verticalGradient(listOf(Neutral900.copy(alpha = 0.3f), Color.Transparent, Neutral900.copy(alpha = 0.5f)))</ID>
-    <ID>MaxLineLength:DetalleComidaScreen.kt$Icon(Icons.Rounded.Restaurant, contentDescription = null, modifier = Modifier.size(64.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
     <ID>MaxLineLength:DetalleComidaScreen.kt$MsPrimaryButton("Sumar al plan", onClick = viewModel::openPlanPicker, modifier = Modifier.weight(1f))</ID>
     <ID>MaxLineLength:DetalleComidaScreen.kt$Row</ID>
     <ID>MaxLineLength:DetalleComidaScreen.kt$Text("${meal.servings} porciones", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = JetBrainsMono))</ID>
     <ID>MaxLineLength:DetalleComidaScreen.kt$Text("${meal.timeMinutes} min", style = MaterialTheme.typography.bodyMedium.copy(fontFamily = JetBrainsMono))</ID>
     <ID>MaxLineLength:DetalleComidaScreen.kt$Text("Ingredientes", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(16.dp))</ID>
     <ID>MaxLineLength:DetalleComidaScreen.kt$Text(ingredient.name, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(0.65f))</ID>
-    <ID>MaxLineLength:DetalleComidaScreen.kt$Text(ingredient.quantity, style = MaterialTheme.typography.bodyMedium.copy(fontFamily = JetBrainsMono), color = MaterialTheme.colorScheme.primary, modifier = Modifier.weight(0.35f))</ID>
+    <ID>MaxLineLength:DetalleComidaScreen.kt$listOf(Neutral900.copy(alpha = 0.3f), Color.Transparent, Neutral900.copy(alpha = 0.5f))</ID>
+    <ID>MaxLineLength:MealRepositoryImpl.kt$MealRepositoryImpl$override fun getAllMeals(): Flow&lt;List&lt;Meal&gt;&gt;</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `1 stick of butter converts to 115 g`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `2 tablespoons converts to 30 ml`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `5 cups exceeds 1 litre and converts to l`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `already metric grams are returned unchanged`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `beef category translates to Carne vacuna`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `compound ingredient name translates correctly`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `dessert category translates to Postre`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `half cup fraction converts correctly`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `italian area translates to Italiana`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `known ingredient returns spanish translation`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `known ingredient with capital letter is found`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `leading and trailing whitespace is trimmed`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `mexican area translates to Mexicana`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `plain number with no unit is returned unchanged`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `unknown area returns original value`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `unknown category returns original value`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `unknown ingredient returns original name`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `unknown unit is returned unchanged`()</ID>
+    <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `vegetarian category translates`()</ID>
     <ID>MaxLineLength:MiSemanaScreen.kt$Icon(Icons.Rounded.Restaurant, contentDescription = null, tint = Persimmon500, modifier = Modifier.size(36.dp))</ID>
-    <ID>MaxLineLength:MiSemanaScreen.kt$Text("${plannedMeal.meal.timeMinutes} min", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:MiSemanaScreen.kt$Text(meal.category, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
     <ID>MaxLineLength:MiSemanaScreen.kt$Text(plannedMeal.meal.name, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)</ID>
+    <ID>MaxLineLength:RecetasViewModel.kt$RecetasViewModel$private</ID>
+    <ID>MaxLineLength:RecetasViewModel.kt$RecetasViewModel$val es = translatedNames.getOrNull(i)?.takeIf { it != r.name } ?: return@mapIndexedNotNull null</ID>
     <ID>MaxLineLength:RecipeDetailScreen.kt$)</ID>
-    <ID>MaxLineLength:RecipeDetailScreen.kt$Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent, Neutral900.copy(alpha = 0.5f)))))</ID>
     <ID>MaxLineLength:RecipeDetailScreen.kt$MsPrimaryButton("Agregar a mis comidas", onClick = { viewModel.importToMyMeals() }, modifier = Modifier.fillMaxWidth())</ID>
-    <ID>MaxLineLength:RecipeDetailScreen.kt$Text(IngredientTranslator.translate(name), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(0.65f))</ID>
     <ID>MaxLineLength:RecipeDetailScreen.kt$item { Text("Ingredientes", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(16.dp)) }</ID>
-    <ID>MaxLineLength:RecipeDetailScreen.kt$recipe.area?.let { Text(IngredientTranslator.translateArea(it), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }</ID>
+    <ID>MaxLineLength:RecipeDetailViewModel.kt$RecipeDetailViewModel$val needsTranslation = recipe.nameEs == null || recipe.instructionsEs == null || recipe.ingredientsEs == null</ID>
+    <ID>MaxLineLength:RecipeRepositoryImpl.kt$RecipeRepositoryImpl$override fun getCachedRecipes(): Flow&lt;List&lt;Recipe&gt;&gt;</ID>
     <ID>MaxLineLength:Type.kt$bodyLarge = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Normal, fontSize = 16.sp, lineHeight = 24.sp)</ID>
     <ID>MaxLineLength:Type.kt$bodyMedium = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 21.sp)</ID>
     <ID>MaxLineLength:Type.kt$bodySmall = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Normal, fontSize = 12.sp, lineHeight = 17.sp)</ID>
-    <ID>MaxLineLength:Type.kt$displayLarge = TextStyle(fontFamily = Bricolage, fontWeight = FontWeight.SemiBold, fontSize = 56.sp, lineHeight = 60.sp, letterSpacing = (-1.1).sp)</ID>
-    <ID>MaxLineLength:Type.kt$displayMedium = TextStyle(fontFamily = Bricolage, fontWeight = FontWeight.SemiBold, fontSize = 44.sp, lineHeight = 48.sp, letterSpacing = (-0.9).sp)</ID>
     <ID>MaxLineLength:Type.kt$displaySmall = TextStyle(fontFamily = Bricolage, fontWeight = FontWeight.SemiBold, fontSize = 36.sp, lineHeight = 40.sp)</ID>
     <ID>MaxLineLength:Type.kt$headlineLarge = TextStyle(fontFamily = Bricolage, fontWeight = FontWeight.SemiBold, fontSize = 30.sp, lineHeight = 36.sp)</ID>
-    <ID>MaxLineLength:Type.kt$headlineMedium= TextStyle(fontFamily = Bricolage, fontWeight = FontWeight.SemiBold, fontSize = 26.sp, lineHeight = 32.sp)</ID>
+    <ID>MaxLineLength:Type.kt$headlineMedium = TextStyle(fontFamily = Bricolage, fontWeight = FontWeight.SemiBold, fontSize = 26.sp, lineHeight = 32.sp)</ID>
     <ID>MaxLineLength:Type.kt$headlineSmall = TextStyle(fontFamily = Bricolage, fontWeight = FontWeight.SemiBold, fontSize = 22.sp, lineHeight = 28.sp)</ID>
     <ID>MaxLineLength:Type.kt$labelLarge = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.SemiBold, fontSize = 14.sp, lineHeight = 19.sp)</ID>
-    <ID>MaxLineLength:Type.kt$labelMedium = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.SemiBold, fontSize = 12.sp, lineHeight = 16.sp, letterSpacing = 0.5.sp)</ID>
-    <ID>MaxLineLength:Type.kt$labelSmall = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Bold, fontSize = 11.sp, lineHeight = 14.sp, letterSpacing = 0.7.sp)</ID>
     <ID>MaxLineLength:Type.kt$titleLarge = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 27.sp)</ID>
     <ID>MaxLineLength:Type.kt$titleMedium = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Bold, fontSize = 16.sp, lineHeight = 22.sp)</ID>
     <ID>MaxLineLength:Type.kt$titleSmall = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Bold, fontSize = 14.sp, lineHeight = 20.sp)</ID>
-    <ID>NewLineAtEndOfFile:ExampleUnitTest.kt$com.example.finalmobile.ExampleUnitTest.kt</ID>
-    <ID>NewLineAtEndOfFile:MisComidasViewModel.kt$com.menusemana.feature.meals.MisComidasViewModel.kt</ID>
-    <ID>ReturnCount:MetricConverter.kt$MetricConverter$fun convert(raw: String): String</ID>
-    <ID>ReturnCount:MetricConverter.kt$MetricConverter$private fun parseAmount(s: String): Pair&lt;Double, String&gt;?</ID>
+    <ID>ReturnCount:MealTranslator.kt$MealTranslator$suspend fun translateBatch(items: List&lt;String&gt;): List&lt;String&gt;</ID>
+    <ID>ReturnCount:MealTranslator.kt$MealTranslator.Companion$fun translateMeasure(raw: String): String</ID>
+    <ID>ReturnCount:MealTranslator.kt$MealTranslator.Companion$private fun parseMeasureAmount(s: String): Pair&lt;Double, String&gt;?</ID>
     <ID>TooManyFunctions:AddEditMealViewModel.kt$AddEditMealViewModel : ViewModel</ID>
+    <ID>TooManyFunctions:RecetasViewModel.kt$RecetasViewModel : ViewModel</ID>
+    <ID>TooManyFunctions:RecipeRepositoryImpl.kt$RecipeRepositoryImpl : RecipeRepository</ID>
     <ID>UnusedParameter:DetalleComidaScreen.kt$mealId: Long</ID>
-    <ID>WildcardImport:ExampleUnitTest.kt$import org.junit.Assert.*</ID>
   </CurrentIssues>
 </SmellBaseline>

@@ -84,15 +84,14 @@ El prototipo de alta fidelidad está disponible en Figma:
 
 ---
 
-## 📦 Entregables — APK
+## 📦 Entregables — APK y AAB
 
-Los APKs se encuentran en la carpeta [`release/`](./release):
+Los artefactos de release se encuentran en la carpeta [`release/`](./release):
 
 | Archivo | Versión | Tipo | Descripción |
 |---|---|---|---|
 | [`menusemana-v1.0-release.aab`](./release/menusemana-v1.0-release.aab) | 1.0 | Release (AAB) | **Android App Bundle firmado** — entregable RC de H2 (formato de publicación en Play Store) |
 | [`menusemana-v1.0-release.apk`](./release/menusemana-v1.0-release.apk) | 1.0 | Release (firmado) | APK de release **firmado** y minificado (R8) — instalable directamente |
-| [`menusemana-v1.0-debug.apk`](./release/menusemana-v1.0-debug.apk) | 1.0 | Debug | APK debug para pruebas rápidas |
 
 > **Firma:** el keystore y sus credenciales **no se versionan**. Ver [`keystore.properties.template`](./keystore.properties.template) para configurar la firma localmente o en CI (vía Secrets).
 
