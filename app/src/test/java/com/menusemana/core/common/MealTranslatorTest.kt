@@ -96,7 +96,9 @@ class MealTranslatorTest {
 
     @Test fun `blank whitespace returns blank`() = assertEquals("", MealTranslator.translateMeasure("   "))
 
-    @Test fun `unknown unit is returned unchanged`() = assertEquals("to taste", MealTranslator.translateMeasure("to taste"))
+    @Test fun `to taste translates to a gusto`() = assertEquals("a gusto", MealTranslator.translateMeasure("to taste"))
+
+    @Test fun `unknown unit is returned unchanged`() = assertEquals("xyzunknownunit", MealTranslator.translateMeasure("xyzunknownunit"))
 
     @Test fun `plain number with no unit is returned unchanged`() = assertEquals("2", MealTranslator.translateMeasure("2"))
 

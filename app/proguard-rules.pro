@@ -19,3 +19,17 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Retrofit
+-keepattributes Signature, Exceptions
+-keepclassmembernames,allowobfuscation interface * {
+    @retrofit2.http.* <methods>;
+}
+-dontwarn retrofit2.**
+
+# OkHttp
+-dontwarn okhttp3.**
+-dontwarn okio.**
+
+# Moshi generated adapters (via @JsonClass + KSP) — keep so R8 doesn't strip them
+-keep class com.menusemana.core.network.dto.**JsonAdapter { *; }
