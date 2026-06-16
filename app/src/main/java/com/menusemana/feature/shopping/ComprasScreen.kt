@@ -1,5 +1,6 @@
 package com.menusemana.feature.shopping
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -31,7 +32,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import android.content.Intent
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.menusemana.core.designsystem.component.MsEmptyState
@@ -57,13 +57,14 @@ fun ComprasScreen(
                         IconButton(onClick = {
                             val text = viewModel.buildShareText()
                             if (text.isNotBlank()) {
-                                val sendIntent = Intent(Intent.ACTION_SEND).apply {
-                                    type = "text/plain"
-                                    putExtra(Intent.EXTRA_SUBJECT, "Lista de compras — MenúSemana")
-                                    putExtra(Intent.EXTRA_TEXT, text)
-                                }
+                                val sendIntent =
+                                    Intent(Intent.ACTION_SEND).apply {
+                                        type = "text/plain"
+                                        putExtra(Intent.EXTRA_SUBJECT, "Lista de compras — MenúSemana")
+                                        putExtra(Intent.EXTRA_TEXT, text)
+                                    }
                                 context.startActivity(
-                                    Intent.createChooser(sendIntent, "Compartir lista")
+                                    Intent.createChooser(sendIntent, "Compartir lista"),
                                 )
                             }
                         }) {
@@ -128,10 +129,11 @@ fun ComprasScreen(
                     val key = viewModel.itemKey(section.aisle, item.name)
                     val checked = key in state.checkedItems
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .alpha(if (checked) 0.55f else 1f)
-                            .padding(horizontal = 8.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .alpha(if (checked) 0.55f else 1f)
+                                .padding(horizontal = 8.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Checkbox(
@@ -141,9 +143,10 @@ fun ComprasScreen(
                         )
                         Text(
                             text = item.name,
-                            style = MaterialTheme.typography.bodyMedium.let {
-                                if (checked) it.copy(textDecoration = TextDecoration.LineThrough) else it
-                            },
+                            style =
+                                MaterialTheme.typography.bodyMedium.let {
+                                    if (checked) it.copy(textDecoration = TextDecoration.LineThrough) else it
+                                },
                             modifier = Modifier.weight(1f),
                         )
                         Text(

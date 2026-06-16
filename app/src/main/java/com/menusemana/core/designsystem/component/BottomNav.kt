@@ -2,7 +2,6 @@ package com.menusemana.core.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CalendarMonth
@@ -31,12 +30,13 @@ data class BottomNavItem(
     val icon: ImageVector,
 )
 
-val bottomNavItems = listOf(
-    BottomNavItem("Mi semana", Icons.Rounded.CalendarMonth),
-    BottomNavItem("Mis comidas", Icons.Rounded.RestaurantMenu),
-    BottomNavItem("Recetas", Icons.Rounded.Search),
-    BottomNavItem("Compras", Icons.Rounded.ShoppingBasket),
-)
+val bottomNavItems =
+    listOf(
+        BottomNavItem("Mi semana", Icons.Rounded.CalendarMonth),
+        BottomNavItem("Mis comidas", Icons.Rounded.RestaurantMenu),
+        BottomNavItem("Recetas", Icons.Rounded.Search),
+        BottomNavItem("Compras", Icons.Rounded.ShoppingBasket),
+    )
 
 @Composable
 fun MsBottomBar(
@@ -52,18 +52,23 @@ fun MsBottomBar(
         bottomNavItems.forEachIndexed { index, item ->
             val selected = index == selectedIndex
             NavigationBarItem(
-                modifier = Modifier.testTag(
-                    if (item.label == "Mis comidas") "tab_mis_comidas" else "tab_$index"
-                ),
+                modifier =
+                    Modifier.testTag(
+                        if (item.label == "Mis comidas") "tab_mis_comidas" else "tab_$index",
+                    ),
                 selected = selected,
                 onClick = { onTabSelected(index) },
                 icon = {
                     Box(
-                        modifier = if (selected) Modifier
-                            .size(width = 56.dp, height = 32.dp)
-                            .clip(PillShape)
-                            .background(Persimmon100)
-                        else Modifier.size(width = 56.dp, height = 32.dp),
+                        modifier =
+                            if (selected) {
+                                Modifier
+                                    .size(width = 56.dp, height = 32.dp)
+                                    .clip(PillShape)
+                                    .background(Persimmon100)
+                            } else {
+                                Modifier.size(width = 56.dp, height = 32.dp)
+                            },
                         contentAlignment = Alignment.Center,
                     ) {
                         Icon(
@@ -80,9 +85,10 @@ fun MsBottomBar(
                         color = if (selected) Persimmon500 else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 },
-                colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-                ),
+                colors =
+                    NavigationBarItemDefaults.colors(
+                        indicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+                    ),
             )
         }
     }

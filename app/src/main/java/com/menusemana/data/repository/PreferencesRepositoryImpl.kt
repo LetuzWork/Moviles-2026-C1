@@ -8,22 +8,27 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class PreferencesRepositoryImpl @Inject constructor(
-    private val preferencesDao: PreferencesDao,
-) : PreferencesRepository {
+class PreferencesRepositoryImpl
+    @Inject
+    constructor(
+        private val preferencesDao: PreferencesDao,
+    ) : PreferencesRepository {
+        override fun observePreferences(): Flow<Set<DietaryPreference>> =
+            preferencesDao.getAll().map { rows ->
+                rows
+                    .mapNotNull { row ->
+                        runCatching { DietaryPreference.valueOf(row.tag) }.getOrNull()
+                    }.toSet()
+            }
 
-    override fun observePreferences(): Flow<Set<DietaryPreference>> =
-        preferencesDao.getAll().map { rows ->
-            rows.mapNotNull { row ->
-                runCatching { DietaryPreference.valueOf(row.tag) }.getOrNull()
-            }.toSet()
-        }
-
-    override suspend fun setPreference(preference: DietaryPreference, enabled: Boolean) {
-        if (enabled) {
-            preferencesDao.insert(DietaryPreferenceEntity(tag = preference.name))
-        } else {
-            preferencesDao.deleteByTag(preference.name)
+        override suspend fun setPreference(
+            preference: DietaryPreference,
+            enabled: Boolean,
+        ) {
+            if (enabled) {
+                preferencesDao.insert(DietaryPreferenceEntity(tag = preference.name))
+            } else {
+                preferencesDao.deleteByTag(preference.name)
+            }
         }
     }
-}

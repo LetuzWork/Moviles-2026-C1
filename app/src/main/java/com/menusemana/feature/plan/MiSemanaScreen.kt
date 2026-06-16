@@ -62,7 +62,6 @@ import com.menusemana.core.designsystem.theme.Persimmon100
 import com.menusemana.core.designsystem.theme.Persimmon500
 import com.menusemana.core.designsystem.theme.SheetShape
 import com.menusemana.core.designsystem.theme.Warning500
-import com.menusemana.domain.model.Meal
 import com.menusemana.domain.model.MealSlot
 import com.menusemana.domain.model.PlannedMeal
 import java.time.LocalDate
@@ -152,17 +151,17 @@ fun MiSemanaScreen(
                     val isSelected = index == selectedDay
                     val isToday = date == today
                     Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(
-                                when {
-                                    isSelected -> Persimmon500
-                                    isToday -> Persimmon100
-                                    else -> MaterialTheme.colorScheme.surfaceVariant
-                                }
-                            )
-                            .clickable { selectedDay = index }
-                            .padding(horizontal = 12.dp, vertical = 8.dp),
+                        modifier =
+                            Modifier
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(
+                                    when {
+                                        isSelected -> Persimmon500
+                                        isToday -> Persimmon100
+                                        else -> MaterialTheme.colorScheme.surfaceVariant
+                                    },
+                                ).clickable { selectedDay = index }
+                                .padding(horizontal = 12.dp, vertical = 8.dp),
                         contentAlignment = Alignment.Center,
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -225,17 +224,22 @@ fun MiSemanaScreen(
             LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
                 items(state.allMeals, key = { it.id }) { meal ->
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { viewModel.assignMealToSlot(meal.id) }
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .clickable { viewModel.assignMealToSlot(meal.id) }
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(Icons.Rounded.Restaurant, contentDescription = null, tint = Persimmon500)
                         Spacer(Modifier.width(12.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(meal.name, style = MaterialTheme.typography.titleSmall)
-                            Text(meal.category, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(
+                                meal.category,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
                         }
                     }
                 }
@@ -312,29 +316,35 @@ private fun SlotRow(
         Spacer(Modifier.height(4.dp))
         if (plannedMeal != null) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.medium)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .clickable(onClick = onTapFilled)
-                    .padding(12.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .clickable(onClick = onTapFilled)
+                        .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(Icons.Rounded.Restaurant, contentDescription = null, tint = Persimmon500, modifier = Modifier.size(36.dp))
                 Spacer(Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(plannedMeal.meal.name, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    Text("${plannedMeal.meal.timeMinutes} min", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        "${plannedMeal.meal.timeMinutes} min",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
                 Icon(Icons.Rounded.ChevronRight, contentDescription = null)
             }
         } else {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(52.dp)
-                    .border(BorderStroke(1.5.dp, Neutral300), MaterialTheme.shapes.medium)
-                    .clickable(onClick = onTapEmpty),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(52.dp)
+                        .border(BorderStroke(1.5.dp, Neutral300), MaterialTheme.shapes.medium)
+                        .clickable(onClick = onTapEmpty),
                 contentAlignment = Alignment.Center,
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {

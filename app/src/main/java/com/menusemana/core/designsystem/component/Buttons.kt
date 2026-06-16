@@ -43,10 +43,11 @@ fun MsPrimaryButton(
         enabled = enabled,
         modifier = modifier.height(48.dp).graphicsLayer(scaleX = scale, scaleY = scale),
         shape = MaterialTheme.shapes.large,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Persimmon500,
-            contentColor = Neutral50,
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = Persimmon500,
+                contentColor = Neutral50,
+            ),
         interactionSource = interactionSource,
     ) {
         Text(text, style = MaterialTheme.typography.labelLarge)
@@ -65,10 +66,11 @@ fun MsTonalButton(
         enabled = enabled,
         modifier = modifier.height(48.dp),
         shape = MaterialTheme.shapes.large,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Persimmon100,
-            contentColor = Persimmon800,
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = Persimmon100,
+                contentColor = Persimmon800,
+            ),
     ) {
         Text(text, style = MaterialTheme.typography.labelLarge)
     }
@@ -103,10 +105,11 @@ fun MsDangerButton(
         onClick = onClick,
         modifier = modifier.height(48.dp),
         shape = MaterialTheme.shapes.large,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Danger500,
-            contentColor = Neutral50,
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = Danger500,
+                contentColor = Neutral50,
+            ),
     ) {
         Text(text, style = MaterialTheme.typography.labelLarge)
     }

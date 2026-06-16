@@ -63,7 +63,7 @@ fun RecipeDetailScreen(
     }
 
     Scaffold(
-        topBar = { MsTopAppBar(title = recipe.name, onNavigateUp = onNavigateUp) }
+        topBar = { MsTopAppBar(title = recipe.nameEs ?: recipe.name, onNavigateUp = onNavigateUp) },
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
             item {
@@ -74,11 +74,21 @@ fun RecipeDetailScreen(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize(),
                     )
-                    Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent, Neutral900.copy(alpha = 0.5f)))))
+                    Box(
+                        modifier =
+                            Modifier.fillMaxSize().background(
+                                Brush.verticalGradient(listOf(Color.Transparent, Neutral900.copy(alpha = 0.5f))),
+                            ),
+                    )
                     recipe.category?.let { cat ->
                         Box(
-                            modifier = Modifier.align(Alignment.TopStart).padding(12.dp)
-                                .clip(PillShape).background(Persimmon500).padding(horizontal = 10.dp, vertical = 4.dp)
+                            modifier =
+                                Modifier
+                                    .align(Alignment.TopStart)
+                                    .padding(12.dp)
+                                    .clip(PillShape)
+                                    .background(Persimmon500)
+                                    .padding(horizontal = 10.dp, vertical = 4.dp),
                         ) { Text(state.translatedCategory ?: cat, style = MaterialTheme.typography.labelSmall, color = Neutral50) }
                     }
                 }
@@ -86,8 +96,14 @@ fun RecipeDetailScreen(
 
             item {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text(recipe.name, style = MaterialTheme.typography.headlineSmall)
-                    state.translatedArea?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+                    Text(recipe.nameEs ?: recipe.name, style = MaterialTheme.typography.headlineSmall)
+                    state.translatedArea?.let {
+                        Text(
+                            it,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                     Spacer(Modifier.height(12.dp))
                     MsPrimaryButton("Agregar a mis comidas", onClick = { viewModel.importToMyMeals() }, modifier = Modifier.fillMaxWidth())
                 }

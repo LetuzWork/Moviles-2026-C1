@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.detekt)
 }
 
 // Carga keystore.properties si existe (no versionado). Permite firmar el release
@@ -147,4 +149,18 @@ dependencies {
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
+}
+
+configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    android.set(true)
+    ignoreFailures.set(false)
+    filter {
+        exclude("**/*.kts")
+    }
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    config.setFrom(files("${rootProject.projectDir}/config/detekt/detekt.yml"))
+    baseline = file("${projectDir}/config/detekt/baseline.xml")
 }

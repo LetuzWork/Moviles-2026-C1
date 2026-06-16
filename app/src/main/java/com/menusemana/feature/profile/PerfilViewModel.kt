@@ -12,17 +12,22 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PerfilViewModel @Inject constructor(
-    private val preferencesRepository: PreferencesRepository,
-) : ViewModel() {
+class PerfilViewModel
+    @Inject
+    constructor(
+        private val preferencesRepository: PreferencesRepository,
+    ) : ViewModel() {
+        val selected: StateFlow<Set<DietaryPreference>> =
+            preferencesRepository
+                .observePreferences()
+                .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptySet())
 
-    val selected: StateFlow<Set<DietaryPreference>> =
-        preferencesRepository.observePreferences()
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptySet())
-
-    fun toggle(preference: DietaryPreference, enabled: Boolean) {
-        viewModelScope.launch {
-            preferencesRepository.setPreference(preference, enabled)
+        fun toggle(
+            preference: DietaryPreference,
+            enabled: Boolean,
+        ) {
+            viewModelScope.launch {
+                preferencesRepository.setPreference(preference, enabled)
+            }
         }
     }
-}

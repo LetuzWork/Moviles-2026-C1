@@ -51,8 +51,8 @@ import com.menusemana.core.designsystem.component.MsDangerButton
 import com.menusemana.core.designsystem.component.MsPrimaryButton
 import com.menusemana.core.designsystem.component.MsTopAppBar
 import com.menusemana.core.designsystem.theme.JetBrainsMono
-import com.menusemana.core.designsystem.theme.Neutral900
 import com.menusemana.core.designsystem.theme.Neutral50
+import com.menusemana.core.designsystem.theme.Neutral900
 import com.menusemana.core.designsystem.theme.Persimmon500
 import com.menusemana.core.designsystem.theme.PillShape
 import com.menusemana.core.designsystem.theme.SheetShape
@@ -82,10 +82,11 @@ fun DetalleComidaScreen(
         return
     }
 
-    val meal = state.meal ?: run {
-        onNavigateUp()
-        return
-    }
+    val meal =
+        state.meal ?: run {
+            onNavigateUp()
+            return
+        }
 
     if (state.showDeleteDialog) {
         AlertDialog(
@@ -165,16 +166,17 @@ fun DetalleComidaScreen(
                     IconButton(onClick = viewModel::showDeleteDialog) {
                         Icon(Icons.Rounded.Delete, contentDescription = "Eliminar", tint = Persimmon500)
                     }
-                }
+                },
             )
-        }
+        },
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
             item {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(280.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(280.dp),
                 ) {
                     if (meal.photoUri != null) {
                         AsyncImage(
@@ -188,17 +190,30 @@ fun DetalleComidaScreen(
                             modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceVariant),
                             contentAlignment = Alignment.Center,
                         ) {
-                            Icon(Icons.Rounded.Restaurant, contentDescription = null, modifier = Modifier.size(64.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Icon(
+                                Icons.Rounded.Restaurant,
+                                contentDescription = null,
+                                modifier = Modifier.size(64.dp),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
                         }
                     }
                     Box(
-                        modifier = Modifier.fillMaxSize().background(
-                            Brush.verticalGradient(listOf(Neutral900.copy(alpha = 0.3f), Color.Transparent, Neutral900.copy(alpha = 0.5f)))
-                        )
+                        modifier =
+                            Modifier.fillMaxSize().background(
+                                Brush.verticalGradient(
+                                    listOf(Neutral900.copy(alpha = 0.3f), Color.Transparent, Neutral900.copy(alpha = 0.5f)),
+                                ),
+                            ),
                     )
                     Box(
-                        modifier = Modifier.align(Alignment.TopStart).padding(12.dp)
-                            .clip(PillShape).background(Persimmon500).padding(horizontal = 10.dp, vertical = 4.dp)
+                        modifier =
+                            Modifier
+                                .align(Alignment.TopStart)
+                                .padding(12.dp)
+                                .clip(PillShape)
+                                .background(Persimmon500)
+                                .padding(horizontal = 10.dp, vertical = 4.dp),
                     ) {
                         Text(meal.category, style = MaterialTheme.typography.labelSmall, color = Neutral50)
                     }
@@ -231,7 +246,12 @@ fun DetalleComidaScreen(
                 }
                 itemsIndexed(meal.ingredients) { _, ingredient ->
                     Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text(ingredient.quantity, style = MaterialTheme.typography.bodyMedium.copy(fontFamily = JetBrainsMono), color = MaterialTheme.colorScheme.primary, modifier = Modifier.weight(0.35f))
+                        Text(
+                            ingredient.quantity,
+                            style = MaterialTheme.typography.bodyMedium.copy(fontFamily = JetBrainsMono),
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.weight(0.35f),
+                        )
                         Text(ingredient.name, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(0.65f))
                     }
                 }

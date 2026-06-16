@@ -19,19 +19,26 @@ data class Meal(
     val sourceRecipeId: String? = null,
 )
 
-enum class MealCategory(val label: String) {
+enum class MealCategory(
+    val label: String,
+) {
     COMIDA("Comida"),
     COLACION("Colación"),
 }
 
-enum class MealSlot(val index: Int, val label: String) {
+enum class MealSlot(
+    val index: Int,
+    val label: String,
+) {
     MANANA(0, "Mañana"),
     MEDIODIA(1, "Mediodía"),
     TARDE(2, "Tarde"),
     NOCHE(3, "Noche"),
 }
 
-enum class Aisle(val label: String) {
+enum class Aisle(
+    val label: String,
+) {
     VERDULERIA("Verdulería"),
     CARNICERIA("Carnicería"),
     LACTEOS("Lácteos"),
@@ -42,7 +49,10 @@ enum class Aisle(val label: String) {
  * Preferencias dietarias del usuario (HU-01.3). [mealDbCategory] es la categoría
  * de TheMealDB con la que se filtran las recetas (null = no filtra la API).
  */
-enum class DietaryPreference(val label: String, val mealDbCategory: String?) {
+enum class DietaryPreference(
+    val label: String,
+    val mealDbCategory: String?,
+) {
     VEGETARIANO("Vegetariano", "Vegetarian"),
     VEGANO("Vegano", "Vegan"),
     SIN_GLUTEN("Sin gluten", null),
@@ -60,6 +70,7 @@ data class PlannedMeal(
 data class Recipe(
     val mealDbId: String,
     val name: String,
+    val nameEs: String? = null,
     val thumbUrl: String?,
     val area: String?,
     val category: String?,

@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RecipeCacheDao {
-
     @Query("SELECT * FROM recipe_cache WHERE mealDbId = :id")
     suspend fun getById(id: String): RecipeCacheEntity?
 
@@ -23,8 +22,14 @@ interface RecipeCacheDao {
     suspend fun insert(recipe: RecipeCacheEntity)
 
     @Query("UPDATE recipe_cache SET instructionsEs = :translated WHERE mealDbId = :id")
-    suspend fun saveTranslation(id: String, translated: String)
+    suspend fun saveTranslation(
+        id: String,
+        translated: String,
+    )
 
     @Query("UPDATE recipe_cache SET ingredientsEsJson = :json WHERE mealDbId = :id")
-    suspend fun saveIngredientTranslations(id: String, json: String)
+    suspend fun saveIngredientTranslations(
+        id: String,
+        json: String,
+    )
 }

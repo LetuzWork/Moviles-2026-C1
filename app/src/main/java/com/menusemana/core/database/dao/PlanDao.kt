@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlanDao {
-
     @Query("SELECT * FROM planned_meals WHERE weekStartEpochDay = :weekStart")
     fun getPlannedMealsForWeek(weekStart: Long): Flow<List<PlannedMealEntity>>
 
@@ -21,5 +20,9 @@ interface PlanDao {
     suspend fun delete(plannedMeal: PlannedMealEntity)
 
     @Query("DELETE FROM planned_meals WHERE weekStartEpochDay = :weekStart AND dayOfWeek = :day AND slot = :slot")
-    suspend fun clearSlot(weekStart: Long, day: Int, slot: Int)
+    suspend fun clearSlot(
+        weekStart: Long,
+        day: Int,
+        slot: Int,
+    )
 }
