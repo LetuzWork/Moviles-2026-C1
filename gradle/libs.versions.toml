@@ -28,6 +28,8 @@ uiautomator = "2.2.0"
 benchmarkMacroJunit4 = "1.2.0-beta01"
 baselineprofile = "1.2.4"
 profileinstaller = "1.3.1"
+ktlintPlugin = "14.2.0"
+detekt = "1.23.8"
 
 [libraries]
 # Compose BOM
@@ -108,3 +110,5 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 android-test = { id = "com.android.test", version.ref = "agp" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintPlugin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MagicNumber:ScrollBenchmark.kt$ScrollBenchmark$1000</ID>
+    <ID>MagicNumber:ScrollBenchmark.kt$ScrollBenchmark$3</ID>
+    <ID>MagicNumber:ScrollBenchmark.kt$ScrollBenchmark$5</ID>
+    <ID>MagicNumber:ScrollBenchmark.kt$ScrollBenchmark$5000</ID>
+    <ID>MaxLineLength:ScrollBenchmark.kt$ScrollBenchmark$throw AssertionError("La lista está vacía. Por favor, precargá comidas manualmente antes de correr el test para poder medir el scroll.")</ID>
+    <ID>NewLineAtEndOfFile:BaselineProfileGenerator.kt$com.example.benchmark.BaselineProfileGenerator.kt</ID>
+    <ID>NewLineAtEndOfFile:ExampleStartupBenchmark.kt$com.example.benchmark.ExampleStartupBenchmark.kt</ID>
+    <ID>NewLineAtEndOfFile:ScrollBenchmark.kt$com.example.benchmark.ScrollBenchmark.kt</ID>
+  </CurrentIssues>
+</SmellBaseline>

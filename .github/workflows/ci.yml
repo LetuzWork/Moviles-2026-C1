@@ -36,6 +36,12 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: ktlint (estilo Kotlin)
+        run: ./gradlew :app:ktlintCheck --no-daemon
+
+      - name: detekt (análisis estático)
+        run: ./gradlew :app:detekt --no-daemon
+
       - name: Lint (Android Lint)
         run: ./gradlew :app:lintDebug --no-daemon
 
