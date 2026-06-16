@@ -144,7 +144,9 @@ class RecetasViewModel @Inject constructor(
                     categoryRecipes[cat] = recipes
                     allLoaded += recipes
                 }
-            } catch (_: Exception) { }
+            } catch (ignored: Exception) {
+                // one or more category fetches failed — show whatever loaded
+            }
 
             val hasAny = categoryRecipes.isNotEmpty()
             _state.update { it.copy(
