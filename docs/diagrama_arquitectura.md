@@ -85,26 +85,26 @@ feature  →  domain  →  data  →  [ Room DB / Retrofit / DataStore ]
 com.menusemana/
 ├── MainActivity.kt
 ├── MenuSemanaApp.kt              ← Application, inicializa Hilt
-├── navigation/
-│   └── AppNavigation.kt         ← Grafo de navegación tipado
-├── feature/
+├── screens/
+│   ├── AppNavigation.kt         ← Grafo de navegación tipado
 │   ├── onboarding/              ← Pantalla de bienvenida (una sola vez)
 │   ├── plan/                    ← Planificador semanal
 │   ├── meals/                   ← CRUD de comidas propias
 │   ├── recipes/                 ← Búsqueda en TheMealDB
-│   └── shopping/                ← Lista de compras generada
-├── domain/
-│   ├── model/Models.kt          ← Modelos puros sin dependencias Android
-│   ├── repository/              ← Interfaces de repositorio
-│   └── usecase/                 ← Casos de uso independientes
-├── data/
-│   └── repository/              ← Implementaciones concretas + módulo Hilt
-└── core/
-    ├── database/                ← Room: entidades, DAOs, base de datos
+│   ├── shopping/                ← Lista de compras generada
+│   └── ui/                      ← Tema y componentes compartidos
+│       ├── component/
+│       └── theme/
+├── repository/
+│   ├── *Repository.kt           ← Interfaces de repositorio
+│   ├── *RepositoryImpl.kt       ← Implementaciones concretas + módulo Hilt
+│   └── *UseCase.kt              ← Casos de uso
+└── data/
+    ├── model/Models.kt          ← Modelos puros sin dependencias Android
+    ├── db/                      ← Room: entidades, DAOs, base de datos
     ├── network/                 ← Retrofit: API, DTOs, módulo Hilt
-    ├── designsystem/            ← Tema, componentes compartidos
-    ├── common/                  ← Utilidades transversales
-    └── datastore/               ← DataStore para preferencias
+    ├── datastore/               ← DataStore para preferencias
+    └── util/                    ← Utilidades transversales
 ```
 
 ---

@@ -32,4 +32,4 @@
 -dontwarn okio.**
 
 # Moshi generated adapters (via @JsonClass + KSP) — keep so R8 doesn't strip them
--keep class com.menusemana.core.network.dto.**JsonAdapter { *; }
+-keep class com.menusemana.data.network.**JsonAdapter { *; }

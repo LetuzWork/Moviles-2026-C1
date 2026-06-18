@@ -46,7 +46,7 @@ El usuario puede deshacer y salir de los flujos con facilidad.
 ## 4. Consistencia y estándares — ✅
 
 - **Material Design 3** en toda la app: `NavigationBar`, `TopAppBar`, `Card`, `TextField`, `Button`, `Snackbar`.
-- **Design system propio** centralizado (`core/designsystem`): componentes reutilizables (`MsPrimaryButton`, `MsSearchBar`, `MsTopAppBar`, `MealPhotoCard`, `MsEmptyState`) → misma apariencia y comportamiento en cada pantalla.
+- **Design system propio** centralizado (`screens/ui`): componentes reutilizables (`MsPrimaryButton`, `MsSearchBar`, `MsTopAppBar`, `MealPhotoCard`, `MsEmptyState`) → misma apariencia y comportamiento en cada pantalla.
 - Tipografía, colores, formas y espaciados unificados (`Type`, `Color`, `Shape`, `Spacing`).
 - Soporte de **modo oscuro** y **dynamic color** (Android 12+).
 
