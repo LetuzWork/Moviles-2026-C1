@@ -23,27 +23,27 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.menusemana.core.designsystem.component.MsBottomBar
-import com.menusemana.core.designsystem.theme.MenuSemanaTheme
-import com.menusemana.feature.meals.AddEditMealScreen
-import com.menusemana.feature.meals.DetalleComidaScreen
-import com.menusemana.feature.meals.MisComidasScreen
-import com.menusemana.feature.onboarding.OnboardingScreen
-import com.menusemana.feature.plan.MiSemanaScreen
-import com.menusemana.feature.profile.PerfilScreen
-import com.menusemana.feature.recipes.RecetasScreen
-import com.menusemana.feature.recipes.RecipeDetailScreen
-import com.menusemana.feature.shopping.ComprasScreen
-import com.menusemana.navigation.AddMeal
-import com.menusemana.navigation.EditMeal
-import com.menusemana.navigation.MealDetail
-import com.menusemana.navigation.Meals
-import com.menusemana.navigation.Onboarding
-import com.menusemana.navigation.Plan
-import com.menusemana.navigation.Profile
-import com.menusemana.navigation.RecipeDetail
-import com.menusemana.navigation.Recipes
-import com.menusemana.navigation.Shopping
+import com.menusemana.screens.AddMeal
+import com.menusemana.screens.EditMeal
+import com.menusemana.screens.MealDetail
+import com.menusemana.screens.Meals
+import com.menusemana.screens.Onboarding
+import com.menusemana.screens.Plan
+import com.menusemana.screens.Profile
+import com.menusemana.screens.RecipeDetail
+import com.menusemana.screens.Recipes
+import com.menusemana.screens.Shopping
+import com.menusemana.screens.meals.AddEditMealScreen
+import com.menusemana.screens.meals.DetalleComidaScreen
+import com.menusemana.screens.meals.MisComidasScreen
+import com.menusemana.screens.onboarding.OnboardingScreen
+import com.menusemana.screens.plan.MiSemanaScreen
+import com.menusemana.screens.profile.PerfilScreen
+import com.menusemana.screens.recipes.RecetasScreen
+import com.menusemana.screens.recipes.RecipeDetailScreen
+import com.menusemana.screens.shopping.ComprasScreen
+import com.menusemana.screens.ui.component.MsBottomBar
+import com.menusemana.screens.ui.theme.MenuSemanaTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
@@ -83,19 +83,19 @@ private fun MenuSemanaApp(dataStore: DataStore<Preferences>) {
 // 1. Usamos los nombres exactos en texto, para que R8 no los rompa
     val topLevelRoutes =
         listOf(
-            "com.menusemana.navigation.Plan",
-            "com.menusemana.navigation.Meals",
-            "com.menusemana.navigation.Recipes",
-            "com.menusemana.navigation.Shopping",
+            "com.menusemana.screens.Plan",
+            "com.menusemana.screens.Meals",
+            "com.menusemana.screens.Recipes",
+            "com.menusemana.screens.Shopping",
         )
     val showBottomBar = topLevelRoutes.any { currentRoute?.startsWith(it) == true }
 
     val selectedIndex =
         when {
-            currentRoute?.startsWith("com.menusemana.navigation.Plan") == true -> 0
-            currentRoute?.startsWith("com.menusemana.navigation.Meals") == true -> 1
-            currentRoute?.startsWith("com.menusemana.navigation.Recipes") == true -> 2
-            currentRoute?.startsWith("com.menusemana.navigation.Shopping") == true -> 3
+            currentRoute?.startsWith("com.menusemana.screens.Plan") == true -> 0
+            currentRoute?.startsWith("com.menusemana.screens.Meals") == true -> 1
+            currentRoute?.startsWith("com.menusemana.screens.Recipes") == true -> 2
+            currentRoute?.startsWith("com.menusemana.screens.Shopping") == true -> 3
             else -> 0
         }
 

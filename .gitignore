@@ -26,6 +26,12 @@ keystore/
 # Claude Code
 .claude/
 
+# Graphify knowledge graph output and temp files
+graphify-out/
+.graphify_*.py
+.graphify_*.json
+.graphify_python
+
 # macOS
 .DS_Store
 

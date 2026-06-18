@@ -1,9 +1,9 @@
 package com.menusemana.util
 
-import com.menusemana.domain.model.Meal
-import com.menusemana.domain.model.PlannedMeal
-import com.menusemana.domain.repository.MealRepository
-import com.menusemana.domain.repository.PlanRepository
+import com.menusemana.data.model.Meal
+import com.menusemana.data.model.PlannedMeal
+import com.menusemana.repository.MealRepository
+import com.menusemana.repository.PlanRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 

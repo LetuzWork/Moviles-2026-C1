@@ -295,7 +295,7 @@ La lista de compras es completamente derivada: se calcula del plan actual via `G
 
 ### 8.3 Design System
 
-Ubicación: `core/designsystem/`
+Ubicación: `screens/ui/`
 
 **Tema:** Material 3 con `dynamicColor = false`. Tokens de color personalizados:
 
