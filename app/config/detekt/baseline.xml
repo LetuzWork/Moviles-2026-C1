@@ -3,6 +3,8 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>ComplexCondition:RecetasScreen.kt$reachedEnd &amp;&amp; state.hasMore &amp;&amp; !state.isLoadingMore &amp;&amp; !state.isLoading &amp;&amp; state.query.isBlank()</ID>
+    <ID>CyclomaticComplexMethod:ComprasScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ComprasScreen( contentPadding: PaddingValues = PaddingValues(), viewModel: ShoppingViewModel = hiltViewModel(), )</ID>
+    <ID>CyclomaticComplexMethod:MainActivity.kt$@Composable private fun MenuSemanaApp(dataStore: DataStore&lt;Preferences&gt;)</ID>
     <ID>CyclomaticComplexMethod:MealTranslator.kt$MealTranslator.Companion$fun translateMeasure(raw: String): String</ID>
     <ID>CyclomaticComplexMethod:RecetasScreen.kt$@Composable fun RecetasScreen( contentPadding: PaddingValues = PaddingValues(), onNavigateToDetail: (String) -&gt; Unit, importedRecipeName: String = "", onImportedConsumed: () -&gt; Unit = {}, viewModel: RecetasViewModel = hiltViewModel(), )</ID>
     <ID>CyclomaticComplexMethod:RecipeDetailScreen.kt$@Composable fun RecipeDetailScreen( mealDbId: String, onNavigateUp: () -&gt; Unit, onImported: (recipeName: String) -&gt; Unit, viewModel: RecipeDetailViewModel = hiltViewModel(), )</ID>
@@ -11,7 +13,7 @@
     <ID>LongMethod:AddEditMealScreen.kt$@Composable fun AddEditMealScreen( mealId: Long?, onNavigateUp: () -&gt; Unit, onSaved: () -&gt; Unit, viewModel: AddEditMealViewModel = hiltViewModel(), )</ID>
     <ID>LongMethod:Cards.kt$@Composable fun MealListRow( name: String, timeMinutes: Int, ingredientCount: Int, category: String, photoUri: String?, onClick: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
     <ID>LongMethod:Cards.kt$@Composable fun MealPhotoCard( name: String, category: String, thumbUrl: String?, onClick: () -&gt; Unit, modifier: Modifier = Modifier, area: String? = null, )</ID>
-    <ID>LongMethod:ComprasScreen.kt$@Composable fun ComprasScreen( contentPadding: PaddingValues = PaddingValues(), viewModel: ShoppingViewModel = hiltViewModel(), )</ID>
+    <ID>LongMethod:ComprasScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ComprasScreen( contentPadding: PaddingValues = PaddingValues(), viewModel: ShoppingViewModel = hiltViewModel(), )</ID>
     <ID>LongMethod:DetalleComidaScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun DetalleComidaScreen( mealId: Long, onNavigateUp: () -&gt; Unit, onNavigateToEdit: () -&gt; Unit, onDeleted: () -&gt; Unit, onNavigateToPlan: () -&gt; Unit, viewModel: DetalleComidaViewModel = hiltViewModel(), )</ID>
     <ID>LongMethod:MainActivity.kt$@Composable private fun MenuSemanaApp(dataStore: DataStore&lt;Preferences&gt;)</ID>
     <ID>LongMethod:MiSemanaScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MiSemanaScreen( contentPadding: PaddingValues = PaddingValues(), onNavigateToMealDetail: (Long) -&gt; Unit, onNavigateToProfile: () -&gt; Unit = {}, viewModel: PlanViewModel = hiltViewModel(), )</ID>
@@ -43,6 +45,7 @@
     <ID>MagicNumber:Color.kt$0xFF7A2A17</ID>
     <ID>MagicNumber:Color.kt$0xFF7A9650</ID>
     <ID>MagicNumber:Color.kt$0xFF7C6E5A</ID>
+    <ID>MagicNumber:Color.kt$0xFF8A5412</ID>
     <ID>MagicNumber:Color.kt$0xFF95AC65</ID>
     <ID>MagicNumber:Color.kt$0xFF9F3920</ID>
     <ID>MagicNumber:Color.kt$0xFFA89A85</ID>
@@ -67,8 +70,11 @@
     <ID>MagicNumber:Color.kt$0xFFFCEFE9</ID>
     <ID>MagicNumber:Color.kt$0xFFFFFFFF</ID>
     <ID>MagicNumber:ComprasScreen.kt$0.55f</ID>
+    <ID>MagicNumber:ComprasScreen.kt$6</ID>
     <ID>MagicNumber:DetalleComidaScreen.kt$0.35f</ID>
     <ID>MagicNumber:DetalleComidaScreen.kt$0.65f</ID>
+    <ID>MagicNumber:GenerateShoppingListUseCase.kt$GenerateShoppingListUseCase$3</ID>
+    <ID>MagicNumber:GenerateShoppingListUseCase.kt$GenerateShoppingListUseCase$4</ID>
     <ID>MagicNumber:MainActivity.kt$3</ID>
     <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$1000</ID>
     <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$115</ID>
@@ -84,7 +90,9 @@
     <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$5</ID>
     <ID>MagicNumber:MealTranslator.kt$MealTranslator.Companion$950</ID>
     <ID>MagicNumber:MenuSemanaDatabase.kt$MenuSemanaDatabase.Companion.&lt;no name provided&gt;$3</ID>
+    <ID>MagicNumber:MiSemanaScreen.kt$10f</ID>
     <ID>MagicNumber:MiSemanaScreen.kt$6</ID>
+    <ID>MagicNumber:MiSemanaScreen.kt$6f</ID>
     <ID>MagicNumber:MiSemanaScreen.kt$7</ID>
     <ID>MagicNumber:MisComidasViewModel.kt$MisComidasViewModel$128</ID>
     <ID>MagicNumber:MisComidasViewModel.kt$MisComidasViewModel$5_000</ID>
@@ -138,7 +146,6 @@
     <ID>MaxLineLength:MealTranslatorTest.kt$MealTranslatorTest$@Test fun `vegetarian category translates`()</ID>
     <ID>MaxLineLength:MiSemanaScreen.kt$Icon(Icons.Rounded.Restaurant, contentDescription = null, tint = Persimmon500, modifier = Modifier.size(36.dp))</ID>
     <ID>MaxLineLength:MiSemanaScreen.kt$Text(plannedMeal.meal.name, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)</ID>
-    <ID>MaxLineLength:RecetasViewModel.kt$RecetasViewModel$private</ID>
     <ID>MaxLineLength:RecetasViewModel.kt$RecetasViewModel$val es = translatedNames.getOrNull(i)?.takeIf { it != r.name } ?: return@mapIndexedNotNull null</ID>
     <ID>MaxLineLength:RecipeDetailScreen.kt$)</ID>
     <ID>MaxLineLength:RecipeDetailScreen.kt$MsPrimaryButton("Agregar a mis comidas", onClick = { viewModel.importToMyMeals() }, modifier = Modifier.fillMaxWidth())</ID>
@@ -147,7 +154,7 @@
     <ID>MaxLineLength:RecipeRepositoryImpl.kt$RecipeRepositoryImpl$override fun getCachedRecipes(): Flow&lt;List&lt;Recipe&gt;&gt;</ID>
     <ID>MaxLineLength:Type.kt$bodyLarge = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Normal, fontSize = 16.sp, lineHeight = 24.sp)</ID>
     <ID>MaxLineLength:Type.kt$bodyMedium = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 21.sp)</ID>
-    <ID>MaxLineLength:Type.kt$bodySmall = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Normal, fontSize = 12.sp, lineHeight = 17.sp)</ID>
+    <ID>MaxLineLength:Type.kt$bodySmall = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Normal, fontSize = 13.sp, lineHeight = 18.sp)</ID>
     <ID>MaxLineLength:Type.kt$displaySmall = TextStyle(fontFamily = Bricolage, fontWeight = FontWeight.SemiBold, fontSize = 36.sp, lineHeight = 40.sp)</ID>
     <ID>MaxLineLength:Type.kt$headlineLarge = TextStyle(fontFamily = Bricolage, fontWeight = FontWeight.SemiBold, fontSize = 30.sp, lineHeight = 36.sp)</ID>
     <ID>MaxLineLength:Type.kt$headlineMedium = TextStyle(fontFamily = Bricolage, fontWeight = FontWeight.SemiBold, fontSize = 26.sp, lineHeight = 32.sp)</ID>

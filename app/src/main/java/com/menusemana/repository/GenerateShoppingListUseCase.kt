@@ -51,16 +51,15 @@ class GenerateShoppingListUseCase
         )
 
         private fun parseQty(raw: String): ParsedQty? {
-            val s = raw.trim()
-            if (s.isBlank()) return null
+            val s = raw.trim().takeIf { it.isNotBlank() } ?: return null
             // Match whole + fraction (e.g. "1 1/2") or fraction (e.g. "1/2") or decimal/int
             val mixedRe = Regex("""^(\d+)\s+(\d+)\s*/\s*(\d+)\s*(.*)$""")
             val fracRe = Regex("""^(\d+)\s*/\s*(\d+)\s*(.*)$""")
             val numRe = Regex("""^(\d+(?:[.,]\d+)?)\s*(.*)$""")
             return when {
                 mixedRe.matches(s) -> {
-                    val (w, n, d, u) = mixedRe.find(s)!!.destructured
-                    ParsedQty(w.toDouble() + n.toDouble() / d.toDouble(), u.trim().lowercase())
+                    val g = mixedRe.find(s)!!.groupValues
+                    ParsedQty(g[1].toDouble() + g[2].toDouble() / g[3].toDouble(), g[4].trim().lowercase())
                 }
                 fracRe.matches(s) -> {
                     val (n, d, u) = fracRe.find(s)!!.destructured
@@ -68,8 +67,8 @@ class GenerateShoppingListUseCase
                 }
                 numRe.matches(s) -> {
                     val (n, u) = numRe.find(s)!!.destructured
-                    val value = n.replace(',', '.').toDoubleOrNull() ?: return null
-                    ParsedQty(value, u.trim().lowercase())
+                    val value = n.replace(',', '.').toDoubleOrNull()
+                    if (value != null) ParsedQty(value, u.trim().lowercase()) else null
                 }
                 else -> null
             }
@@ -78,15 +77,20 @@ class GenerateShoppingListUseCase
         private fun sumQuantities(quantities: List<String>): String {
             if (quantities.size == 1) return quantities.first()
             val parsed = quantities.map { parseQty(it) }
-            if (parsed.all { it != null }) {
-                val units = parsed.map { it!!.unit }.distinct()
-                if (units.size == 1) {
-                    val total = parsed.sumOf { it!!.value }
-                    val unit = units.first()
-                    val formatted = if (total == floor(total)) total.toLong().toString() else "%.1f".format(total)
-                    return if (unit.isBlank()) formatted else "$formatted $unit"
+            val summed =
+                if (parsed.all { it != null }) {
+                    val units = parsed.map { it!!.unit }.distinct()
+                    if (units.size == 1) {
+                        val total = parsed.sumOf { it!!.value }
+                        val unit = units.first()
+                        val formatted = if (total == floor(total)) total.toLong().toString() else "%.1f".format(total)
+                        if (unit.isBlank()) formatted else "$formatted $unit"
+                    } else {
+                        null
+                    }
+                } else {
+                    null
                 }
-            }
-            return quantities.filter { it.isNotBlank() }.joinToString(", ")
+            return summed ?: quantities.filter { it.isNotBlank() }.joinToString(", ")
         }
     }

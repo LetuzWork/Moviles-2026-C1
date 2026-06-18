@@ -90,9 +90,15 @@ class GenerateShoppingListUseCaseTest {
     fun `same ingredient with different units in two meals has quantities joined`() =
         runTest {
             val meal1 =
-                makeMeal(id = 1L, ingredients = listOf(Ingredient(name = "Harina", quantity = "200 g", aisle = Aisle.ALMACEN.label)))
+                makeMeal(
+                    id = 1L,
+                    ingredients = listOf(Ingredient(name = "Harina", quantity = "200 g", aisle = Aisle.ALMACEN.label)),
+                )
             val meal2 =
-                makeMeal(id = 2L, ingredients = listOf(Ingredient(name = "Harina", quantity = "1 taza", aisle = Aisle.ALMACEN.label)))
+                makeMeal(
+                    id = 2L,
+                    ingredients = listOf(Ingredient(name = "Harina", quantity = "1 taza", aisle = Aisle.ALMACEN.label)),
+                )
             mealRepo.setMeals(listOf(meal1, meal2))
             planRepo.setPlan(
                 listOf(
