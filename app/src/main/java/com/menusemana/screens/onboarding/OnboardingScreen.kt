@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -88,7 +90,8 @@ fun OnboardingScreen(
             modifier =
                 Modifier
                     .align(Alignment.TopEnd)
-                    .padding(16.dp),
+                    .statusBarsPadding()
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
         ) {
             Text("Saltar", color = Neutral50)
         }
@@ -97,6 +100,7 @@ fun OnboardingScreen(
             modifier =
                 Modifier
                     .fillMaxSize()
+                    .navigationBarsPadding()
                     .padding(horizontal = 32.dp)
                     .padding(top = 64.dp, bottom = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,

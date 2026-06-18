@@ -2,6 +2,7 @@ package com.menusemana.screens.plan
 
 import app.cash.turbine.test
 import com.menusemana.repository.AssignMealToSlotUseCase
+import com.menusemana.repository.WeekStateHolder
 import com.menusemana.util.FakeMealRepository
 import com.menusemana.util.FakePlanRepository
 import com.menusemana.util.MainDispatcherRule
@@ -36,7 +37,7 @@ class PlanViewModelTest {
     fun setup() {
         planRepo = FakePlanRepository()
         mealRepo = FakeMealRepository()
-        viewModel = PlanViewModel(planRepo, mealRepo, AssignMealToSlotUseCase(planRepo))
+        viewModel = PlanViewModel(planRepo, mealRepo, AssignMealToSlotUseCase(planRepo), WeekStateHolder())
     }
 
     // ── initial state ─────────────────────────────────────────────────────────

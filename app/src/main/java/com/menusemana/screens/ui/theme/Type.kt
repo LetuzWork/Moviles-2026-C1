@@ -53,22 +53,22 @@ val MenuSemanaTypography =
         titleSmall = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Bold, fontSize = 14.sp, lineHeight = 20.sp),
         bodyLarge = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Normal, fontSize = 16.sp, lineHeight = 24.sp),
         bodyMedium = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 21.sp),
-        bodySmall = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Normal, fontSize = 12.sp, lineHeight = 17.sp),
+        bodySmall = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.Normal, fontSize = 13.sp, lineHeight = 18.sp),
         labelLarge = TextStyle(fontFamily = Manrope, fontWeight = FontWeight.SemiBold, fontSize = 14.sp, lineHeight = 19.sp),
         labelMedium =
             TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 12.sp,
-                lineHeight = 16.sp,
-                letterSpacing = 0.5.sp,
+                fontSize = 13.sp,
+                lineHeight = 17.sp,
+                letterSpacing = 0.4.sp,
             ),
         labelSmall =
             TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Bold,
-                fontSize = 11.sp,
-                lineHeight = 14.sp,
-                letterSpacing = 0.7.sp,
+                fontSize = 12.sp,
+                lineHeight = 15.sp,
+                letterSpacing = 0.5.sp,
             ),
     )

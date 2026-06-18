@@ -45,5 +45,6 @@ val Neutral950 = Color(0xFF14110E)
 
 val Success500 = Color(0xFF4F8A3F)
 val Warning500 = Color(0xFFE89220)
+val Warning700 = Color(0xFF8A5412)
 val Danger500 = Color(0xFFC73E2A)
 val Info500 = Color(0xFF3D7A8A)

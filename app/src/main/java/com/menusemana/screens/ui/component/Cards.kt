@@ -25,8 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -144,8 +146,8 @@ fun MealPhotoCard(
                         .fillMaxSize()
                         .background(
                             Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, Neutral900.copy(alpha = 0.65f)),
-                                startY = 0.4f * 1000f,
+                                colors = listOf(Color.Transparent, Neutral900.copy(alpha = 0.82f)),
+                                startY = 0.3f * 1000f,
                             ),
                         ),
             )
@@ -166,6 +168,12 @@ fun MealPhotoCard(
                 )
             }
 
+            val textShadow =
+                Shadow(
+                    color = Color.Black.copy(alpha = 0.9f),
+                    offset = Offset(0f, 2f),
+                    blurRadius = 16f,
+                )
             Column(
                 modifier =
                     Modifier
@@ -174,7 +182,7 @@ fun MealPhotoCard(
             ) {
                 Text(
                     text = name,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = MaterialTheme.typography.titleSmall.copy(shadow = textShadow),
                     color = Neutral50,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
@@ -182,8 +190,8 @@ fun MealPhotoCard(
                 if (!area.isNullOrBlank()) {
                     Text(
                         text = area,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = Neutral50.copy(alpha = 0.75f),
+                        style = MaterialTheme.typography.labelSmall.copy(shadow = textShadow),
+                        color = Neutral50.copy(alpha = 0.9f),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
