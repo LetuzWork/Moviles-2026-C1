@@ -30,6 +30,7 @@ keystore/
 graphify-out/
 .graphify_*.py
 .graphify_*.json
+.graphify_*.txt
 .graphify_python
 
 # macOS
