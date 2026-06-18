@@ -170,7 +170,10 @@ class RecetasViewModel
             }
         }
 
-        private fun buildVisible(): List<Recipe> = BROWSE_CATEGORIES.flatMap { cat -> categoryRecipes[cat]?.take(perPage) ?: emptyList() }
+        private fun buildVisible(): List<Recipe> =
+            BROWSE_CATEGORIES.flatMap { cat ->
+                categoryRecipes[cat]?.take(perPage) ?: emptyList()
+            }
 
         private fun updateVisible() {
             val visible = buildVisible()
