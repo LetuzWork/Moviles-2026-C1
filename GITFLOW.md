@@ -11,6 +11,8 @@ main
 └── develop
     ├── feature/nombre-de-la-feature
     ├── bugfix/descripcion-del-bug
+    ├── refactor/descripcion-del-refactor
+    ├── build/descripcion-del-cambio
     ├── release/x.y.z
     └── hotfix/descripcion-del-fix
 ```
@@ -28,6 +30,8 @@ main
 |------|--------|---------|-------------|
 | `feature/*` | `develop` | `develop` | Nuevas funcionalidades |
 | `bugfix/*` | `develop` | `develop` | Corrección de bugs en desarrollo |
+| `refactor/*` | `develop` | `develop` | Reestructuración de código sin cambio de comportamiento |
+| `build/*` | `develop` | `develop` | Cambios en el sistema de build, dependencias, CI/CD o configuración de firma |
 | `release/*` | `develop` | `main` + `develop` | Preparación de una nueva versión |
 | `hotfix/*` | `main` | `main` + `develop` | Correcciones urgentes en producción |
 
@@ -46,6 +50,10 @@ feature/login-con-google
 feature/pantalla-perfil-usuario
 bugfix/crash-al-abrir-notificaciones
 bugfix/error-validacion-formulario
+refactor/estructura-de-paquetes
+refactor/viewmodel-mis-comidas
+build/ajuste-firma-release
+build/actualizar-dependencias-room
 release/1.2.0
 hotfix/token-expiracion-infinita
 ```

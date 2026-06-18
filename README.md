@@ -54,9 +54,13 @@ cd Moviles-2026-C1
 
 ---
 
-## 🗂️ Tablero del proyecto
+## 🔗 Links del proyecto
 
-[Ver tablero en GitHub Projects](https://github.com/users/LetuzWork/projects/2/views/1)
+| | |
+|---|---|
+| Tablero | [GitHub Projects](https://github.com/users/LetuzWork/projects/2/views/1) |
+| Presentación H2 | [Slides en Canva](https://www.canva.com/design/DAHMGQdBGDU/qL3_5P6IeviRpPbiyFMUQw/view?utm_content=DAHMGQdBGDU&utm_campaign=designshare&utm_medium=link&utm_source=viewer) |
+| Prototipo UI | [Figma](https://www.figma.com/design/IaeaVzp4HpRV4P37Gr0s1N/) |
 
 ---
 
@@ -73,14 +77,7 @@ En la carpeta [`docs/`](./docs) se encuentran los documentos base del proyecto:
 | [`documentacion_usuario.md`](./docs/documentacion_usuario.md) | Documentación orientada al usuario final |
 | [`checklist_nielsen.md`](./docs/checklist_nielsen.md) | Evaluación de usabilidad contra las 10 heurísticas de Nielsen |
 | [`metricas_performance.md`](./docs/metricas_performance.md) | Resultados de Macrobenchmark (cold start y scroll) |
-| [`pitch_h2.md`](./docs/pitch_h2.md) | Guion del pitch / defensa de H2 |
-| [`pitch_h2_slides.md`](./docs/pitch_h2_slides.md) | Slides del pitch en formato Marp (exportable a PDF/PPTX) |
 | [`declaracion_ia.md`](./docs/declaracion_ia.md) | Declaración de uso responsable de IA (consigna 0.1) |
-
-### Diseño UI
-
-El prototipo de alta fidelidad está disponible en Figma:
-[Ver diseño en Figma](https://www.figma.com/design/IaeaVzp4HpRV4P37Gr0s1N/)
 
 ---
 

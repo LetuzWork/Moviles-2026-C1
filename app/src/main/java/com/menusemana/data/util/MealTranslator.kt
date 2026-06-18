@@ -1,0 +1,857 @@
+package com.menusemana.data.util
+
+import com.menusemana.data.model.DietaryPreference
+import com.menusemana.data.model.MealCategory
+import com.menusemana.data.model.Recipe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.HttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.json.JSONArray
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class MealTranslator
+    @Inject
+    constructor(
+        private val client: OkHttpClient,
+    ) {
+        suspend fun translateToSpanish(text: String): String? =
+            withContext(Dispatchers.IO) {
+                if (text.isBlank()) return@withContext null
+                runCatching {
+                    val url =
+                        HttpUrl
+                            .Builder()
+                            .scheme("https")
+                            .host("translate.googleapis.com")
+                            .addPathSegments("translate_a/single")
+                            .addQueryParameter("client", "gtx")
+                            .addQueryParameter("sl", "en")
+                            .addQueryParameter("tl", "es")
+                            .addQueryParameter("dt", "t")
+                            .addQueryParameter("q", text)
+                            .build()
+                    val response = client.newCall(Request.Builder().url(url).build()).execute()
+                    if (!response.isSuccessful) return@runCatching null
+                    val body = response.body?.string() ?: return@runCatching null
+                    parseSegments(body)
+                }.getOrNull()
+            }
+
+        suspend fun translateBatch(items: List<String>): List<String> {
+            if (items.isEmpty()) return emptyList()
+            val translated = translateToSpanish(items.joinToString("\n")) ?: return items
+            val lines = translated.split("\n")
+            return if (lines.size == items.size) lines.map { it.trim() } else items
+        }
+
+        private fun parseSegments(json: String): String {
+            val segments = JSONArray(json).getJSONArray(0)
+            return (0 until segments.length())
+                .mapNotNull { runCatching { segments.getJSONArray(it).getString(0) }.getOrNull() }
+                .joinToString("")
+                .trim()
+        }
+
+        fun translate(name: String) = Companion.translate(name)
+
+        fun translateMeasure(raw: String) = Companion.translateMeasure(raw)
+
+        fun translatePair(
+            name: String,
+            measure: String,
+        ) = Companion.translatePair(name, measure)
+
+        fun translateArea(area: String) = Companion.translateArea(area)
+
+        fun translateCategory(category: String) = Companion.translateCategory(category)
+
+        companion object {
+            fun translate(name: String): String = INGREDIENTS[name.trim().lowercase()] ?: name.trim()
+
+            fun translateMeasure(raw: String): String {
+                val s = raw.trim()
+                if (s.isBlank()) return s
+                val (amount, rest) = parseMeasureAmount(s) ?: return MEASURES[s.lowercase()] ?: s
+                val unit = rest.trim().lowercase()
+                return when {
+                    unit.startsWith("cup") -> toMetric(amount * 240, "ml")
+                    unit.startsWith("tbsp") || unit.startsWith("tablespoon") -> toMetric(amount * 15, "ml")
+                    unit.startsWith("tsp") || unit.startsWith("teaspoon") -> toMetric(amount * 5, "ml")
+                    unit.startsWith("fl oz") || unit.startsWith("fluid ounce") -> toMetric(amount * 30, "ml")
+                    unit.startsWith("pint") -> toMetric(amount * 475, "ml")
+                    unit.startsWith("quart") -> toMetric(amount * 950, "ml")
+                    unit.startsWith("gallon") -> toMetric(amount * 3800, "ml")
+                    unit.startsWith("oz") || unit.startsWith("ounce") -> toMetric(amount * 28, "g")
+                    unit.startsWith("lb") || unit.startsWith("pound") -> toMetric(amount * 450, "g")
+                    unit.startsWith("stick") -> toMetric(amount * 115, "g")
+                    else -> {
+                        val translatedUnit = MEASURES[unit] ?: unit
+                        if (translatedUnit != unit) {
+                            val n =
+                                if (amount == amount.toLong().toDouble()) {
+                                    amount.toLong().toString()
+                                } else {
+                                    "%.1f".format(amount)
+                                }
+                            "$n $translatedUnit"
+                        } else {
+                            MEASURES[s.lowercase()] ?: s
+                        }
+                    }
+                }
+            }
+
+            fun translatePair(
+                name: String,
+                measure: String,
+            ): Pair<String, String> = translate(name) to translateMeasure(measure)
+
+            fun translateArea(area: String): String = AREAS[area.trim().lowercase()] ?: area.trim()
+
+            fun translateCategory(category: String): String = CATEGORIES[category.trim().lowercase()] ?: category.trim()
+
+            private val MIXED = Regex("""^(\d+)\s+(\d+)/(\d+)(.*)$""")
+            private val FRACTION = Regex("""^(\d+)/(\d+)(.*)$""")
+            private val DECIMAL = Regex("""^(\d+(?:\.\d+)?)(.*)$""")
+
+            private fun parseMeasureAmount(s: String): Pair<Double, String>? {
+                MIXED.find(s)?.let { m ->
+                    val whole = m.groupValues[1].toDouble()
+                    val num = m.groupValues[2].toDouble()
+                    val den = m.groupValues[3].toDouble()
+                    return (whole + num / den) to m.groupValues[4]
+                }
+                FRACTION.find(s)?.let { m ->
+                    return (m.groupValues[1].toDouble() / m.groupValues[2].toDouble()) to m.groupValues[3]
+                }
+                DECIMAL.find(s)?.let { m ->
+                    return m.groupValues[1].toDouble() to m.groupValues[2]
+                }
+                return null
+            }
+
+            private fun toMetric(
+                value: Double,
+                baseUnit: String,
+            ): String {
+                val (scaled, unit) =
+                    when (baseUnit) {
+                        "ml" -> if (value >= 1000) value / 1000 to "l" else value to "ml"
+                        "g" -> if (value >= 1000) value / 1000 to "kg" else value to "g"
+                        else -> value to baseUnit
+                    }
+                val formatted =
+                    if (scaled == scaled.toLong().toDouble()) {
+                        scaled.toLong().toString()
+                    } else {
+                        "%.0f".format(scaled)
+                    }
+                return "$formatted $unit"
+            }
+
+            private val INGREDIENTS =
+                mapOf(
+                    "chicken" to "Pollo",
+                    "chicken breast" to "Pechuga de pollo",
+                    "chicken breasts" to "Pechugas de pollo",
+                    "chicken thighs" to "Muslos de pollo",
+                    "chicken legs" to "Patas de pollo",
+                    "chicken stock" to "Caldo de pollo",
+                    "chicken stock cube" to "Cubito de caldo de pollo",
+                    "beef" to "Carne vacuna",
+                    "beef brisket" to "Pecho de ternera",
+                    "beef fillet" to "Filete de res",
+                    "beef gravy" to "Salsa de carne",
+                    "beef stock" to "Caldo de carne",
+                    "beef shin" to "Jarrete de ternera",
+                    "beef kidney" to "Riñón de res",
+                    "lean minced beef" to "Carne picada magra",
+                    "minced beef" to "Carne picada",
+                    "pork" to "Cerdo",
+                    "minced pork" to "Cerdo picado",
+                    "lamb" to "Cordero",
+                    "lamb loin chops" to "Chuletas de cordero",
+                    "lamb mince" to "Cordero picado",
+                    "lamb leg" to "Pierna de cordero",
+                    "lamb shoulder" to "Paleta de cordero",
+                    "lamb kidney" to "Riñón de cordero",
+                    "veal" to "Ternera",
+                    "duck" to "Pato",
+                    "duck legs" to "Patas de pato",
+                    "turkey mince" to "Pavo picado",
+                    "bacon" to "Panceta / Bacon",
+                    "ham" to "Jamón",
+                    "prosciutto" to "Prosciutto",
+                    "parma ham" to "Jamón de parma",
+                    "chorizo" to "Chorizo",
+                    "sausages" to "Salchichas",
+                    "italian fennel sausages" to "Salchichas italianas de hinojo",
+                    "black pudding" to "Morcilla",
+                    "doner meat" to "Carne de doner",
+                    "salmon" to "Salmón",
+                    "tuna" to "Atún",
+                    "cod" to "Bacalao",
+                    "salt cod" to "Bacalao salado",
+                    "haddock" to "Eglefino",
+                    "smoked haddock" to "Eglefino ahumado",
+                    "mackerel" to "Caballa",
+                    "monkfish" to "Rape",
+                    "white fish" to "Pescado blanco",
+                    "white fish fillets" to "Filetes de pescado blanco",
+                    "fish stock" to "Caldo de pescado",
+                    "fish sauce" to "Salsa de pescado",
+                    "thai fish sauce" to "Salsa de pescado tailandesa",
+                    "prawns" to "Gambas",
+                    "king prawns" to "Gambas grandes",
+                    "raw king prawns" to "Gambas crudas",
+                    "tiger prawns" to "Gambas tigre",
+                    "shrimp" to "Camarones",
+                    "mussels" to "Mejillones",
+                    "clams" to "Almejas",
+                    "squid" to "Calamar",
+                    "baby squid" to "Chipirones",
+                    "oysters" to "Ostras",
+                    "pilchards" to "Sardinas en lata",
+                    "tomato" to "Tomate",
+                    "tomatoes" to "Tomates",
+                    "cherry tomatoes" to "Tomates cherry",
+                    "baby plum tomatoes" to "Tomates pera pequeños",
+                    "plum tomatoes" to "Tomates pera",
+                    "grape tomatoes" to "Tomates uva",
+                    "vine tomatoes" to "Tomates de vid",
+                    "chopped tomatoes" to "Tomates picados",
+                    "canned tomatoes" to "Tomates en lata",
+                    "diced tomatoes" to "Tomates en cubos",
+                    "tinned tomatos" to "Tomates en lata",
+                    "sun-dried tomatoes" to "Tomates secos",
+                    "tomato puree" to "Puré de tomate",
+                    "tomato sauce" to "Salsa de tomate",
+                    "tomato ketchup" to "Ketchup",
+                    "passata" to "Passata de tomate",
+                    "onion" to "Cebolla",
+                    "onions" to "Cebollas",
+                    "red onions" to "Cebollas moradas",
+                    "spring onions" to "Cebolletas",
+                    "chopped onion" to "Cebolla picada",
+                    "shallots" to "Echalotes",
+                    "challots" to "Echalotes",
+                    "leek" to "Puerro",
+                    "garlic" to "Ajo",
+                    "garlic clove" to "Diente de ajo",
+                    "minced garlic" to "Ajo picado",
+                    "garlic powder" to "Ajo en polvo",
+                    "garlic sauce" to "Salsa de ajo",
+                    "ginger garlic paste" to "Pasta de ajo y jengibre",
+                    "ginger paste" to "Pasta de jengibre",
+                    "carrot" to "Zanahoria",
+                    "carrots" to "Zanahorias",
+                    "potato" to "Papa",
+                    "potatoes" to "Papas",
+                    "small potatoes" to "Papas pequeñas",
+                    "floury potatoes" to "Papas harinosas",
+                    "charlotte potatoes" to "Papas charlotte",
+                    "sweet potato" to "Batata / Camote",
+                    "pepper" to "Pimiento",
+                    "red pepper" to "Pimiento rojo",
+                    "green pepper" to "Pimiento verde",
+                    "yellow pepper" to "Pimiento amarillo",
+                    "chilli" to "Chile",
+                    "green chilli" to "Chile verde",
+                    "red chilli" to "Chile rojo",
+                    "jalapeno" to "Jalapeño",
+                    "spinach" to "Espinaca",
+                    "kale" to "Kale / Col rizada",
+                    "lettuce" to "Lechuga",
+                    "little gem lettuce" to "Lechuga pequeña",
+                    "rocket" to "Rúcula",
+                    "celery" to "Apio",
+                    "celeriac" to "Apio nabo",
+                    "broccoli" to "Brócoli",
+                    "chinese broccoli" to "Brócoli chino",
+                    "cauliflower" to "Coliflor",
+                    "cabbage" to "Repollo",
+                    "brussels sprouts" to "Coles de Bruselas",
+                    "zucchini" to "Zucchini / Zapallito",
+                    "courgettes" to "Zucchini / Zapallitos",
+                    "aubergine" to "Berenjena",
+                    "egg plants" to "Berenjenas",
+                    "eggplant" to "Berenjena",
+                    "mushrooms" to "Hongos",
+                    "chestnut mushroom" to "Hongos castañas",
+                    "shiitake mushrooms" to "Hongos shiitake",
+                    "wild mushrooms" to "Hongos silvestres",
+                    "avocado" to "Palta / Aguacate",
+                    "cucumber" to "Pepino",
+                    "peas" to "Arvejas / Guisantes",
+                    "frozen peas" to "Arvejas congeladas",
+                    "sugar snap peas" to "Arvejas dulces",
+                    "green beans" to "Chauchas / Judías verdes",
+                    "corn" to "Maíz",
+                    "sweetcorn" to "Maíz dulce",
+                    "creamed corn" to "Crema de maíz",
+                    "asparagus" to "Espárragos",
+                    "fennel" to "Hinojo",
+                    "fennel bulb" to "Bulbo de hinojo",
+                    "squash" to "Calabaza",
+                    "butternut squash" to "Calabaza butternut",
+                    "pumpkin" to "Calabaza",
+                    "turnips" to "Nabos",
+                    "swede" to "Nabo sueco",
+                    "beetroot" to "Remolacha",
+                    "artichoke" to "Alcachofa",
+                    "jerusalem artichokes" to "Alcachofas de Jerusalén",
+                    "chestnuts" to "Castañas",
+                    "roasted vegetables" to "Verduras asadas",
+                    "stir-fry vegetables" to "Verduras para saltear",
+                    "ginger" to "Jengibre",
+                    "ground ginger" to "Jengibre molido",
+                    "lemon" to "Limón",
+                    "lemons" to "Limones",
+                    "lemon juice" to "Jugo de limón",
+                    "lemon zest" to "Ralladura de limón",
+                    "lime" to "Lima",
+                    "orange" to "Naranja",
+                    "orange zest" to "Ralladura de naranja",
+                    "apple" to "Manzana",
+                    "apples" to "Manzanas",
+                    "braeburn apples" to "Manzanas Braeburn",
+                    "bramley apples" to "Manzanas Bramley",
+                    "banana" to "Banana",
+                    "mango" to "Mango",
+                    "pears" to "Peras",
+                    "peaches" to "Duraznos",
+                    "apricot" to "Damasco / Albaricoque",
+                    "dried apricots" to "Damascos secos",
+                    "strawberries" to "Frutillas",
+                    "raspberries" to "Frambuesas",
+                    "blueberries" to "Arándanos",
+                    "blackberries" to "Moras",
+                    "redcurrants" to "Grosellas rojas",
+                    "raisins" to "Pasas de uva",
+                    "sultanas" to "Sultanas",
+                    "currants" to "Grosellas",
+                    "cherry" to "Cereza",
+                    "glace cherry" to "Cereza confitada",
+                    "medjool dates" to "Dátiles medjool",
+                    "milk" to "Leche",
+                    "whole milk" to "Leche entera",
+                    "semi-skimmed milk" to "Leche semidescremada",
+                    "soya milk" to "Leche de soja",
+                    "condensed milk" to "Leche condensada",
+                    "evaporated milk" to "Leche evaporada",
+                    "butter" to "Mantequilla",
+                    "chilled butter" to "Mantequilla fría",
+                    "salted butter" to "Mantequilla con sal",
+                    "unsalted butter" to "Mantequilla sin sal",
+                    "vegan butter" to "Mantequilla vegana",
+                    "cream" to "Crema",
+                    "double cream" to "Crema doble",
+                    "heavy cream" to "Crema para batir",
+                    "whipping cream" to "Crema batida",
+                    "single cream" to "Crema liviana",
+                    "sour cream" to "Crema ácida",
+                    "creme fraiche" to "Crème fraîche",
+                    "cream cheese" to "Queso crema",
+                    "clotted cream" to "Crema coagulada",
+                    "fromage frais" to "Fromage frais",
+                    "cheese" to "Queso",
+                    "cheddar cheese" to "Queso cheddar",
+                    "mozzarella" to "Mozzarella",
+                    "mozzarella balls" to "Bolitas de mozzarella",
+                    "parmesan" to "Parmesano",
+                    "parmesan cheese" to "Queso parmesano",
+                    "parmigiano-reggiano" to "Parmigiano-reggiano",
+                    "pecorino" to "Pecorino",
+                    "ricotta" to "Ricotta",
+                    "feta" to "Queso feta",
+                    "cubed feta cheese" to "Queso feta en cubos",
+                    "mascarpone" to "Mascarpone",
+                    "brie" to "Queso brie",
+                    "gruyère" to "Gruyère",
+                    "gouda cheese" to "Queso gouda",
+                    "stilton cheese" to "Queso stilton",
+                    "goats cheese" to "Queso de cabra",
+                    "cheese curds" to "Cuajada de queso",
+                    "paneer" to "Paneer",
+                    "colby jack cheese" to "Queso colby jack",
+                    "monterey jack cheese" to "Queso monterey jack",
+                    "shredded mexican cheese" to "Queso mexicano rallado",
+                    "yogurt" to "Yogur",
+                    "greek yogurt" to "Yogur griego",
+                    "full fat yogurt" to "Yogur entero",
+                    "ghee" to "Ghee",
+                    "eggs" to "Huevos",
+                    "egg" to "Huevo",
+                    "egg white" to "Clara de huevo",
+                    "egg yolks" to "Yemas de huevo",
+                    "free-range eggs beaten" to "Huevos de campo batidos",
+                    "flax eggs" to "Huevos de linaza",
+                    "rice" to "Arroz",
+                    "basmati rice" to "Arroz basmati",
+                    "jasmine rice" to "Arroz jazmín",
+                    "brown rice" to "Arroz integral",
+                    "flour" to "Harina",
+                    "plain flour" to "Harina común",
+                    "self-raising flour" to "Harina leudante",
+                    "white flour" to "Harina blanca",
+                    "whole wheat" to "Trigo integral",
+                    "wholegrain bread" to "Pan integral",
+                    "breadcrumbs" to "Pan rallado",
+                    "bread" to "Pan",
+                    "baguette" to "Baguette",
+                    "naan bread" to "Pan naan",
+                    "corn flour" to "Harina de maíz",
+                    "cornstarch" to "Almidón de maíz",
+                    "oats" to "Avena",
+                    "rolled oats" to "Avena en copos",
+                    "oatmeal" to "Harina de avena",
+                    "spaghetti" to "Spaghetti",
+                    "penne rigate" to "Penne rigate",
+                    "rigatoni" to "Rigatoni",
+                    "macaroni" to "Macarrones",
+                    "farfalle" to "Farfalle",
+                    "bowtie pasta" to "Pasta farfalle",
+                    "lasagne sheets" to "Láminas de lasaña",
+                    "tagliatelle" to "Tagliatelle",
+                    "fettuccine" to "Fettuccine",
+                    "pappardelle pasta" to "Pappardelle",
+                    "linguine pasta" to "Linguine",
+                    "paccheri pasta" to "Paccheri",
+                    "vermicelli pasta" to "Vermicelli",
+                    "rice noodles" to "Fideos de arroz",
+                    "rice stick noodles" to "Fideos de arroz planos",
+                    "rice vermicelli" to "Vermicelli de arroz",
+                    "udon noodles" to "Fideos udon",
+                    "couscous" to "Cuscús",
+                    "lentils" to "Lentejas",
+                    "brown lentils" to "Lentejas marrones",
+                    "french lentils" to "Lentejas francesas",
+                    "green red lentils" to "Lentejas verdes y rojas",
+                    "toor dal" to "Dal toor",
+                    "chickpeas" to "Garbanzos",
+                    "kidney beans" to "Frijoles rojos",
+                    "cannellini beans" to "Alubias blancas",
+                    "butter beans" to "Judías manteca",
+                    "pinto beans" to "Frijoles pintos",
+                    "haricot beans" to "Alubias",
+                    "borlotti beans" to "Judías borlotti",
+                    "refried beans" to "Frijoles refritos",
+                    "baked beans" to "Alubias en salsa de tomate",
+                    "oil" to "Aceite",
+                    "olive oil" to "Aceite de oliva",
+                    "extra virgin olive oil" to "Aceite de oliva extra virgen",
+                    "vegetable oil" to "Aceite vegetal",
+                    "sunflower oil" to "Aceite de girasol",
+                    "peanut oil" to "Aceite de maní",
+                    "sesame seed oil" to "Aceite de sésamo",
+                    "truffle oil" to "Aceite de trufa",
+                    "rapeseed oil" to "Aceite de colza",
+                    "canola oil" to "Aceite de canola",
+                    "goose fat" to "Grasa de ganso",
+                    "duck fat" to "Grasa de pato",
+                    "lard" to "Manteca de cerdo",
+                    "suet" to "Grasa de riñón",
+                    "soy sauce" to "Salsa de soja",
+                    "dark soy sauce" to "Salsa de soja oscura",
+                    "oyster sauce" to "Salsa de ostras",
+                    "worcestershire sauce" to "Salsa Worcestershire",
+                    "tabasco sauce" to "Salsa tabasco",
+                    "hotsauce" to "Salsa picante",
+                    "salsa" to "Salsa",
+                    "green salsa" to "Salsa verde",
+                    "enchilada sauce" to "Salsa para enchiladas",
+                    "barbeque sauce" to "Salsa barbacoa",
+                    "vinaigrette dressing" to "Aderezo vinagreta",
+                    "tahini" to "Tahini / Pasta de sésamo",
+                    "peanut butter" to "Mantequilla de maní",
+                    "mustard" to "Mostaza",
+                    "dijon mustard" to "Mostaza dijón",
+                    "english mustard" to "Mostaza inglesa",
+                    "horseradish" to "Rábano picante",
+                    "madras paste" to "Pasta madras",
+                    "thai green curry paste" to "Pasta de curry verde tailandés",
+                    "thai red curry paste" to "Pasta de curry rojo tailandés",
+                    "massaman curry paste" to "Pasta de curry massaman",
+                    "harissa spice" to "Especias harissa",
+                    "fajita seasoning" to "Condimento para fajitas",
+                    "vinegar" to "Vinagre",
+                    "white vinegar" to "Vinagre blanco",
+                    "red wine vinegar" to "Vinagre de vino tinto",
+                    "balsamic vinegar" to "Vinagre balsámico",
+                    "apple cider vinegar" to "Vinagre de manzana",
+                    "red wine" to "Vino tinto",
+                    "white wine" to "Vino blanco",
+                    "dry white wine" to "Vino blanco seco",
+                    "brandy" to "Brandy",
+                    "sake" to "Sake",
+                    "mirin" to "Mirin",
+                    "stout" to "Cerveza stout",
+                    "salt" to "Sal",
+                    "sea salt" to "Sal marina",
+                    "kosher salt" to "Sal kosher",
+                    "celery salt" to "Sal de apio",
+                    "onion salt" to "Sal de cebolla",
+                    "black pepper" to "Pimienta negra",
+                    "paprika" to "Pimentón / Paprika",
+                    "smoked paprika" to "Pimentón ahumado",
+                    "smoky paprika" to "Pimentón ahumado",
+                    "chili powder" to "Chile en polvo",
+                    "chilli powder" to "Chile en polvo",
+                    "red chilli powder" to "Chile rojo en polvo",
+                    "red chilli flakes" to "Hojuelas de chile rojo",
+                    "red pepper flakes" to "Hojuelas de pimiento rojo",
+                    "cayenne pepper" to "Pimienta de cayena",
+                    "cumin" to "Comino",
+                    "cumin seeds" to "Semillas de comino",
+                    "ground cumin" to "Comino molido",
+                    "coriander" to "Cilantro / Coriandro",
+                    "coriander seeds" to "Semillas de cilantro",
+                    "coriander leaves" to "Hojas de cilantro",
+                    "fresh basil" to "Albahaca fresca",
+                    "basil" to "Albahaca",
+                    "basil leaves" to "Hojas de albahaca",
+                    "oregano" to "Orégano",
+                    "dried oregano" to "Orégano seco",
+                    "thyme" to "Tomillo",
+                    "fresh thyme" to "Tomillo fresco",
+                    "rosemary" to "Romero",
+                    "bay leaf" to "Hoja de laurel",
+                    "bay leaves" to "Hojas de laurel",
+                    "parsley" to "Perejil",
+                    "chopped parsley" to "Perejil picado",
+                    "freshly chopped parsley" to "Perejil fresco picado",
+                    "cilantro" to "Cilantro",
+                    "dill" to "Eneldo",
+                    "mint" to "Menta",
+                    "sage" to "Salvia",
+                    "tarragon leaves" to "Estragón",
+                    "chives" to "Ciboulette",
+                    "marjoram" to "Mejorana",
+                    "turmeric" to "Cúrcuma",
+                    "turmeric powder" to "Cúrcuma en polvo",
+                    "cinnamon" to "Canela",
+                    "cinnamon stick" to "Rama de canela",
+                    "nutmeg" to "Nuez moscada",
+                    "cloves" to "Clavos de olor",
+                    "cardamom" to "Cardamomo",
+                    "star anise" to "Anís estrellado",
+                    "fennel seeds" to "Semillas de hinojo",
+                    "mustard seeds" to "Semillas de mostaza",
+                    "mustard powder" to "Mostaza en polvo",
+                    "saffron" to "Azafrán",
+                    "garam masala" to "Garam masala",
+                    "curry powder" to "Curry en polvo",
+                    "italian seasoning" to "Condimento italiano",
+                    "cajun" to "Condimento cajún",
+                    "biryani masala" to "Masala biryani",
+                    "fenugreek" to "Fenogreco",
+                    "sesame seed" to "Semillas de sésamo",
+                    "poppy seeds" to "Semillas de amapola",
+                    "khus khus" to "Semillas de amapola blanca",
+                    "sugar" to "Azúcar",
+                    "granulated sugar" to "Azúcar granulada",
+                    "caster sugar" to "Azúcar impalpable gruesa",
+                    "icing sugar" to "Azúcar impalpable",
+                    "brown sugar" to "Azúcar morena",
+                    "dark brown sugar" to "Azúcar morena oscura",
+                    "dark soft brown sugar" to "Azúcar morena blanda oscura",
+                    "light brown soft sugar" to "Azúcar morena clara",
+                    "dark brown soft sugar" to "Azúcar morena blanda",
+                    "demerara sugar" to "Azúcar demerara",
+                    "coco sugar" to "Azúcar de coco",
+                    "muscovado sugar" to "Azúcar mascabado",
+                    "honey" to "Miel",
+                    "maple syrup" to "Jarabe de arce",
+                    "golden syrup" to "Sirope dorado",
+                    "black treacle" to "Melaza negra",
+                    "treacle" to "Melaza",
+                    "vanilla" to "Vainilla",
+                    "vanilla extract" to "Extracto de vainilla",
+                    "baking powder" to "Polvo de hornear",
+                    "bicarbonate of soda" to "Bicarbonato de sodio",
+                    "yeast" to "Levadura",
+                    "cocoa" to "Cacao en polvo",
+                    "cacao" to "Cacao",
+                    "chocolate chips" to "Chips de chocolate",
+                    "dark chocolate chips" to "Chips de chocolate amargo",
+                    "white chocolate chips" to "Chips de chocolate blanco",
+                    "plain chocolate" to "Chocolate negro",
+                    "dark chocolate" to "Chocolate amargo",
+                    "milk chocolate" to "Chocolate con leche",
+                    "white chocolate" to "Chocolate blanco",
+                    "caramel" to "Caramelo",
+                    "caramel sauce" to "Salsa de caramelo",
+                    "custard" to "Natilla",
+                    "custard powder" to "Polvo para natilla",
+                    "ice cream" to "Helado",
+                    "miniature marshmallows" to "Malvaviscos miniatura",
+                    "gelatine leafs" to "Láminas de gelatina",
+                    "raspberry jam" to "Mermelada de frambuesa",
+                    "apricot jam" to "Mermelada de damasco",
+                    "marzipan" to "Mazapán",
+                    "peanut brittle" to "Crocante de maní",
+                    "peanut cookies" to "Galletas de maní",
+                    "digestive biscuits" to "Galletas digestivas",
+                    "meringue nests" to "Merengues",
+                    "shortcrust pastry" to "Masa brisa",
+                    "puff pastry" to "Hojaldre",
+                    "desiccated coconut" to "Coco rallado seco",
+                    "toffee popcorn" to "Pochoclos acaramelados",
+                    "almonds" to "Almendras",
+                    "flaked almonds" to "Almendras laminadas",
+                    "ground almonds" to "Almendras molidas",
+                    "walnuts" to "Nueces",
+                    "pecan nuts" to "Nueces pecán",
+                    "cashews" to "Castañas de cajú",
+                    "cashew nuts" to "Castañas de cajú",
+                    "peanuts" to "Maníes",
+                    "pine nuts" to "Piñones",
+                    "hazlenuts" to "Avellanas",
+                    "water" to "Agua",
+                    "cold water" to "Agua fría",
+                    "vegetable stock" to "Caldo de verduras",
+                    "vegetable stock cube" to "Cubito de caldo vegetal",
+                    "hot beef stock" to "Caldo de carne caliente",
+                    "tamarind paste" to "Pasta de tamarindo",
+                    "tamarind ball" to "Bola de tamarindo",
+                    "ginger cordial" to "Refresco de jengibre",
+                    "coconut milk" to "Leche de coco",
+                    "coconut cream" to "Crema de coco",
+                    "vine leaves" to "Hojas de parra",
+                    "capers" to "Alcaparras",
+                    "olives" to "Aceitunas",
+                    "green olives" to "Aceitunas verdes",
+                    "black olives" to "Aceitunas negras",
+                    "pitted black olives" to "Aceitunas negras sin hueso",
+                    "corn tortillas" to "Tortillas de maíz",
+                    "flour tortilla" to "Tortilla de harina",
+                    "tortillas" to "Tortillas",
+                    "hard taco shells" to "Tapas de taco duras",
+                    "fries" to "Papas fritas",
+                    "mixed grain" to "Mezcla de granos",
+                    "egg rolls" to "Rollitos de huevo",
+                    "pretzels" to "Pretzels",
+                    "crusty bread" to "Pan crocante",
+                    "christmas pudding" to "Budín navideño",
+                    "bouquet garni" to "Bouquet garni",
+                    "fruit mix" to "Mix de frutas",
+                    "dried fruit" to "Frutas secas",
+                    "mixed peel" to "Cáscaras confitadas mixtas",
+                    "food colouring" to "Colorante alimentario",
+                    "red food colouring" to "Colorante rojo",
+                    "pink food colouring" to "Colorante rosa",
+                    "blue food colouring" to "Colorante azul",
+                    "yellow food colouring" to "Colorante amarillo",
+                    "potato starch" to "Fécula de papa",
+                    "fideo" to "Fideo",
+                )
+
+            private val MEASURES =
+                mapOf(
+                    "handful" to "puñado",
+                    "a handful" to "un puñado",
+                    "handful of" to "puñado de",
+                    "a handful of" to "un puñado de",
+                    "pinch" to "pizca",
+                    "a pinch" to "una pizca",
+                    "dash" to "toque",
+                    "a dash" to "un toque",
+                    "drizzle" to "chorrito",
+                    "a drizzle" to "un chorrito",
+                    "sprinkle" to "pizca",
+                    "bunch" to "atado",
+                    "a bunch" to "un atado",
+                    "sprig" to "ramita",
+                    "knob" to "nuez",
+                    "squeeze" to "chorro",
+                    "a squeeze" to "un chorro",
+                    "can" to "lata",
+                    "tin" to "lata",
+                    "jar" to "frasco",
+                    "packet" to "paquete",
+                    "pack" to "paquete",
+                    "bag" to "bolsa",
+                    "bottle" to "botella",
+                    "head" to "cabeza",
+                    "clove" to "diente",
+                    "stalk" to "tallo",
+                    "leaf" to "hoja",
+                    "strip" to "tira",
+                    "piece" to "trozo",
+                    "slice" to "rodaja",
+                    "rasher" to "loncha",
+                    "cube" to "cubo",
+                    "fillet" to "filete",
+                    "portion" to "porción",
+                    "handfuls" to "puñados",
+                    "pinches" to "pizcas",
+                    "dashes" to "toques",
+                    "drizzles" to "chorritos",
+                    "sprinkles" to "pizcas",
+                    "bunches" to "atados",
+                    "sprigs" to "ramitas",
+                    "knobs" to "nueces",
+                    "squeezes" to "chorros",
+                    "cans" to "latas",
+                    "tins" to "latas",
+                    "jars" to "frascos",
+                    "packets" to "paquetes",
+                    "packs" to "paquetes",
+                    "bags" to "bolsas",
+                    "bottles" to "botellas",
+                    "heads" to "cabezas",
+                    "cloves" to "dientes",
+                    "stalks" to "tallos",
+                    "leaves" to "hojas",
+                    "strips" to "tiras",
+                    "pieces" to "trozos",
+                    "slices" to "rodajas",
+                    "rashers" to "lonchas",
+                    "cubes" to "cubos",
+                    "fillets" to "filetes",
+                    "portions" to "porciones",
+                    "chopped" to "picado",
+                    "finely chopped" to "finamente picado",
+                    "coarsely chopped" to "picado grueso",
+                    "roughly chopped" to "picado grueso",
+                    "diced" to "en cubos",
+                    "minced" to "picado fino",
+                    "beaten" to "batido",
+                    "finely sliced" to "finamente rebanado",
+                    "thinly sliced" to "en rodajas finas",
+                    "thickly sliced" to "en rodajas gruesas",
+                    "sliced" to "en rodajas",
+                    "grated" to "rallado",
+                    "crushed" to "machacado",
+                    "peeled" to "pelado",
+                    "deveined" to "desvenado",
+                    "trimmed" to "limpio",
+                    "halved" to "partido a la mitad",
+                    "quartered" to "en cuartos",
+                    "shredded" to "desmenuzado",
+                    "melted" to "derretido",
+                    "softened" to "ablandado",
+                    "room temperature" to "temperatura ambiente",
+                    "to taste" to "a gusto",
+                    "to serve" to "para servir",
+                    "for serving" to "para servir",
+                    "to sprinkle" to "para espolvorear",
+                    "as needed" to "cantidad necesaria",
+                    "optional" to "opcional",
+                    "some" to "un poco",
+                    "a few" to "algunos",
+                    "a little" to "un poco",
+                    "large" to "grande",
+                    "medium" to "mediano",
+                    "small" to "pequeño",
+                    "zest" to "ralladura",
+                    "juice" to "jugo",
+                )
+
+            private val AREAS =
+                mapOf(
+                    "american" to "Americana",
+                    "british" to "Británica",
+                    "canadian" to "Canadiense",
+                    "chinese" to "China",
+                    "croatian" to "Croata",
+                    "dutch" to "Holandesa",
+                    "egyptian" to "Egipcia",
+                    "filipino" to "Filipina",
+                    "french" to "Francesa",
+                    "greek" to "Griega",
+                    "indian" to "India",
+                    "irish" to "Irlandesa",
+                    "italian" to "Italiana",
+                    "jamaican" to "Jamaicana",
+                    "japanese" to "Japonesa",
+                    "kenyan" to "Keniana",
+                    "malaysian" to "Malaya",
+                    "mexican" to "Mexicana",
+                    "moroccan" to "Marroquí",
+                    "polish" to "Polaca",
+                    "portuguese" to "Portuguesa",
+                    "russian" to "Rusa",
+                    "spanish" to "Española",
+                    "thai" to "Tailandesa",
+                    "tunisian" to "Tunecina",
+                    "turkish" to "Turca",
+                    "ukrainian" to "Ucraniana",
+                    "vietnamese" to "Vietnamita",
+                    "unknown" to "Sin especificar",
+                )
+
+            private val CATEGORIES =
+                mapOf(
+                    "beef" to "Carne vacuna",
+                    "chicken" to "Pollo",
+                    "lamb" to "Cordero",
+                    "pork" to "Cerdo",
+                    "seafood" to "Mariscos",
+                    "pasta" to "Pasta",
+                    "vegetarian" to "Vegetariana",
+                    "vegan" to "Vegana",
+                    "dessert" to "Postre",
+                    "breakfast" to "Desayuno",
+                    "side" to "Guarnición",
+                    "starter" to "Entrada",
+                    "goat" to "Cabra",
+                    "miscellaneous" to "Varios",
+                )
+
+            private val COLACION_CATEGORIES = setOf("dessert", "starter", "breakfast", "side")
+
+            private val MEAT_FISH =
+                setOf(
+                    "chicken", "beef", "pork", "lamb", "turkey", "duck", "veal", "venison",
+                    "bacon", "ham", "sausage", "chorizo", "salami", "prosciutto", "pancetta",
+                    "lard", "gelatin", "fish", "salmon", "tuna", "cod", "tilapia", "sea bass",
+                    "trout", "mackerel", "herring", "anchovy", "sardine", "shrimp", "prawn",
+                    "crab", "lobster", "mussel", "clam", "squid", "octopus", "scallop",
+                )
+
+            private val DAIRY_INGREDIENTS =
+                setOf(
+                    "milk", "cream", "butter", "cheese", "yogurt", "yoghurt", "ghee",
+                    "mozzarella", "parmesan", "cheddar", "ricotta", "brie", "camembert",
+                    "feta", "gouda", "emmental", "gruyere", "sour cream", "condensed milk",
+                    "evaporated milk", "creme fraiche", "cream cheese", "whipping cream",
+                    "double cream", "heavy cream",
+                )
+
+            private val GLUTEN_INGREDIENTS =
+                setOf(
+                    "flour", "bread", "breadcrumbs", "croutons", "pasta", "noodle", "noodles",
+                    "wheat", "barley", "rye", "semolina", "couscous", "oat", "oats",
+                    "soy sauce", "beer", "malt",
+                )
+
+            fun mealCategory(mealDbCategory: String?): MealCategory =
+                if (mealDbCategory?.trim()?.lowercase() in COLACION_CATEGORIES) {
+                    MealCategory.COLACION
+                } else {
+                    MealCategory.COMIDA
+                }
+
+            fun satisfies(
+                recipe: Recipe,
+                preference: DietaryPreference,
+            ): Boolean {
+                val names = recipe.ingredients.map { it.first.lowercase() }
+                return when (preference) {
+                    DietaryPreference.VEGETARIANO ->
+                        names.none { name -> MEAT_FISH.any { name.contains(it) } }
+                    DietaryPreference.VEGANO ->
+                        names.none { name -> (MEAT_FISH + DAIRY_INGREDIENTS).any { name.contains(it) } }
+                    DietaryPreference.SIN_LACTEOS ->
+                        names.none { name -> DAIRY_INGREDIENTS.any { name.contains(it) } }
+                    DietaryPreference.SIN_GLUTEN ->
+                        names.none { name -> GLUTEN_INGREDIENTS.any { name.contains(it) } }
+                }
+            }
+        }
+    }
