@@ -17,6 +17,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -78,24 +79,22 @@ private fun MenuSemanaApp(dataStore: DataStore<Preferences>) {
 
     if (!ready) return
     val backStack by navController.currentBackStackEntryAsState()
-    val currentRoute = backStack?.destination?.route
+    val destination = backStack?.destination
 
-// 1. Usamos los nombres exactos en texto, para que R8 no los rompa
-    val topLevelRoutes =
-        listOf(
-            "com.menusemana.screens.Plan",
-            "com.menusemana.screens.Meals",
-            "com.menusemana.screens.Recipes",
-            "com.menusemana.screens.Shopping",
-        )
-    val showBottomBar = topLevelRoutes.any { currentRoute?.startsWith(it) == true }
+    val showBottomBar =
+        destination?.let {
+            it.hasRoute(Plan::class) ||
+                it.hasRoute(Meals::class) ||
+                it.hasRoute(Recipes::class) ||
+                it.hasRoute(Shopping::class)
+        } ?: false
 
     val selectedIndex =
         when {
-            currentRoute?.startsWith("com.menusemana.screens.Plan") == true -> 0
-            currentRoute?.startsWith("com.menusemana.screens.Meals") == true -> 1
-            currentRoute?.startsWith("com.menusemana.screens.Recipes") == true -> 2
-            currentRoute?.startsWith("com.menusemana.screens.Shopping") == true -> 3
+            destination?.hasRoute(Plan::class) == true -> 0
+            destination?.hasRoute(Meals::class) == true -> 1
+            destination?.hasRoute(Recipes::class) == true -> 2
+            destination?.hasRoute(Shopping::class) == true -> 3
             else -> 0
         }
 

@@ -6,6 +6,7 @@ import com.menusemana.data.model.ShoppingSection
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
+import kotlin.math.floor
 
 class GenerateShoppingListUseCase
     @Inject
@@ -31,7 +32,7 @@ class GenerateShoppingListUseCase
                             val first = group.first()
                             ShoppingItem(
                                 name = first.name,
-                                quantity = group.joinToString(", ") { it.quantity },
+                                quantity = sumQuantities(group.map { it.quantity }),
                                 aisle = first.aisle,
                             )
                         }
@@ -43,4 +44,53 @@ class GenerateShoppingListUseCase
                     .sortedBy { (aisle, _) -> aisleOrder.indexOf(aisle).takeIf { it >= 0 } ?: Int.MAX_VALUE }
                     .map { (aisle, items) -> ShoppingSection(aisle, items) }
             }
+
+        private data class ParsedQty(
+            val value: Double,
+            val unit: String,
+        )
+
+        private fun parseQty(raw: String): ParsedQty? {
+            val s = raw.trim().takeIf { it.isNotBlank() } ?: return null
+            // Match whole + fraction (e.g. "1 1/2") or fraction (e.g. "1/2") or decimal/int
+            val mixedRe = Regex("""^(\d+)\s+(\d+)\s*/\s*(\d+)\s*(.*)$""")
+            val fracRe = Regex("""^(\d+)\s*/\s*(\d+)\s*(.*)$""")
+            val numRe = Regex("""^(\d+(?:[.,]\d+)?)\s*(.*)$""")
+            return when {
+                mixedRe.matches(s) -> {
+                    val g = mixedRe.find(s)!!.groupValues
+                    ParsedQty(g[1].toDouble() + g[2].toDouble() / g[3].toDouble(), g[4].trim().lowercase())
+                }
+                fracRe.matches(s) -> {
+                    val (n, d, u) = fracRe.find(s)!!.destructured
+                    ParsedQty(n.toDouble() / d.toDouble(), u.trim().lowercase())
+                }
+                numRe.matches(s) -> {
+                    val (n, u) = numRe.find(s)!!.destructured
+                    val value = n.replace(',', '.').toDoubleOrNull()
+                    if (value != null) ParsedQty(value, u.trim().lowercase()) else null
+                }
+                else -> null
+            }
+        }
+
+        private fun sumQuantities(quantities: List<String>): String {
+            if (quantities.size == 1) return quantities.first()
+            val parsed = quantities.map { parseQty(it) }
+            val summed =
+                if (parsed.all { it != null }) {
+                    val units = parsed.map { it!!.unit }.distinct()
+                    if (units.size == 1) {
+                        val total = parsed.sumOf { it!!.value }
+                        val unit = units.first()
+                        val formatted = if (total == floor(total)) total.toLong().toString() else "%.1f".format(total)
+                        if (unit.isBlank()) formatted else "$formatted $unit"
+                    } else {
+                        null
+                    }
+                } else {
+                    null
+                }
+            return summed ?: quantities.filter { it.isNotBlank() }.joinToString(", ")
+        }
     }

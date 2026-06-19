@@ -1,8 +1,6 @@
 package com.menusemana.screens.plan
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,7 +46,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -57,6 +60,7 @@ import com.menusemana.data.model.PlannedMeal
 import com.menusemana.screens.ui.component.MsEmptyState
 import com.menusemana.screens.ui.component.MsLargeHeader
 import com.menusemana.screens.ui.theme.Herb500
+import com.menusemana.screens.ui.theme.Herb700
 import com.menusemana.screens.ui.theme.JetBrainsMono
 import com.menusemana.screens.ui.theme.Neutral300
 import com.menusemana.screens.ui.theme.Neutral50
@@ -64,9 +68,27 @@ import com.menusemana.screens.ui.theme.Persimmon100
 import com.menusemana.screens.ui.theme.Persimmon500
 import com.menusemana.screens.ui.theme.SheetShape
 import com.menusemana.screens.ui.theme.Warning500
+import com.menusemana.screens.ui.theme.Warning700
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
+
+private fun Modifier.dashedBorder(
+    width: Dp,
+    color: androidx.compose.ui.graphics.Color,
+    cornerRadius: Dp,
+): Modifier =
+    drawBehind {
+        drawRoundRect(
+            color = color,
+            cornerRadius = CornerRadius(cornerRadius.toPx()),
+            style =
+                Stroke(
+                    width = width.toPx(),
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 6f)),
+                ),
+        )
+    }
 
 private val DAY_NAMES = listOf("Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom")
 private val SLOTS = MealSlot.entries
@@ -282,6 +304,7 @@ private fun WeekSummaryCard(
                 color = accent,
             )
             Spacer(Modifier.height(6.dp))
+            val statusTextColor = if (completa) Herb700 else Warning700
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = if (completa) Icons.Rounded.CheckCircle else Icons.Rounded.WarningAmber,
@@ -292,8 +315,8 @@ private fun WeekSummaryCard(
                 Spacer(Modifier.width(4.dp))
                 Text(
                     text = if (completa) "¡Semana completa!" else "Quedan $huecos turnos sin asignar",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = accent,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = statusTextColor,
                 )
             }
         }
@@ -343,7 +366,7 @@ private fun SlotRow(
                     Modifier
                         .fillMaxWidth()
                         .height(52.dp)
-                        .border(BorderStroke(1.5.dp, Neutral300), MaterialTheme.shapes.medium)
+                        .dashedBorder(1.5.dp, Neutral300, 12.dp)
                         .clickable(onClick = onTapEmpty),
                 contentAlignment = Alignment.Center,
             ) {

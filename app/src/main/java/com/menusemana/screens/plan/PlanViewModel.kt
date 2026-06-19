@@ -7,6 +7,7 @@ import com.menusemana.data.model.PlannedMeal
 import com.menusemana.repository.AssignMealToSlotUseCase
 import com.menusemana.repository.MealRepository
 import com.menusemana.repository.PlanRepository
+import com.menusemana.repository.WeekStateHolder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,13 +41,8 @@ class PlanViewModel
         private val planRepository: PlanRepository,
         private val mealRepository: MealRepository,
         private val assignMeal: AssignMealToSlotUseCase,
+        private val weekStateHolder: WeekStateHolder,
     ) : ViewModel() {
-        private val currentWeekMonday =
-            LocalDate
-                .now()
-                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-
-        private val _weekStart = MutableStateFlow(currentWeekMonday)
         private val _state = MutableStateFlow(PlanUiState())
 
         val state: StateFlow<PlanUiState> =
@@ -58,8 +54,9 @@ class PlanViewModel
 
         init {
             viewModelScope.launch {
-                _weekStart
-                    .flatMapLatest { weekStart ->
+                weekStateHolder.weekOffset
+                    .flatMapLatest { offset ->
+                        val weekStart = weekStateHolder.weekStartAt(offset)
                         planRepository
                             .getWeekPlan(weekStart.toEpochDay())
                             .map { weekStart to it }
@@ -67,7 +64,7 @@ class PlanViewModel
                         _state.update {
                             it.copy(
                                 weekStart = weekStart,
-                                isCurrentWeek = weekStart == currentWeekMonday,
+                                isCurrentWeek = weekStart == weekStateHolder.currentWeekMonday,
                                 plannedMeals = planned,
                             )
                         }
@@ -80,11 +77,11 @@ class PlanViewModel
             }
         }
 
-        fun previousWeek() = _weekStart.update { it.minusWeeks(1) }
+        fun previousWeek() = weekStateHolder.previousWeek()
 
-        fun nextWeek() = _weekStart.update { it.plusWeeks(1) }
+        fun nextWeek() = weekStateHolder.nextWeek()
 
-        fun goToCurrentWeek() = _weekStart.update { currentWeekMonday }
+        fun goToCurrentWeek() = weekStateHolder.goToCurrentWeek()
 
         fun openMealPicker(
             day: Int,
@@ -101,7 +98,7 @@ class PlanViewModel
             val day = _state.value.pickerDay ?: return
             val slot = _state.value.pickerSlot ?: return
             viewModelScope.launch {
-                assignMeal(_weekStart.value.toEpochDay(), day, slot, mealId)
+                assignMeal(_state.value.weekStart.toEpochDay(), day, slot, mealId)
                 closeMealPicker()
             }
         }
@@ -111,7 +108,7 @@ class PlanViewModel
             slot: Int,
         ) {
             viewModelScope.launch {
-                planRepository.clearSlot(_weekStart.value.toEpochDay(), day, slot)
+                planRepository.clearSlot(_state.value.weekStart.toEpochDay(), day, slot)
             }
         }
     }

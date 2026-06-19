@@ -64,7 +64,7 @@ class GenerateShoppingListUseCaseTest {
         }
 
     @Test
-    fun `same ingredient in two meals has quantities joined`() =
+    fun `same ingredient with same unit in two meals has quantities summed`() =
         runTest {
             val ing = Ingredient(name = "Ajo", quantity = "2 dientes", aisle = Aisle.VERDULERIA.label)
             val meal1 = makeMeal(id = 1L, ingredients = listOf(ing))
@@ -81,8 +81,38 @@ class GenerateShoppingListUseCaseTest {
                 val sections = awaitItem()
                 val verduleria = sections.first { it.aisle == Aisle.VERDULERIA.label }
                 val ajoItem = verduleria.items.first { it.name == "Ajo" }
-                assertTrue(ajoItem.quantity.contains("2 dientes"))
-                assertTrue(ajoItem.quantity.contains("3 dientes"))
+                assertEquals("5 dientes", ajoItem.quantity)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @Test
+    fun `same ingredient with different units in two meals has quantities joined`() =
+        runTest {
+            val meal1 =
+                makeMeal(
+                    id = 1L,
+                    ingredients = listOf(Ingredient(name = "Harina", quantity = "200 g", aisle = Aisle.ALMACEN.label)),
+                )
+            val meal2 =
+                makeMeal(
+                    id = 2L,
+                    ingredients = listOf(Ingredient(name = "Harina", quantity = "1 taza", aisle = Aisle.ALMACEN.label)),
+                )
+            mealRepo.setMeals(listOf(meal1, meal2))
+            planRepo.setPlan(
+                listOf(
+                    makePlannedMeal(meal1, day = 0, slot = 0),
+                    makePlannedMeal(meal2, day = 1, slot = 0),
+                ),
+            )
+
+            useCase(weekStart).test {
+                val sections = awaitItem()
+                val almacen = sections.first { it.aisle == Aisle.ALMACEN.label }
+                val harinaItem = almacen.items.first { it.name == "Harina" }
+                assertTrue(harinaItem.quantity.contains("200 g"))
+                assertTrue(harinaItem.quantity.contains("1 taza"))
                 cancelAndIgnoreRemainingEvents()
             }
         }
